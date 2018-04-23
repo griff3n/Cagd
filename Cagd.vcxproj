@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\glad.c" />
     <ClCompile Include="src\Main.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -73,20 +74,20 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\admin\Documents\Visual Studio 2017\Projects\Cagd\include;C:\Users\admin\Documents\Visual Studio 2017\Projects\Cagd\include\glm-0.9.8.5;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\admin\Documents\Visual Studio 2017\Projects\Cagd\libs;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)include;$(ProjectDir)include\glm-0.9.8.5;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)libs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\Users\admin\Documents\Visual Studio 2017\Projects\Cagd\include;C:\Users\admin\Documents\Visual Studio 2017\Projects\Cagd\include\glm-0.9.8.5;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\admin\Documents\Visual Studio 2017\Projects\Cagd\libs;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)include;$(ProjectDir)include\glm-0.9.8.5;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)libs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Users\admin\Documents\Visual Studio 2017\Projects\Cagd\include;C:\Users\admin\Documents\Visual Studio 2017\Projects\Cagd\include\glm-0.9.8.5;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\admin\Documents\Visual Studio 2017\Projects\Cagd\libs;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)include;$(ProjectDir)include\glm-0.9.8.5;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)libs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>C:\Users\admin\Documents\Visual Studio 2017\Projects\Cagd\include;C:\Users\admin\Documents\Visual Studio 2017\Projects\Cagd\include\glm-0.9.8.5;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\admin\Documents\Visual Studio 2017\Projects\Cagd\libs;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)include;$(ProjectDir)include\glm-0.9.8.5;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)libs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
