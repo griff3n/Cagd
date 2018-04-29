@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>QTCadgClass</class>
- <widget class="QMainWindow" name="QTCadgClass">
+ <class>QTCagdClass</class>
+ <widget class="QMainWindow" name="QTCagdClass">
   <property name="windowModality">
    <enum>Qt::ApplicationModal</enum>
   </property>
@@ -14,7 +14,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>QTCadg</string>
+   <string>QTCagd</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="OpenGLWidget" name="openGLWidget">
@@ -85,13 +85,13 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="QTCadg.qrc"/>
+  <include location="QTCagd.qrc"/>
  </resources>
  <connections>
   <connection>
    <sender>actionBeenden</sender>
    <signal>triggered()</signal>
-   <receiver>QTCadgClass</receiver>
+   <receiver>QTCagdClass</receiver>
    <slot>closeApplication()</slot>
    <hints>
     <hint type="sourcelabel">

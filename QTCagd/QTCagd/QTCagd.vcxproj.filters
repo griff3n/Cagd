@@ -33,31 +33,31 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="QTCadg.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="OpenGLWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <QtMoc Include="QTCadg.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-  </ItemGroup>
-  <ItemGroup>
-    <QtUic Include="QTCadg.ui">
-      <Filter>Form Files</Filter>
-    </QtUic>
-  </ItemGroup>
-  <ItemGroup>
-    <QtRcc Include="QTCadg.qrc">
-      <Filter>Resource Files</Filter>
-    </QtRcc>
+    <ClCompile Include="QTCagd.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OpenGLWidget.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="QTCagd.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="QTCagd.qrc">
+      <Filter>Resource Files</Filter>
+    </QtRcc>
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="QTCagd.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
   </ItemGroup>
 </Project>
