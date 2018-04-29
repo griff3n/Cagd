@@ -1,4 +1,5 @@
-#pragma once
+#ifndef QTCAGD_H
+#define QTCAGD_H
 
 #include <QtWidgets/QMainWindow>
 #include "ui_QTCadg.h"
@@ -16,3 +17,5 @@ public slots:
 private:
 	Ui::QTCadgClass ui;
 };
+
+#endif // QTCAGD_H

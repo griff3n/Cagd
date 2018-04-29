@@ -17,10 +17,10 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
-#include <QtWidgets/QOpenGLWidget>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QWidget>
+#include "openglwidget.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -29,7 +29,7 @@ class Ui_QTCadgClass
 public:
     QAction *actionBeenden;
     QWidget *centralWidget;
-    QOpenGLWidget *openGLWidget;
+    OpenGLWidget *openGLWidget;
     QPushButton *pushButton;
     QMenuBar *menuBar;
     QMenu *menuDatei;
@@ -39,12 +39,13 @@ public:
     {
         if (QTCadgClass->objectName().isEmpty())
             QTCadgClass->setObjectName(QStringLiteral("QTCadgClass"));
+        QTCadgClass->setWindowModality(Qt::ApplicationModal);
         QTCadgClass->resize(752, 536);
         actionBeenden = new QAction(QTCadgClass);
         actionBeenden->setObjectName(QStringLiteral("actionBeenden"));
         centralWidget = new QWidget(QTCadgClass);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
-        openGLWidget = new QOpenGLWidget(centralWidget);
+        openGLWidget = new OpenGLWidget(centralWidget);
         openGLWidget->setObjectName(QStringLiteral("openGLWidget"));
         openGLWidget->setGeometry(QRect(0, 50, 751, 451));
         pushButton = new QPushButton(centralWidget);

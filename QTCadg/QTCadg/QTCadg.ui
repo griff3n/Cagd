@@ -2,6 +2,9 @@
 <ui version="4.0">
  <class>QTCadgClass</class>
  <widget class="QMainWindow" name="QTCadgClass">
+  <property name="windowModality">
+   <enum>Qt::ApplicationModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -14,7 +17,7 @@
    <string>QTCadg</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QOpenGLWidget" name="openGLWidget">
+   <widget class="OpenGLWidget" name="openGLWidget">
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -74,6 +77,13 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>OpenGLWidget</class>
+   <extends>QOpenGLWidget</extends>
+   <header>openglwidget.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="QTCadg.qrc"/>
  </resources>
