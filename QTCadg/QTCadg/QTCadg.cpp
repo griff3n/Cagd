@@ -5,3 +5,8 @@ QTCadg::QTCadg(QWidget *parent)
 {
 	ui.setupUi(this);
 }
+
+void QTCadg::closeApplication()
+{
+	return;
+}

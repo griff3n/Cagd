@@ -10,6 +10,9 @@ class QTCadg : public QMainWindow
 public:
 	QTCadg(QWidget *parent = Q_NULLPTR);
 
+public slots:
+	void closeApplication();
+
 private:
 	Ui::QTCadgClass ui;
 };
