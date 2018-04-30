@@ -31,12 +31,12 @@ public:
 		glBindVertexArray(0);
 	}
 	void translate(glm::vec3 vector) {
-		model = glm::myTranslate(model, vector);
+		model = model * glm::translate(vector);
 	}
 	void rotateAroundAxis(float rot_speed, glm::vec3 axis, glm::vec3 positionOfAxis) {
 		glm::vec3 invPosition = positionOfAxis * (-1.0f);
 		translate(invPosition);
-		model = glm::myRotate(model, rot_speed, axis);
+		model = model * glm::rotate(rot_speed, axis);
 		translate(positionOfAxis);
 	}
 private:
@@ -140,12 +140,12 @@ public:
 		glBindVertexArray(0);
 	}
 	void translate(glm::vec3 vector) {
-		model = glm::myTranslate(model, vector);
+		model = model * glm::translate(vector);
 	}
 	void rotateAroundAxis(float rot_speed, glm::vec3 axis, glm::vec3 positionOfAxis) {
 		glm::vec3 invPosition = positionOfAxis * (-1.0f);
 		translate(invPosition);
-		model = glm::myRotate(model, rot_speed, axis);
+		model = model * glm::rotate(rot_speed, axis);
 		translate(positionOfAxis);
 	}
 	void faceDirection(glm::vec3 direction) {
@@ -252,12 +252,12 @@ public:
 		glBindVertexArray(0);
 	}
 	void translate(glm::vec3 vector) {
-		model = glm::myTranslate(model, vector);
+		model = model * glm::translate(vector);
 	}
 	void rotateAroundAxis(float rot_speed, glm::vec3 axis, glm::vec3 positionOfAxis) {
 		glm::vec3 invPosition = positionOfAxis * (-1.0f);
 		translate(invPosition);
-		model = glm::myRotate(model, rot_speed, axis);
+		model = model * glm::rotate(rot_speed, axis);
 		translate(positionOfAxis);
 	}
 private:
@@ -361,12 +361,12 @@ public:
 		glBindVertexArray(0);
 	}
 	void translate(glm::vec3 vector) {
-		model = glm::myTranslate(model, vector);
+		model = model * glm::translate(vector);
 	}
 	void rotateAroundAxis(float rot_speed, glm::vec3 axis, glm::vec3 positionOfAxis) {
 		glm::vec3 invPosition = positionOfAxis * (-1.0f);
 		translate(invPosition);
-		model = glm::myRotate(model, rot_speed, axis);
+		model = model * glm::rotate(rot_speed, axis);
 		translate(positionOfAxis);
 	}
 private:
@@ -468,12 +468,12 @@ public:
 		glBindVertexArray(0);
 	}
 	void translate(glm::vec3 vector) {
-		model = glm::myTranslate(model, vector);
+		model = model * glm::translate(vector);
 	}
 	void rotateAroundAxis(float rot_speed, glm::vec3 axis, glm::vec3 positionOfAxis) {
 		glm::vec3 invPosition = positionOfAxis * (-1.0f);
 		translate(invPosition);
-		model = glm::myRotate(model, rot_speed, axis);
+		model = model * glm::rotate(rot_speed, axis);
 		translate(positionOfAxis);
 	}
 private:
@@ -575,12 +575,12 @@ public:
 		glBindVertexArray(0);
 	}
 	void translate(glm::vec3 vector) {
-		model = glm::myTranslate(model, vector);
+		model = model * glm::translate(vector);
 	}
 	void rotateAroundAxis(float rot_speed, glm::vec3 axis, glm::vec3 positionOfAxis) {
 		glm::vec3 invPosition = positionOfAxis * (-1.0f);
 		translate(invPosition);
-		model = glm::myRotate(model, rot_speed, axis);
+		model = model * glm::rotate(rot_speed, axis);
 		translate(positionOfAxis);
 	}
 private:
@@ -697,7 +697,7 @@ public:
 		glBindVertexArray(0);
 	}
 	void translate(glm::vec3 vector) {
-		model = glm::myTranslate(model, vector);
+		model = model * glm::translate(vector);
 		boundingBox->translate(vector);
 		helpNormals->translate(vector);
 		normals->translate(vector);
@@ -705,7 +705,7 @@ public:
 	void rotateAroundAxis(float rot_speed, glm::vec3 axis, glm::vec3 positionOfAxis) {
 		glm::vec3 invPosition = positionOfAxis * (-1.0f);
 		translate(invPosition);
-		model = glm::myRotate(model, rot_speed, axis);
+		model = model * glm::rotate(rot_speed, axis);
 		translate(positionOfAxis);
 		boundingBox->rotateAroundAxis(rot_speed, axis, positionOfAxis);
 		helpNormals->rotateAroundAxis(rot_speed, axis, positionOfAxis);
@@ -1102,22 +1102,22 @@ public:
 		//glBindVertexArray(0);
 	}
 	void translate(glm::vec3 vector) {
-		model = glm::myTranslate(model, vector);
+		model = model * glm::translate(vector);
 		boundingBox->translate(vector);
 		for (Sphere *cpt : controlPoints) {
-			cpt->model = glm::myTranslate(cpt->model, vector);
+			cpt->model = cpt->model * glm::translate(vector);
 		}
 	}
 	void rotateAroundAxis(float rot_speed, glm::vec3 axis, glm::vec3 positionOfAxis) {
 		glm::vec3 invPosition = positionOfAxis * (-1.0f);
 		translate(invPosition);
-		model = glm::myRotate(model, rot_speed, axis);
+		model = model * glm::rotate(rot_speed, axis);
 		translate(positionOfAxis);
 		boundingBox->rotateAroundAxis(rot_speed, axis, positionOfAxis);
 		for (Sphere *cpt : controlPoints) {
 			glm::vec3 invPosition = positionOfAxis * (-1.0f);
 			translate(invPosition);
-			cpt->model = glm::myRotate(cpt->model, rot_speed, axis);
+			cpt->model = cpt->model * glm::rotate(rot_speed, axis);
 			translate(positionOfAxis);
 		}
 	}
@@ -1292,7 +1292,7 @@ private:
 		for (int i = 0; i < positions.size(); i++) {
 			Sphere *controlPoint = new Sphere(glm::vec3(1.0f, 0.0f, 1.0f));
 			controlPoint->model = glm::scale(controlPoint->model, glm::vec3(0.1f));
-			controlPoint->model = glm::myTranslate(controlPoint->model, positions[i] * scale);
+			controlPoint->model = controlPoint->model * glm::translate(positions[i] * scale);
 			controlPoints.push_back(controlPoint);
 		}
 
@@ -1390,12 +1390,12 @@ public:
 		glBindVertexArray(0);
 	}
 	void translate(glm::vec3 vector) {
-		model = glm::myTranslate(model, vector);
+		model = model * glm::translate(vector);
 	}
 	void rotateAroundAxis(float rot_speed, glm::vec3 axis, glm::vec3 positionOfAxis) {
 		glm::vec3 invPosition = positionOfAxis * (-1.0f);
 		translate(invPosition);
-		model = glm::myRotate(model, rot_speed, axis);
+		model = model * glm::rotate(rot_speed, axis);
 		translate(positionOfAxis);
 	}
 private:
@@ -1495,12 +1495,12 @@ public:
 		glBindVertexArray(0);
 	}
 	void translate(glm::vec3 vector) {
-		model = glm::myTranslate(model, vector);
+		model = model * glm::translate(vector);
 	}
 	void rotateAroundAxis(float rot_speed, glm::vec3 axis, glm::vec3 positionOfAxis) {
 		glm::vec3 invPosition = positionOfAxis * (-1.0f);
 		translate(invPosition);
-		model = glm::myRotate(model, rot_speed, axis);
+		model = model * glm::rotate(rot_speed, axis);
 		translate(positionOfAxis);
 	}
 private:
@@ -1591,7 +1591,6 @@ public:
 	Orb(glm::vec3 position, float startingRotation, float scaling, glm::vec3 positionOfAxis, glm::vec3 color)
 	{
 		sphere = new Sphere(color);
-
 		scale(scaling);
 		translate(position);
 		rotateAroundAxis(startingRotation, glm::vec3(0.0f, 1.0f, 0.0f), positionOfAxis);
@@ -1608,7 +1607,7 @@ public:
 	}
 
 	void translate(glm::vec3 vector) {
-		sphere->model = glm::myTranslate(sphere->model, vector);
+		sphere->model = sphere->model * glm::translate(vector);
 	}
 
 	void move(glm::vec3 vector) {
@@ -1656,7 +1655,7 @@ public:
 		glm::vec3 invPosition = position * (-1.0f);
 		translate(invPosition);
 		glm::vec3 axis = getAxis();
-		sphere->model = glm::myRotate(sphere->model, rot_speed, axis);
+		sphere->model = sphere->model * glm::rotate(rot_speed, axis);
 		translate(position);
 		for (Orb* child : childs) {
 			child->rotateAroundAxis(rot_speed, axis, position);
@@ -1673,7 +1672,7 @@ public:
 	void rotateAroundAxis(float rot_speed, glm::vec3 axis, glm::vec3 positionOfAxis) {
 		glm::vec3 invPosition = positionOfAxis * (-1.0f);
 		translate(invPosition);
-		sphere->model = glm::myRotate(sphere->model, rot_speed, axis);
+		sphere->model = sphere->model * glm::rotate(rot_speed, axis);
 		translate(positionOfAxis);
 		for (Orb* child : childs) {
 			child->rotateAroundAxis(rot_speed, axis, positionOfAxis);
@@ -1759,7 +1758,7 @@ public:
 private:
 	std::vector<Orb*> childs;
 	std::vector<Orbit*> orbits;
-	Axis* axis;
-	Model* customModel;
-	Orb* parent;
+	Axis* axis = nullptr;
+	Model* customModel = nullptr;
+	Orb* parent = nullptr;
 };

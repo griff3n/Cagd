@@ -33,6 +33,8 @@
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)libs\glm-0.9.8.5;$(ProjectDir)libs\glew-2.1.0\include</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64;$(ProjectDir)libs\glew-2.1.0\lib\Release\x64</LibraryPath>
+    <LinkIncremental>
+    </LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
@@ -121,6 +123,7 @@
   <ItemGroup>
     <ClCompile Include="GLSLProgram.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="ObjectLoader.cpp" />
     <ClCompile Include="OpenGLWidget.cpp" />
     <ClCompile Include="QTCagd.cpp" />
   </ItemGroup>
@@ -135,7 +138,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GLSLProgram.h" />
-    <ClInclude Include="Model.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="ObjectLoader.h" />
     <ClInclude Include="OpenGLWidget.h" />
