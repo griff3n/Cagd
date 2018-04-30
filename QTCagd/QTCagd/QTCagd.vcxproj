@@ -121,14 +121,14 @@
     </QtRcc>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="GLSLProgram.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="ObjectLoader.cpp" />
-    <ClCompile Include="OpenGLWidget.cpp" />
-    <ClCompile Include="QTCagd.cpp" />
+    <ClCompile Include="src\GLSLProgram.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\ObjectLoader.cpp" />
+    <ClCompile Include="src\OpenGLWidget.cpp" />
+    <ClCompile Include="src\QTCagd.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="QTCagd.h" />
+    <QtMoc Include="src\QTCagd.h" />
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="QTCagd.ui" />
@@ -137,12 +137,12 @@
     <QtRcc Include="QTCagd.qrc" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GLSLProgram.h" />
-    <ClInclude Include="Object.h" />
-    <ClInclude Include="ObjectLoader.h" />
-    <ClInclude Include="OpenGLWidget.h" />
-    <ClInclude Include="Orb.h" />
-    <ClInclude Include="Sphere.h" />
+    <ClInclude Include="src\GLSLProgram.h" />
+    <ClInclude Include="src\Object.h" />
+    <ClInclude Include="src\ObjectLoader.h" />
+    <ClInclude Include="src\OpenGLWidget.h" />
+    <ClInclude Include="src\Orb.h" />
+    <ClInclude Include="src\Sphere.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
