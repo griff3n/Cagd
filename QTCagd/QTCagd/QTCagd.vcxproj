@@ -126,6 +126,7 @@
     <ClCompile Include="src\ObjectLoader.cpp" />
     <ClCompile Include="src\OpenGLWidget.cpp" />
     <ClCompile Include="src\QTCagd.cpp" />
+    <ClCompile Include="src\Sphere.cpp" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="src\QTCagd.h" />
