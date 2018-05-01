@@ -121,10 +121,21 @@
     </QtRcc>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Axis.cpp" />
+    <ClCompile Include="src\BBox.cpp" />
+    <ClCompile Include="src\BCurve.cpp" />
+    <ClCompile Include="src\Bezier.cpp" />
+    <ClCompile Include="src\CasteljauSteps.cpp" />
+    <ClCompile Include="src\Cone.cpp" />
     <ClCompile Include="src\GLSLProgram.cpp" />
+    <ClCompile Include="src\HNormals.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Model.cpp" />
+    <ClCompile Include="src\Normals.cpp" />
     <ClCompile Include="src\ObjectLoader.cpp" />
     <ClCompile Include="src\OpenGLWidget.cpp" />
+    <ClCompile Include="src\Orb.cpp" />
+    <ClCompile Include="src\Orbit.cpp" />
     <ClCompile Include="src\QTCagd.cpp" />
     <ClCompile Include="src\Sphere.cpp" />
   </ItemGroup>
@@ -138,11 +149,21 @@
     <QtRcc Include="QTCagd.qrc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Axis.h" />
+    <ClInclude Include="src\BBox.h" />
+    <ClInclude Include="src\BCurve.h" />
+    <ClInclude Include="src\Bezier.h" />
+    <ClInclude Include="src\CasteljauSteps.h" />
+    <ClInclude Include="src\Cone.h" />
     <ClInclude Include="src\GLSLProgram.h" />
+    <ClInclude Include="src\HNormals.h" />
+    <ClInclude Include="src\Model.h" />
+    <ClInclude Include="src\Normals.h" />
     <ClInclude Include="src\Object.h" />
     <ClInclude Include="src\ObjectLoader.h" />
     <ClInclude Include="src\OpenGLWidget.h" />
     <ClInclude Include="src\Orb.h" />
+    <ClInclude Include="src\Orbit.h" />
     <ClInclude Include="src\Sphere.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
