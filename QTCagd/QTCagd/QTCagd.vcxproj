@@ -122,7 +122,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Design.cpp" />
+    <ClCompile Include="graphicFace.cpp" />
     <ClCompile Include="GraphicObject.cpp" />
+    <ClCompile Include="halfEdge.cpp" />
     <ClCompile Include="IClickableGraphic.cpp" />
     <ClCompile Include="ISelectableDesign.cpp" />
     <ClCompile Include="ISelectableGraphic.cpp" />
@@ -158,11 +160,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Design.h" />
+    <ClInclude Include="graphicFace.h" />
     <ClInclude Include="GraphicObject.h" />
+    <ClInclude Include="halfEdge.h" />
     <ClInclude Include="IClickableGraphic.h" />
     <ClInclude Include="ISelectableDesign.h" />
     <ClInclude Include="ISelectableGraphic.h" />
     <ClInclude Include="OpenGLWidget.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="SelectionMemory.h" />
     <ClInclude Include="Skin.h" />
     <ClInclude Include="graphicVertex.h" />
@@ -182,6 +187,9 @@
     <ClInclude Include="src\Orb.h" />
     <ClInclude Include="src\Orbit.h" />
     <ClInclude Include="src\Sphere.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="QTCagd.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

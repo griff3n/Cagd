@@ -14,13 +14,3 @@ graphicVertex::graphicVertex(glm::vec4 location, graphicVertex * lastLOD, graphi
 graphicVertex::~graphicVertex()
 {
 }
-
-bool graphicVertex::isFlagged()
-{
-	return hasFlag;
-}
-
-void graphicVertex::setFlagged(bool flagged)
-{
-	hasFlag = flagged;
-}
