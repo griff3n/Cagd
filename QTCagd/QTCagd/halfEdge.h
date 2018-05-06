@@ -10,7 +10,7 @@ struct halfEdge :
 	public GraphicObject
 {
 public:
-	halfEdge(Design* design, SelectionMemory* sMem);
+	halfEdge(Design* design, ObjectMemory* sMem);
 	~halfEdge();
 	graphicVertex* vert; // start-vertex of the half-edge
 	halfEdge* pair; // oppositely oriented adjacent half-edge 
@@ -22,7 +22,7 @@ struct graphicVertex :
 	public GraphicObject
 {
 public:
-	graphicVertex(glm::vec4 location, graphicVertex* lastLOD, graphicVertex* nextLOD, Design* design, SelectionMemory* sMem);
+	graphicVertex(glm::vec4 location, graphicVertex* lastLOD, graphicVertex* nextLOD, Design* design, ObjectMemory* sMem);
 	~graphicVertex();
 	float weight;
 	glm::vec4 location;
@@ -36,7 +36,7 @@ struct graphicFace :
 	public GraphicObject
 {
 public:
-	graphicFace(Design* design, SelectionMemory* sMem);
+	graphicFace(Design* design, ObjectMemory* sMem);
 	~graphicFace();
 	bool hole;
 	halfEdge* surrounding = nullptr;
