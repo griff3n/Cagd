@@ -160,7 +160,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Design.h" />
-    <ClInclude Include="graphicFace.h" />
     <ClInclude Include="GraphicObject.h" />
     <ClInclude Include="halfEdge.h" />
     <ClInclude Include="IClickableGraphic.h" />
@@ -170,7 +169,6 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="SelectionMemory.h" />
     <ClInclude Include="Skin.h" />
-    <ClInclude Include="graphicVertex.h" />
     <ClInclude Include="src\Axis.h" />
     <ClInclude Include="src\BBox.h" />
     <ClInclude Include="src\BCurve.h" />

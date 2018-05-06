@@ -1,9 +1,8 @@
-#include "graphicFace.h"
+#include "halfEdge.h"
 
 
-graphicFace::graphicFace(Design * design, SelectionMemory * sMem)
+graphicFace::graphicFace(Design * design, SelectionMemory * sMem):GraphicObject(design,sMem)
 {
-	super(design, sMem);
 }
 
 graphicFace::~graphicFace()

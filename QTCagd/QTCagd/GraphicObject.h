@@ -8,12 +8,12 @@ class GraphicObject :public ISelectableGraphic, public IClickableGraphic
 {
 public:
 	GraphicObject();
-	GraphicObject(Design* design, SelectionMemory* sMem);
+	GraphicObject(Design * design, SelectionMemory * sMem);
 
 
 protected:
 
 	bool isSelected = false;
-	Design* design;
-	SelectionMemory* sMem;
+	Design * design;
+	SelectionMemory * sMem;
 };

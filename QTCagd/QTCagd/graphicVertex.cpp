@@ -1,11 +1,10 @@
-#include "graphicVertex.h"
+#include "halfEdge.h"
 
 
 
 
-graphicVertex::graphicVertex(glm::vec4 location, graphicVertex * lastLOD, graphicVertex* nextLOD, Design* design, SelectionMemory* sMem)
+graphicVertex::graphicVertex(glm::vec4 location, graphicVertex * lastLOD, graphicVertex* nextLOD, Design* design, SelectionMemory* sMem): GraphicObject(design,sMem)
 {
-	super(design, sMem);
 	this->location = location;
 	this->lastLOD = lastLOD;
 	this->nextLOD = nextLOD;

@@ -137,9 +137,6 @@
     <ClInclude Include="Skin.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="graphicVertex.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Axis.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -192,9 +189,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="halfEdge.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="graphicFace.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

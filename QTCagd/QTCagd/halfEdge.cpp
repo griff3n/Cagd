@@ -2,9 +2,8 @@
 
 
 
-halfEdge::halfEdge(Design * design, SelectionMemory * sMem)
+halfEdge::halfEdge(Design * design, SelectionMemory * sMem):GraphicObject(design,sMem)
 {
-	super(design, sMem);
 }
 
 halfEdge::~halfEdge()
