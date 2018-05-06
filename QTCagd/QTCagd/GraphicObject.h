@@ -1,7 +1,7 @@
 #include "ISelectableGraphic.h"
 #include "IClickableGraphic.h"
 #include "Design.h"
-#include "SelectionMemory.h"
+#include "ObjectMemory.h"
 
 #pragma once
 class GraphicObject :public ISelectableGraphic, public IClickableGraphic

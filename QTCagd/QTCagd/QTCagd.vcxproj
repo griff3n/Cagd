@@ -128,7 +128,7 @@
     <ClCompile Include="IClickableGraphic.cpp" />
     <ClCompile Include="ISelectableDesign.cpp" />
     <ClCompile Include="ISelectableGraphic.cpp" />
-    <ClCompile Include="SelectionMemory.cpp" />
+    <ClCompile Include="ObjectMemory.cpp" />
     <ClCompile Include="Skin.cpp" />
     <ClCompile Include="graphicVertex.cpp" />
     <ClCompile Include="src\Axis.cpp" />
@@ -167,7 +167,7 @@
     <ClInclude Include="ISelectableGraphic.h" />
     <ClInclude Include="OpenGLWidget.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="SelectionMemory.h" />
+    <ClInclude Include="ObjectMemory.h" />
     <ClInclude Include="Skin.h" />
     <ClInclude Include="src\Axis.h" />
     <ClInclude Include="src\BBox.h" />
