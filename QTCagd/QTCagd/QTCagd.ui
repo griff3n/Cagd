@@ -37,7 +37,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>PushButton</string>
+     <string>Show Bunny</string>
     </property>
    </widget>
   </widget>
@@ -104,8 +104,25 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>QTCagdClass</receiver>
+   <slot>showBunny()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>94</x>
+     <y>62</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>24</x>
+     <y>50</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>closeApplication()</slot>
+  <slot>showBunny()</slot>
  </slots>
 </ui>

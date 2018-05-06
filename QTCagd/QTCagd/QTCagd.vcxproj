@@ -31,6 +31,10 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)libs\glm-0.9.8.5;$(ProjectDir)libs\glew-2.1.0\include</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64;$(ProjectDir)libs\glew-2.1.0\lib\Release\x64</LibraryPath>
+    <LinkIncremental>
+    </LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
@@ -65,7 +69,7 @@
       <OutputFile>$(OutDir)\$(ProjectName).exe</OutputFile>
       <AdditionalLibraryDirectories>$(QTDIR)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>qtmaind.lib;Qt53DCored.lib;Qt53DAnimationd.lib;Qt53DExtrasd.lib;Qt53DInputd.lib;Qt53DLogicd.lib;Qt53DRenderd.lib;Qt53DQuickd.lib;Qt53DQuickAnimationd.lib;Qt53DQuickExtrasd.lib;Qt53DQuickInputd.lib;Qt53DQuickRenderd.lib;Qt53DQuickScene2Dd.lib;Qt5Concurrentd.lib;Qt5Cored.lib;Qt5Guid.lib;Qt5Helpd.lib;Qt5Locationd.lib;Qt5OpenGLd.lib;opengl32.lib;glu32.lib;Qt5OpenGLExtensionsd.lib;Qt5Positioningd.lib;Qt5Quickd.lib;Qt5QuickWidgetsd.lib;Qt5QuickControls2d.lib;Qt5Testd.lib;Qt5UiToolsd.lib;Qt5Widgetsd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32.lib;qtmaind.lib;Qt53DCored.lib;Qt53DAnimationd.lib;Qt53DExtrasd.lib;Qt53DInputd.lib;Qt53DLogicd.lib;Qt53DRenderd.lib;Qt53DQuickd.lib;Qt53DQuickAnimationd.lib;Qt53DQuickExtrasd.lib;Qt53DQuickInputd.lib;Qt53DQuickRenderd.lib;Qt53DQuickScene2Dd.lib;Qt5Concurrentd.lib;Qt5Cored.lib;Qt5Guid.lib;Qt5Helpd.lib;Qt5Locationd.lib;Qt5OpenGLd.lib;opengl32.lib;glu32.lib;Qt5OpenGLExtensionsd.lib;Qt5Positioningd.lib;Qt5Quickd.lib;Qt5QuickWidgetsd.lib;Qt5QuickControls2d.lib;Qt5Testd.lib;Qt5UiToolsd.lib;Qt5Widgetsd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <QtMoc>
       <OutputFile>.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</OutputFile>
@@ -81,6 +85,9 @@
       <ExecutionDescription>Rcc'ing %(Identity)...</ExecutionDescription>
       <OutputFile>.\GeneratedFiles\qrc_%(Filename).cpp</OutputFile>
     </QtRcc>
+    <PostBuildEvent>
+      <Command>xcopy /y "$(ProjectDir)libs\glew-2.1.0\bin\Release\x64\glew32.dll" "$(TargetDir)"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -114,6 +121,7 @@
     </QtRcc>
   </ItemDefinitionGroup>
   <ItemGroup>
+<<<<<<< HEAD
     <ClCompile Include="Design.cpp" />
     <ClCompile Include="GraphicObject.cpp" />
     <ClCompile Include="IClickableGraphic.cpp" />
@@ -125,9 +133,28 @@
     <ClCompile Include="SelectionMemory.cpp" />
     <ClCompile Include="Skin.cpp" />
     <ClCompile Include="graphicVertex.cpp" />
+=======
+    <ClCompile Include="src\Axis.cpp" />
+    <ClCompile Include="src\BBox.cpp" />
+    <ClCompile Include="src\BCurve.cpp" />
+    <ClCompile Include="src\Bezier.cpp" />
+    <ClCompile Include="src\CasteljauSteps.cpp" />
+    <ClCompile Include="src\Cone.cpp" />
+    <ClCompile Include="src\GLSLProgram.cpp" />
+    <ClCompile Include="src\HNormals.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Model.cpp" />
+    <ClCompile Include="src\Normals.cpp" />
+    <ClCompile Include="src\ObjectLoader.cpp" />
+    <ClCompile Include="src\OpenGLWidget.cpp" />
+    <ClCompile Include="src\Orb.cpp" />
+    <ClCompile Include="src\Orbit.cpp" />
+    <ClCompile Include="src\QTCagd.cpp" />
+    <ClCompile Include="src\Sphere.cpp" />
+>>>>>>> 32fcdbee370eff99ebd9ad5817ff54d31b9939b4
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="QTCagd.h" />
+    <QtMoc Include="src\QTCagd.h" />
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="QTCagd.ui" />
@@ -136,6 +163,7 @@
     <QtRcc Include="QTCagd.qrc" />
   </ItemGroup>
   <ItemGroup>
+<<<<<<< HEAD
     <ClInclude Include="Design.h" />
     <ClInclude Include="GraphicObject.h" />
     <ClInclude Include="IClickableGraphic.h" />
@@ -145,6 +173,24 @@
     <ClInclude Include="SelectionMemory.h" />
     <ClInclude Include="Skin.h" />
     <ClInclude Include="graphicVertex.h" />
+=======
+    <ClInclude Include="src\Axis.h" />
+    <ClInclude Include="src\BBox.h" />
+    <ClInclude Include="src\BCurve.h" />
+    <ClInclude Include="src\Bezier.h" />
+    <ClInclude Include="src\CasteljauSteps.h" />
+    <ClInclude Include="src\Cone.h" />
+    <ClInclude Include="src\GLSLProgram.h" />
+    <ClInclude Include="src\HNormals.h" />
+    <ClInclude Include="src\Model.h" />
+    <ClInclude Include="src\Normals.h" />
+    <ClInclude Include="src\Object.h" />
+    <ClInclude Include="src\ObjectLoader.h" />
+    <ClInclude Include="src\OpenGLWidget.h" />
+    <ClInclude Include="src\Orb.h" />
+    <ClInclude Include="src\Orbit.h" />
+    <ClInclude Include="src\Sphere.h" />
+>>>>>>> 32fcdbee370eff99ebd9ad5817ff54d31b9939b4
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
