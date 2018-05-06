@@ -1,6 +1,13 @@
 #pragma once
 
-#include "GLSLProgram.h"
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <vector>
+
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <GL/glew.h>
 
 struct HE_vert;
 struct HE_face;

@@ -1,5 +1,8 @@
 #pragma once
 
+#include <iostream>
+#include <glm/glm.hpp>
+#include <glm/gtx/rotate_vector.hpp>
 #include "GLSLProgram.h"
 #include "Object.h"
 #include "ObjectLoader.h"
