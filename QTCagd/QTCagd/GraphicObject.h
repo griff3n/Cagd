@@ -7,6 +7,7 @@
 class GraphicObject :public ISelectableGraphic, public IClickableGraphic
 {
 public:
+	GraphicObject();
 	GraphicObject(Design* design, SelectionMemory* sMem);
 
 

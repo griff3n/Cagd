@@ -121,19 +121,14 @@
     </QtRcc>
   </ItemDefinitionGroup>
   <ItemGroup>
-<<<<<<< HEAD
     <ClCompile Include="Design.cpp" />
     <ClCompile Include="GraphicObject.cpp" />
     <ClCompile Include="IClickableGraphic.cpp" />
     <ClCompile Include="ISelectableDesign.cpp" />
     <ClCompile Include="ISelectableGraphic.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="OpenGLWidget.cpp" />
-    <ClCompile Include="QTCagd.cpp" />
     <ClCompile Include="SelectionMemory.cpp" />
     <ClCompile Include="Skin.cpp" />
     <ClCompile Include="graphicVertex.cpp" />
-=======
     <ClCompile Include="src\Axis.cpp" />
     <ClCompile Include="src\BBox.cpp" />
     <ClCompile Include="src\BCurve.cpp" />
@@ -151,7 +146,6 @@
     <ClCompile Include="src\Orbit.cpp" />
     <ClCompile Include="src\QTCagd.cpp" />
     <ClCompile Include="src\Sphere.cpp" />
->>>>>>> 32fcdbee370eff99ebd9ad5817ff54d31b9939b4
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="src\QTCagd.h" />
@@ -163,7 +157,6 @@
     <QtRcc Include="QTCagd.qrc" />
   </ItemGroup>
   <ItemGroup>
-<<<<<<< HEAD
     <ClInclude Include="Design.h" />
     <ClInclude Include="GraphicObject.h" />
     <ClInclude Include="IClickableGraphic.h" />
@@ -173,7 +166,6 @@
     <ClInclude Include="SelectionMemory.h" />
     <ClInclude Include="Skin.h" />
     <ClInclude Include="graphicVertex.h" />
-=======
     <ClInclude Include="src\Axis.h" />
     <ClInclude Include="src\BBox.h" />
     <ClInclude Include="src\BCurve.h" />
@@ -190,7 +182,6 @@
     <ClInclude Include="src\Orb.h" />
     <ClInclude Include="src\Orbit.h" />
     <ClInclude Include="src\Sphere.h" />
->>>>>>> 32fcdbee370eff99ebd9ad5817ff54d31b9939b4
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

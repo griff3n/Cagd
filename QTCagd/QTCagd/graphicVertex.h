@@ -5,9 +5,10 @@
 struct graphicVertex : public GraphicObject
 {
 public:
-	graphicVertex(glm::vec4 location, graphicVertex* lastLOD);
+	graphicVertex(glm::vec4 location, graphicVertex* lastLOD, graphicVertex* nextLOD, Design* design, SelectionMemory* sMem);
 	~graphicVertex();
 	bool isFlagged();
+	void setFlagged(bool flagged);
 
 protected:
 	float weight;
@@ -15,5 +16,8 @@ protected:
 	bool hasFlag = false;
 	graphicVertex *nextLOD = nullptr;
 	graphicVertex *lastLOD = nullptr;
+
+private:
+	typedef GraphicObject super;
 };
 
