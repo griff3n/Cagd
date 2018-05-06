@@ -2,7 +2,7 @@
 
 
 
-halfEdge::halfEdge(Design * design, SelectionMemory * sMem):GraphicObject(design,sMem)
+halfEdge::halfEdge(Design * design, ObjectMemory * sMem):GraphicObject(design,sMem)
 {
 }
 

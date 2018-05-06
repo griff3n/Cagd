@@ -6,7 +6,7 @@ GraphicObject::GraphicObject()
 	sMem = nullptr;
 }
 
-GraphicObject::GraphicObject(Design* design, SelectionMemory* sMem)
+GraphicObject::GraphicObject(Design* design, ObjectMemory* sMem)
 {
 	this->design = design;
 	this->sMem = sMem;
