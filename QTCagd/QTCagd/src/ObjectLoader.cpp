@@ -1,8 +1,54 @@
+#include <regex>
 #include "ObjectLoader.h"
 
 std::vector<std::vector<HE_edge*>> acceleration;
 std::vector<glm::vec2*> HEtextureVertices;
 std::vector<glm::vec3*> HEVertexNormals;
+
+bool loadOBJreg(const char * path, std::vector<glm::vec3> & out_vertices, std::vector<GLuint> &out_indices, std::vector<HE_vert*> &out_HEvertices, std::vector<HE_face*> &out_HEfaces, std::vector<HE_edge*> &out_HEedges, std::vector<float> &bbox) {
+	std::string line;
+	std::string name;
+	std::regex skip("^# | ^\\s*$");
+	std::regex reg("[\\w.]+");
+	std::ifstream myfile(path);
+
+	if (myfile.is_open())
+	{
+		while (getline(myfile, line))
+		{
+			if (std::regex_search(line, skip))
+			{// Skip unimportant lines and continue
+				continue;
+			}
+			std::vector<std::smatch> results;
+			std::sregex_iterator next(line.begin(), line.end(), reg);
+			std::sregex_iterator end;
+			while (next != end)
+			{
+				std::smatch match = *next;
+				results.push_back(match);
+				next++;
+			}
+			if (results[0].str() == "v")
+			{
+				//do vertex stuff
+			}
+			else if (results[0].str() == "f")
+			{
+				//do face stuff
+			}
+			else
+			{
+				//something else
+			}
+		}
+		myfile.close();
+		return true;
+	}
+	else std::cout << "Unable to open file";
+	return false;
+}
+
 
 bool loadOBJ(const char * path, std::vector<glm::vec3> & out_vertices, std::vector<GLuint> &out_indices, std::vector<HE_vert*> &out_HEvertices, std::vector<HE_face*> &out_HEfaces, std::vector<HE_edge*> &out_HEedges, std::vector<float> &bbox) {
 	std::string line;
