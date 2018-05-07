@@ -6,6 +6,7 @@ class Design: public ISelectableDesign
 {
 public:
 	Design(Skin* normal, Skin* selected);
+	~Design();
 	Skin* getActiveSkin();
 	void applySelectedDesign();
 	void applyStandardDesign();

@@ -9,6 +9,13 @@ Design::Design(Skin* normal, Skin* selected)
 	active = normal;
 }
 
+Design::~Design()
+{
+	normal->~Skin();
+	selected->~Skin();
+	active->~Skin();
+}
+
 Skin* Design::getActiveSkin()
 {
 	return active;

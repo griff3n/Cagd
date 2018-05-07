@@ -4,6 +4,6 @@ class Skin
 {
 public:
 	Skin();
-	~Skin();
+	virtual ~Skin();
 };
 
