@@ -8,6 +8,12 @@ class GraphicObject :public ISelectableGraphic, public IClickableGraphic
 {
 public:
 	virtual ~GraphicObject();
+	void select();
+	void deselect();
+	void onClick();
+	bool getIsSelected();
+	Design* getDesign();
+	ObjectMemory* getSMem();
 
 protected:
 
