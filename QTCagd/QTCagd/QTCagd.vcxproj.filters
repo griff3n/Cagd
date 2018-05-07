@@ -96,15 +96,6 @@
     <ClCompile Include="src\halfEdge.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\IClickableGraphic.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ISelectableDesign.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ISelectableGraphic.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\ObjectMemory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

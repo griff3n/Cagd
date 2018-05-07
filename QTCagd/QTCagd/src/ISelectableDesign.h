@@ -2,7 +2,7 @@
 class ISelectableDesign
 {
 public:
-	virtual void applySelectedDesign();
-	virtual void applyStandardDesign();
+	virtual void applySelectedDesign() = 0;
+	virtual void applyStandardDesign() = 0;
 };
 

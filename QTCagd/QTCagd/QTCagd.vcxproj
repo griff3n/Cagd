@@ -125,9 +125,6 @@
     <ClCompile Include="src\graphicFace.cpp" />
     <ClCompile Include="src\GraphicObject.cpp" />
     <ClCompile Include="src\halfEdge.cpp" />
-    <ClCompile Include="src\IClickableGraphic.cpp" />
-    <ClCompile Include="src\ISelectableDesign.cpp" />
-    <ClCompile Include="src\ISelectableGraphic.cpp" />
     <ClCompile Include="src\ObjectMemory.cpp" />
     <ClCompile Include="src\Skin.cpp" />
     <ClCompile Include="src\graphicVertex.cpp" />

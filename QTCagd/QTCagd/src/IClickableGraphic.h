@@ -3,6 +3,6 @@ class IClickableGraphic
 {
 public:
 
-	virtual void onClick();
+	virtual void onClick() = 0;
 };
 
