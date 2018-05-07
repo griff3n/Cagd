@@ -1,4 +1,4 @@
-#include "halfEdge.h"
+#include "graphicFace.h"
 
 
 graphicFace::graphicFace(Design * design, ObjectMemory * sMem):GraphicObject(design,sMem)

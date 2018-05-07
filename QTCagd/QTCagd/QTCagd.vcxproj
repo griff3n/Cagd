@@ -160,7 +160,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Design.h" />
+    <ClInclude Include="src\graphicFace.h" />
     <ClInclude Include="src\GraphicObject.h" />
+    <ClInclude Include="src\graphicVertex.h" />
     <ClInclude Include="src\halfEdge.h" />
     <ClInclude Include="src\IClickableGraphic.h" />
     <ClInclude Include="src\ISelectableDesign.h" />
