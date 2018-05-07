@@ -10,7 +10,7 @@ struct halfEdge :
 	public GraphicObject
 {
 public:
-	halfEdge(Design* design, ObjectMemory* sMem);
+	halfEdge(Design* design = nullptr, ObjectMemory* sMem = nullptr);
 	~halfEdge();
 	graphicVertex* vert; // start-vertex of the half-edge
 	halfEdge* pair; // oppositely oriented adjacent half-edge 

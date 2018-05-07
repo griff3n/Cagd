@@ -7,13 +7,11 @@
 class GraphicObject :public ISelectableGraphic, public IClickableGraphic
 {
 public:
-	GraphicObject();
-	GraphicObject(Design * design, ObjectMemory * sMem);
-
+	virtual ~GraphicObject();
 
 protected:
 
 	bool isSelected = false;
-	Design * design;
-	ObjectMemory * sMem;
+	Design * design = nullptr;
+	ObjectMemory * sMem = nullptr;
 };
