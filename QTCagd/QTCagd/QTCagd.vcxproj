@@ -121,16 +121,16 @@
     </QtRcc>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Design.cpp" />
-    <ClCompile Include="graphicFace.cpp" />
-    <ClCompile Include="GraphicObject.cpp" />
-    <ClCompile Include="halfEdge.cpp" />
-    <ClCompile Include="IClickableGraphic.cpp" />
-    <ClCompile Include="ISelectableDesign.cpp" />
-    <ClCompile Include="ISelectableGraphic.cpp" />
-    <ClCompile Include="ObjectMemory.cpp" />
-    <ClCompile Include="Skin.cpp" />
-    <ClCompile Include="graphicVertex.cpp" />
+    <ClCompile Include="src\Design.cpp" />
+    <ClCompile Include="src\graphicFace.cpp" />
+    <ClCompile Include="src\GraphicObject.cpp" />
+    <ClCompile Include="src\halfEdge.cpp" />
+    <ClCompile Include="src\IClickableGraphic.cpp" />
+    <ClCompile Include="src\ISelectableDesign.cpp" />
+    <ClCompile Include="src\ISelectableGraphic.cpp" />
+    <ClCompile Include="src\ObjectMemory.cpp" />
+    <ClCompile Include="src\Skin.cpp" />
+    <ClCompile Include="src\graphicVertex.cpp" />
     <ClCompile Include="src\Axis.cpp" />
     <ClCompile Include="src\BBox.cpp" />
     <ClCompile Include="src\BCurve.cpp" />
@@ -159,16 +159,15 @@
     <QtRcc Include="QTCagd.qrc" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Design.h" />
-    <ClInclude Include="GraphicObject.h" />
-    <ClInclude Include="halfEdge.h" />
-    <ClInclude Include="IClickableGraphic.h" />
-    <ClInclude Include="ISelectableDesign.h" />
-    <ClInclude Include="ISelectableGraphic.h" />
-    <ClInclude Include="OpenGLWidget.h" />
+    <ClInclude Include="src\Design.h" />
+    <ClInclude Include="src\GraphicObject.h" />
+    <ClInclude Include="src\halfEdge.h" />
+    <ClInclude Include="src\IClickableGraphic.h" />
+    <ClInclude Include="src\ISelectableDesign.h" />
+    <ClInclude Include="src\ISelectableGraphic.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="ObjectMemory.h" />
-    <ClInclude Include="Skin.h" />
+    <ClInclude Include="src\ObjectMemory.h" />
+    <ClInclude Include="src\Skin.h" />
     <ClInclude Include="src\Axis.h" />
     <ClInclude Include="src\BBox.h" />
     <ClInclude Include="src\BCurve.h" />
