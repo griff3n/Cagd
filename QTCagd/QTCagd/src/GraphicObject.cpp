@@ -2,8 +2,12 @@
 
 GraphicObject::~GraphicObject()
 {
-	design->~Design();
-	sMem->~ObjectMemory();
+	if (design) {
+		delete design;
+	}
+	if (sMem) {
+		delete sMem;
+	}	
 }
 
 void GraphicObject::select()

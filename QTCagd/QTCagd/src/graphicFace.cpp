@@ -9,6 +9,10 @@ graphicFace::graphicFace(Design * design, ObjectMemory * sMem)
 
 graphicFace::~graphicFace()
 {
-	surrounding->~halfEdge();
-	nextLOD->~graphicVertex();
+	if (surrounding) {
+		delete surrounding;
+	}
+	if (nextLOD) {
+		delete nextLOD;
+	}
 }

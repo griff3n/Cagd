@@ -10,9 +10,17 @@ halfEdge::halfEdge(Design * design, ObjectMemory * sMem)
 
 halfEdge::~halfEdge()
 {
-	vert->~graphicVertex();
-	pair->~halfEdge();
-	face->~graphicFace();
-	next->~halfEdge();
+	if (vert) {
+		delete vert;
+	}
+	if (pair) {
+		delete pair;
+	}
+	if (face) {
+		delete face;
+	}
+	if (next) {
+		delete next;
+	}
 }
 

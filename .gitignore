@@ -1,10 +1,11 @@
 /Debug/
 /.vs/
 /QTCadg/Debug/
-/QTCadg/x64/
-/QTCadg/.vs/
-/QTCadg/QTCadg/x64/
-/QTCadg/QTCadg/x64/Generated Files/
+/QTCagd/x64/
+/QTCagd/.vs/
+/QTCagd/QTCagd/x64/
+/QTCagd/QTCagd/x64/Generated Files/
 /QTCagd/QTCagd/QTCagd.vcxproj.user
 /QTCagd/QTCagd/QTCagd.vcxproj.filters
 /QTCagd/QTCagd/.vs/
+/QTCagd/TestQTCagd/x64/

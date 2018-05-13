@@ -12,5 +12,5 @@ public:
 	~graphicFace();
 	bool hole;
 	halfEdge* surrounding = nullptr;
-	graphicVertex* nextLOD;
+	graphicVertex* nextLOD = nullptr;
 };

@@ -14,7 +14,13 @@ graphicVertex::graphicVertex(glm::vec4 location, graphicVertex * lastLOD, graphi
 
 graphicVertex::~graphicVertex()
 {
-	lastLOD->~graphicVertex();
-	nextLOD->~graphicVertex();
-	outgoing->~halfEdge();
+	if (lastLOD) {
+		delete lastLOD;
+	}
+	if (nextLOD) {
+		delete nextLOD;
+	}
+	if(outgoing) {
+		delete outgoing;
+	}
 }
