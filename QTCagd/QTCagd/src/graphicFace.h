@@ -10,7 +10,7 @@ struct graphicFace :
 public:
 	graphicFace(Design* design = nullptr, ObjectMemory* sMem = nullptr);
 	~graphicFace();
-	bool hole;
+	bool isHole = false;
 	halfEdge* surrounding = nullptr;
 	graphicVertex* nextLOD = nullptr;
 };
