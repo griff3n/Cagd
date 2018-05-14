@@ -1,7 +1,5 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
-#include <iostream>
-#include <string>
 
 #include "Design.h"
 #include "Design.cpp"
@@ -22,7 +20,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace TestQTCagd
 {		
-	TEST_CLASS(UnitTest1)
+	TEST_CLASS(TestHalfEdge)
 	{
 	public:
 		

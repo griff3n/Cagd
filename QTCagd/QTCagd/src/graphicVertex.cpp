@@ -1,13 +1,5 @@
 #include "graphicVertex.h"
 
-
-
-
-graphicVertex::graphicVertex(glm::vec4 location)
-{
-	this->location = location;
-}
-
 graphicVertex::graphicVertex(glm::vec4 location, graphicVertex * lastLOD, graphicVertex* nextLOD, Design* design, ObjectMemory* sMem)
 {
 	this->design = design;
