@@ -15,7 +15,8 @@ namespace TestQTCagd
 			Assert::IsNull(testGF->getDesign());
 			Assert::IsNull(testGF->getSMem());
 			Assert::IsFalse(testGF->isHole);
-			Assert::IsNull(testGF->surrounding);
+			Assert::AreEqual(0, testGF->valence);
+			Assert::IsNull(testGF->edge);
 			Assert::IsNull(testGF->nextLOD);
 		}
 
@@ -32,7 +33,8 @@ namespace TestQTCagd
 			Assert::IsNotNull(testGF->getSMem());
 			Assert::IsTrue(sMem == testGF->getSMem());
 			Assert::IsFalse(testGF->isHole);
-			Assert::IsNull(testGF->surrounding);
+			Assert::AreEqual(0, testGF->valence);
+			Assert::IsNull(testGF->edge);
 			Assert::IsNull(testGF->nextLOD);
 		}
 
@@ -45,16 +47,18 @@ namespace TestQTCagd
 		}
 
 		TEST_METHOD(testSetVals) {
-			halfEdge * surrounding = new halfEdge();
+			halfEdge * edge = new halfEdge();
 			glm::vec4 pos0 = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
 			graphicVertex * nextLOD = new graphicVertex(pos0);
 			graphicFace * testGF = new graphicFace();
 			testGF->isHole = true;
-			testGF->surrounding = surrounding;
+			testGF->valence = 1;
+			testGF->edge = edge;
 			testGF->nextLOD = nextLOD;
 			Assert::IsTrue(testGF->isHole);
-			Assert::IsNotNull(testGF->surrounding);
-			Assert::IsTrue(surrounding == testGF->surrounding);
+			Assert::AreEqual(1, testGF->valence);
+			Assert::IsNotNull(testGF->edge);
+			Assert::IsTrue(edge == testGF->edge);
 			Assert::IsNotNull(testGF->nextLOD);
 			Assert::IsTrue(nextLOD == testGF->nextLOD);
 		}

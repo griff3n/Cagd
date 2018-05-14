@@ -11,13 +11,7 @@ graphicVertex::graphicVertex(glm::vec4 location, graphicVertex * lastLOD, graphi
 
 graphicVertex::~graphicVertex()
 {
-	if (lastLOD) {
-		delete lastLOD;
-	}
-	if (nextLOD) {
-		delete nextLOD;
-	}
-	if(outgoing) {
-		delete outgoing;
-	}
+	delete lastLOD;
+	delete nextLOD;
+	delete edge;
 }

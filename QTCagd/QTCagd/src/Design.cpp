@@ -11,13 +11,11 @@ Design::Design(Skin* normal, Skin* selected)
 
 Design::~Design()
 {
-	if (normal) {
-		delete normal;
-	}
-	if (selected && selected != normal) {
+	delete normal;
+	if (selected != normal) {
 		delete selected;
 	}
-	if (active && active != normal && active != selected) {
+	if (active != normal && active != selected) {
 		delete active;
 	}
 }

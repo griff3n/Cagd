@@ -18,7 +18,8 @@ namespace TestQTCagd
 			Assert::AreEqual(0.0f, testGV->weight);
 			Assert::IsTrue(pos == testGV->location);
 			Assert::IsFalse(testGV->hasFlag);
-			Assert::IsNull(testGV->outgoing);
+			Assert::AreEqual(0, testGV->valence);
+			Assert::IsNull(testGV->edge);
 			Assert::IsNull(testGV->lastLOD);
 			Assert::IsNull(testGV->nextLOD);
 		}
@@ -43,7 +44,8 @@ namespace TestQTCagd
 			Assert::IsTrue(pos == testGV->location);
 			Assert::IsFalse(pos0 == testGV->location);
 			Assert::IsFalse(testGV->hasFlag);
-			Assert::IsNull(testGV->outgoing);
+			Assert::AreEqual(0, testGV->valence);
+			Assert::IsNull(testGV->edge);
 			Assert::IsNotNull(testGV->lastLOD);
 			Assert::IsTrue(lastLOD == testGV->lastLOD);
 			Assert::IsNotNull(testGV->nextLOD);
@@ -69,17 +71,19 @@ namespace TestQTCagd
 			glm::vec4 pos = glm::vec4(4.0f, 3.0f, 2.0f, 1.0f);
 			graphicVertex * lastLOD = new graphicVertex(pos0);
 			graphicVertex * nextLOD = new graphicVertex(pos0);
-			halfEdge * out = new halfEdge();
+			halfEdge * edge = new halfEdge();
 			graphicVertex * testGV = new graphicVertex(pos);
 			testGV->weight = 1.0f;
 			testGV->hasFlag = true;
-			testGV->outgoing = out;
+			testGV->valence = 1;
+			testGV->edge = edge;
 			testGV->nextLOD = nextLOD;
 			testGV->lastLOD = lastLOD;
 			Assert::AreEqual(1.0f, testGV->weight);
 			Assert::IsTrue(testGV->hasFlag);
-			Assert::IsNotNull(testGV->outgoing);
-			Assert::IsTrue(out == testGV->outgoing);
+			Assert::AreEqual(1, testGV->valence);
+			Assert::IsNotNull(testGV->edge);
+			Assert::IsTrue(edge == testGV->edge);
 			Assert::IsNotNull(testGV->nextLOD);
 			Assert::IsTrue(nextLOD == testGV->nextLOD);
 			Assert::IsNotNull(testGV->lastLOD);
