@@ -1,15 +1,16 @@
 #include <regex>
 #include "ObjectLoader.h"
+#include "HalfEdgeMesh.h"
 
 std::vector<std::vector<HE_edge*>> acceleration;
 std::vector<glm::vec2*> HEtextureVertices;
 std::vector<glm::vec3*> HEVertexNormals;
 
-bool loadOBJreg(const char * path, std::vector<glm::vec3> & out_vertices, std::vector<GLuint> &out_indices, std::vector<HE_vert*> &out_HEvertices, std::vector<HE_face*> &out_HEfaces, std::vector<HE_edge*> &out_HEedges, std::vector<float> &bbox) {
+bool loadOBJreg(const char * path, HalfEdgeMesh * mesh) {
 	std::string line;
 	std::string name;
-	std::regex skip("^# | ^\\s*$");
-	std::regex reg("[\\w.]+");
+	std::regex skip("^# | ^\\s*$"); // Comments and empty Lines
+	std::regex reg("[\\w.]+"); // Words or Numbers
 	std::ifstream myfile(path);
 
 	if (myfile.is_open())
@@ -31,11 +32,21 @@ bool loadOBJreg(const char * path, std::vector<glm::vec3> & out_vertices, std::v
 			}
 			if (results[0].str() == "v")
 			{
-				//do vertex stuff
+				try {
+					float x = std::stof(results[1].str);
+					float y = std::stof(results[2].str);
+					float z = std::stof(results[3].str);
+					glm::vec4 location = glm::vec4(x, y, z, 1);
+					graphicVertex* newVert = new graphicVertex(location);
+					mesh->vertices.push_back(newVert);
+				}
+				catch(const std::invalid_argument& ia){
+					std::cerr << "Invalid argument: " << ia.what() << '\n';
+				}
 			}
 			else if (results[0].str() == "f")
 			{
-				//do face stuff
+				if (acceleration.size() == 0) acceleration.resize(mesh->vertices.size()); //Only once after reading all vertices
 			}
 			else
 			{
