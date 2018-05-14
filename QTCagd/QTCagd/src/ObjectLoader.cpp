@@ -33,9 +33,9 @@ bool loadOBJreg(const char * path, HalfEdgeMesh * mesh) {
 			if (results[0].str() == "v")
 			{
 				try {
-					float x = std::stof(results[1].str);
-					float y = std::stof(results[2].str);
-					float z = std::stof(results[3].str);
+					float x = std::stof(results[1].str());
+					float y = std::stof(results[2].str());
+					float z = std::stof(results[3].str());
 					glm::vec4 location = glm::vec4(x, y, z, 1);
 					graphicVertex* newVert = new graphicVertex(location);
 					mesh->vertices.push_back(newVert);
