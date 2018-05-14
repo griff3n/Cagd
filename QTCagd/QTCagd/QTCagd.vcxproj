@@ -125,6 +125,7 @@
     <ClCompile Include="src\graphicFace.cpp" />
     <ClCompile Include="src\GraphicObject.cpp" />
     <ClCompile Include="src\halfEdge.cpp" />
+    <ClCompile Include="src\HalfEdgeMesh.cpp" />
     <ClCompile Include="src\ObjectMemory.cpp" />
     <ClCompile Include="src\Skin.cpp" />
     <ClCompile Include="src\graphicVertex.cpp" />
@@ -161,6 +162,7 @@
     <ClInclude Include="src\GraphicObject.h" />
     <ClInclude Include="src\graphicVertex.h" />
     <ClInclude Include="src\halfEdge.h" />
+    <ClInclude Include="src\HalfEdgeMesh.h" />
     <ClInclude Include="src\IClickableGraphic.h" />
     <ClInclude Include="src\ISelectableDesign.h" />
     <ClInclude Include="src\ISelectableGraphic.h" />
