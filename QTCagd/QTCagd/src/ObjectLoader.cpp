@@ -2,7 +2,8 @@
 #include "ObjectLoader.h"
 #include "HalfEdgeMesh.h"
 
-std::vector<std::vector<HE_edge*>> acceleration;
+std::vector<std::vector<halfEdge*>> acceleration;
+std::vector<std::vector<HE_edge*>> accelerationOld;
 std::vector<glm::vec2*> HEtextureVertices;
 std::vector<glm::vec3*> HEVertexNormals;
 
@@ -47,11 +48,68 @@ bool loadOBJreg(const char * path, HalfEdgeMesh * mesh) {
 			else if (results[0].str() == "f")
 			{
 				if (acceleration.size() == 0) acceleration.resize(mesh->vertices.size()); //Only once after reading all vertices
+				
+				//BEGIN HE datastructure =====================================
+				std::vector<int> indices;
+				try {
+					for (int i = 1; i < results.size(); i++) {
+						indices.push_back(stoi(results[i].str()));
+					}
+				}
+				catch (const std::invalid_argument& ia) {
+					std::cerr << "Invalid argument: " << ia.what() << '\n';
+				}
+				graphicFace * face = new graphicFace;
+				halfEdge *previous = nullptr;
+				halfEdge *first = nullptr;
+				for (int j = 0; j < indices.size(); j++) {
+					halfEdge *edge = new halfEdge;
+					edge->face = face;
+					graphicVertex *vert = mesh->vertices[indices[j] - 1];
+					if (vert->edge == nullptr) {
+						vert->edge = edge;
+					}
+					acceleration[indices[j] - 1].push_back(edge);
+					edge->vert = vert;
+					if (previous == nullptr) {
+						first = edge;
+					}
+					else {
+						previous->next = edge;
+					}
+					previous = edge;
+					mesh->halfEdges.push_back(edge);
+				}
+				previous->next = first;
+				face->edge = first;
+				//Face valences
+				face->valence = indices.size();
+				mesh->faces.push_back(face);
+				//Pairs setzen
+				for (int k = 0; k < indices.size(); k++) {
+					graphicVertex *start = first->vert;
+					graphicVertex *end = first->next->vert;
+					int index = indices[(k + 1) % indices.size()] - 1;
+					for (int n = 0; n < acceleration[index].size(); n++) {
+						if (acceleration[index][n]->next != nullptr) {
+							if (acceleration[index][n]->next->vert == start) {
+								first->pair = acceleration[index][n];
+								acceleration[index][n]->pair = first;
+							}
+						}
+					}
+					first = first->next;
+				}
+				//END HE datastructure =======================================
 			}
 			else
 			{
 				//something else
 			}
+		}
+		//Vertice valences
+		for (int i = 0; i < mesh->vertices.size(); i++) {
+			mesh->vertices[i]->valence = acceleration[i].size();
 		}
 		myfile.close();
 		return true;
@@ -119,7 +177,7 @@ bool loadOBJ(const char * path, std::vector<glm::vec3> & out_vertices, std::vect
 			}
 			else if (line[0] == 'f') {
 				//BEGIN HE datastructure =====================================
-				if (acceleration.size() == 0) acceleration.resize(out_HEvertices.size()); //Only once after reading all vertices
+				if (accelerationOld.size() == 0) accelerationOld.resize(out_HEvertices.size()); //Only once after reading all vertices
 																						  //END HE datastructure =======================================
 				std::string delimiter = " ";
 				if (line[2] == ' ') {
@@ -156,7 +214,7 @@ bool loadOBJ(const char * path, std::vector<glm::vec3> & out_vertices, std::vect
 					if (vert->edge == nullptr) {
 						vert->edge = edge;
 					}
-					acceleration[indices[j] - 1].push_back(edge);
+					accelerationOld[indices[j] - 1].push_back(edge);
 					edge->vert = vert;
 					if (previous == nullptr) {
 						first = edge;
@@ -176,11 +234,11 @@ bool loadOBJ(const char * path, std::vector<glm::vec3> & out_vertices, std::vect
 					HE_vert *start = first->vert;
 					HE_vert *end = first->next->vert;
 					int index = indices[(k + 1) % indices.size()] - 1;
-					for (int n = 0; n < acceleration[index].size(); n++) {
-						if (acceleration[index][n]->next != nullptr) {
-							if (acceleration[index][n]->next->vert == start) {
-								first->pair = acceleration[index][n];
-								acceleration[index][n]->pair = first;
+					for (int n = 0; n < accelerationOld[index].size(); n++) {
+						if (accelerationOld[index][n]->next != nullptr) {
+							if (accelerationOld[index][n]->next->vert == start) {
+								first->pair = accelerationOld[index][n];
+								accelerationOld[index][n]->pair = first;
 							}
 						}
 					}
@@ -191,7 +249,7 @@ bool loadOBJ(const char * path, std::vector<glm::vec3> & out_vertices, std::vect
 		}
 		//Vertice valences
 		for (int i = 0; i < out_HEvertices.size(); i++) {
-			out_HEvertices[i]->valence = acceleration[i].size();
+			out_HEvertices[i]->valence = accelerationOld[i].size();
 		}
 		myfile.close();
 		return true;
@@ -305,7 +363,7 @@ bool loadMayaOBJ(const char * path, std::vector<glm::vec3> & out_vertices, std::
 			}
 			else if (line[0] == 'f') {
 				//BEGIN HE datastructure =====================================
-				if (acceleration.size() == 0) acceleration.resize(out_HEvertices.size()); //Only once after reading all vertices
+				if (accelerationOld.size() == 0) accelerationOld.resize(out_HEvertices.size()); //Only once after reading all vertices
 																						  //END HE datastructure =======================================
 				std::string delimiter = " ";
 				if (line[2] == ' ') {
@@ -370,7 +428,7 @@ bool loadMayaOBJ(const char * path, std::vector<glm::vec3> & out_vertices, std::
 					if (vert->normal == nullptr) {
 						vert->normal = HEVertexNormals[vnIndices[j] - 1];
 					}
-					acceleration[indices[j] - 1].push_back(edge);
+					accelerationOld[indices[j] - 1].push_back(edge);
 					edge->vert = vert;
 					if (previous == nullptr) {
 						first = edge;
@@ -390,11 +448,11 @@ bool loadMayaOBJ(const char * path, std::vector<glm::vec3> & out_vertices, std::
 					HE_vert *start = first->vert;
 					HE_vert *end = first->next->vert;
 					int index = indices[(k + 1) % indices.size()] - 1;
-					for (int n = 0; n < acceleration[index].size(); n++) {
-						if (acceleration[index][n]->next != nullptr) {
-							if (acceleration[index][n]->next->vert == start) {
-								first->pair = acceleration[index][n];
-								acceleration[index][n]->pair = first;
+					for (int n = 0; n < accelerationOld[index].size(); n++) {
+						if (accelerationOld[index][n]->next != nullptr) {
+							if (accelerationOld[index][n]->next->vert == start) {
+								first->pair = accelerationOld[index][n];
+								accelerationOld[index][n]->pair = first;
 							}
 						}
 					}
@@ -405,7 +463,7 @@ bool loadMayaOBJ(const char * path, std::vector<glm::vec3> & out_vertices, std::
 		}
 		//Vertice valences
 		for (int i = 0; i < out_HEvertices.size(); i++) {
-			out_HEvertices[i]->valence = acceleration[i].size();
+			out_HEvertices[i]->valence = accelerationOld[i].size();
 		}
 		std::cout << "v " << out_HEvertices.size() << ", vt " << HEtextureVertices.size() << ", vn " << HEVertexNormals.size() << std::endl;
 		myfile.close();

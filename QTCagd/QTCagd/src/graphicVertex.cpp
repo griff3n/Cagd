@@ -17,7 +17,7 @@ graphicVertex::~graphicVertex()
 	if (nextLOD) {
 		delete nextLOD;
 	}
-	if(outgoing) {
-		delete outgoing;
+	if(edge) {
+		delete edge;
 	}
 }

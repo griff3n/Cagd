@@ -11,6 +11,7 @@ public:
 	graphicFace(Design* design = nullptr, ObjectMemory* sMem = nullptr);
 	~graphicFace();
 	bool hole;
-	halfEdge* surrounding = nullptr;
+	int valence;
+	halfEdge* edge = nullptr;
 	graphicVertex* nextLOD = nullptr;
 };
