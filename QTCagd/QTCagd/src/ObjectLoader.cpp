@@ -2,11 +2,11 @@
 #include "ObjectLoader.h"
 #include "HalfEdgeMesh.h"
 
-std::vector<std::vector<halfEdge*>> acceleration; // Lists of all outgoing Edges of every Vertex to speed up the Process
+//std::vector<std::vector<halfEdge*>> acceleration; // Lists of all outgoing Edges of every Vertex to speed up the Process
 std::vector<std::vector<HE_edge*>> accelerationOld;
 std::vector<glm::vec2*> HEtextureVertices;
 std::vector<glm::vec3*> HEVertexNormals;
-
+/*
 bool loadOBJreg(const char * path, HalfEdgeMesh * mesh) {
 	std::string line;
 	std::string name;
@@ -113,6 +113,7 @@ bool loadOBJreg(const char * path, HalfEdgeMesh * mesh) {
 	else std::cout << "Unable to open file";
 	return false;
 }
+*/
 
 
 bool loadOBJ(const char * path, std::vector<glm::vec3> & out_vertices, std::vector<GLuint> &out_indices, std::vector<HE_vert*> &out_HEvertices, std::vector<HE_face*> &out_HEfaces, std::vector<HE_edge*> &out_HEedges, std::vector<float> &bbox) {
