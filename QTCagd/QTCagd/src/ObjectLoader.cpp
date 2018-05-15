@@ -2,7 +2,7 @@
 #include "ObjectLoader.h"
 #include "HalfEdgeMesh.h"
 
-std::vector<std::vector<halfEdge*>> acceleration;
+std::vector<std::vector<halfEdge*>> acceleration; // Lists of all outgoing Edges of every Vertex to speed up the Process
 std::vector<std::vector<HE_edge*>> accelerationOld;
 std::vector<glm::vec2*> HEtextureVertices;
 std::vector<glm::vec3*> HEVertexNormals;
@@ -37,8 +37,7 @@ bool loadOBJreg(const char * path, HalfEdgeMesh * mesh) {
 					float x = std::stof(results[1].str());
 					float y = std::stof(results[2].str());
 					float z = std::stof(results[3].str());
-					glm::vec4 location = glm::vec4(x, y, z, 1);
-					graphicVertex* newVert = new graphicVertex(location);
+					graphicVertex* newVert = new graphicVertex(glm::vec4(x, y, z, 1.0f));
 					mesh->vertices.push_back(newVert);
 				}
 				catch(const std::invalid_argument& ia){
@@ -49,8 +48,7 @@ bool loadOBJreg(const char * path, HalfEdgeMesh * mesh) {
 			{
 				if (acceleration.size() == 0) acceleration.resize(mesh->vertices.size()); //Only once after reading all vertices
 				
-				//BEGIN HE datastructure =====================================
-				std::vector<int> indices;
+				std::vector<int> indices; // Indices of Vertices of the current Face
 				try {
 					for (int i = 1; i < results.size(); i++) {
 						indices.push_back(stoi(results[i].str()));
@@ -82,10 +80,9 @@ bool loadOBJreg(const char * path, HalfEdgeMesh * mesh) {
 				}
 				previous->next = first;
 				face->edge = first;
-				//Face valences
-				face->valence = indices.size();
+				face->valence = indices.size(); //Face valences
 				mesh->faces.push_back(face);
-				//Pairs setzen
+				// setting Pairs
 				for (int k = 0; k < indices.size(); k++) {
 					graphicVertex *start = first->vert;
 					graphicVertex *end = first->next->vert;
@@ -100,7 +97,6 @@ bool loadOBJreg(const char * path, HalfEdgeMesh * mesh) {
 					}
 					first = first->next;
 				}
-				//END HE datastructure =======================================
 			}
 			else
 			{
