@@ -20,6 +20,9 @@ public slots:
 	void closeApplication();
 	void showBunny();
 
+signals:
+	void meshChanged(HalfEdgeMesh*);
+
 private:
 	Ui::QTCagdClass ui;
 };

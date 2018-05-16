@@ -173,9 +173,6 @@
     <ClInclude Include="src\ObjectMemory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\OpenGLWidget.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Skin.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -194,6 +191,9 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="src\QTCagd.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="src\OpenGLWidget.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

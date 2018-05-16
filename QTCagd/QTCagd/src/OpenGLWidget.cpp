@@ -1,8 +1,9 @@
 #include "OpenGLWidget.h"
 
-Orb* sun = nullptr;
-glm::mat4x4 view;
-glm::mat4x4 projection;
+//Orb* sun = nullptr;
+//glm::mat4x4 view;
+//glm::mat4x4 projection;
+
 
 OpenGLWidget::OpenGLWidget(QWidget *parent)
 	: QOpenGLWidget(parent)
@@ -15,17 +16,23 @@ OpenGLWidget::~OpenGLWidget()
 
 }
 
+void OpenGLWidget::setHalfEdgeMesh(HalfEdgeMesh* mesh)
+{
+	this->mesh = mesh;
+}
+
 void OpenGLWidget::initializeGL()
 {
-	/*
+	
 	glClearColor(0.2, 0.2, 0.2, 1);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHT0);
 	glEnable(GL_LIGHTING);
 	glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 	glEnable(GL_COLOR_MATERIAL);
-	*/
+	glDepthFunc(GL_LEQUAL);
 
+	/*
 	glewInit();
 
 	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
@@ -57,34 +64,67 @@ void OpenGLWidget::initializeGL()
 	projection = glm::perspective(45.0f, (float)width / height, zNear, zFar);
 	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	*/
 	
 }
 
 void OpenGLWidget::paintGL()
 {
-	/*
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	if (!mesh) {
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glBegin(GL_TRIANGLES);
-	glColor3f(1.0, 0.0, 0.0);
-	glVertex3f(-0.5, -0.5, 0);
-	glColor3f(0.0, 1.0, 0.0);
-	glVertex3f(0.5, -0.5, 0);
-	glColor3f(0.0, 0.0, 1.0);
-	glVertex3f(0.0, 0.5, 0);
-	glEnd();
-	*/
+		glBegin(GL_TRIANGLES);
+		glColor3f(1.0, 0.0, 0.0);
+		glVertex3f(-0.5, -0.5, 0);
+		glColor3f(0.0, 1.0, 0.0);
+		glVertex3f(0.5, -0.5, 0);
+		glColor3f(0.0, 0.0, 1.0);
+		glVertex3f(0.0, 0.5, 0);
+		glEnd();
+	}
+	else {
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	
+		for (graphicFace* face : mesh->faces) {
+			if (face->valence == 3) {
+				halfEdge* start = face->edge;
+				halfEdge* current = face->edge;
+				glBegin(GL_TRIANGLES);
+				for (int i = 0; i < 3; i++) {
+					float x, y, z;
+					x = 0.2 * current->vert->location.x;
+					y = 0.2 * current->vert->location.y;
+					z = 0.2 * current->vert->location.z;
+					glColor3f(1.0, 0.0, 0.0);
+					glVertex3f(x,y,z);
+					current = current->next;
+				}
+				glEnd();
+			}
+			else if (face->valence == 4) {
+				halfEdge* start = face->edge;
+				halfEdge* current = face->edge;
+				glBegin(GL_QUADS);
+				for (int i = 0; i < 4; i++) {
+					float x, y, z;
+					x = 0.2 * current->vert->location.x;
+					y = 0.2 * current->vert->location.y;
+					z = 0.2 * current->vert->location.z;
+					glColor3f(1.0, 0.0, 0.0);
+					glVertex3f(x, y, z);
+					current = current->next;
+				}
+				glEnd();
+			}
+		}
+	}
 
-	
-
-	sun->render(view, projection, false, false, false);
+	//sun->render(view, projection, false false, false);
 }
 
 void OpenGLWidget::resizeGL(int w, int h)
 {
-	/*
+	
 	glViewport(0, 0, w, h);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -92,5 +132,5 @@ void OpenGLWidget::resizeGL(int w, int h)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	gluLookAt(0, 0, 5, 0, 0, 0, 0, 1, 0);
-	*/
+	
 }

@@ -14,6 +14,11 @@ void QTCagd::closeApplication()
 
 void QTCagd::showBunny()
 {
+	HalfEdgeMesh* bunny = new HalfEdgeMesh();
+	char* bunnyPath = "stanford_bunny_closed.obj";
+	//char* bunnyPath = "cube.obj";
+	loadOBJreg(bunnyPath, bunny);
+	emit meshChanged(bunny);
 	/*  Funktioniert nicht, da nicht im OpenGLWidget
 	glewInit();
 
@@ -49,4 +54,5 @@ void QTCagd::showBunny()
 
 	sun->render(view, projection, false, false, false);
 	*/
+	
 }

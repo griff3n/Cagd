@@ -1,6 +1,6 @@
 #include <regex>
 #include "ObjectLoader.h"
-#include "HalfEdgeMesh.h"
+
 
 std::vector<std::vector<halfEdge*>> acceleration; // Lists of all outgoing Edges of every Vertex to speed up the Process
 std::vector<std::vector<HE_edge*>> accelerationOld;
@@ -11,7 +11,7 @@ bool loadOBJreg(const char * path, HalfEdgeMesh * mesh) {
 	std::string line;
 	std::string name;
 	std::regex skip("^# | ^\\s*$"); // Comments and empty Lines
-	std::regex reg("[\\w.]+"); // Words or Numbers
+	std::regex reg("[\\w.-]+"); // Words or Numbers
 	std::ifstream myfile(path);
 
 	if (myfile.is_open())

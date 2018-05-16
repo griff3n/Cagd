@@ -9,6 +9,8 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <GL/glew.h>
 
+#include "HalfEdgeMesh.h"
+
 struct HE_vert;
 struct HE_face;
 struct HE_edge {
@@ -30,6 +32,8 @@ struct HE_face{
 	HE_edge* edge; // one of the half-edges bordering the face
 	int valence;
 };
+
+bool loadOBJreg(const char * path, HalfEdgeMesh * mesh);
 
 bool loadOBJ(const char * path, std::vector<glm::vec3> & out_vertices, std::vector<GLuint> &out_indices, std::vector<HE_vert*> &out_HEvertices, std::vector<HE_face*> &out_HEfaces, std::vector<HE_edge*> &out_HEedges, std::vector<float> &bbox);
 

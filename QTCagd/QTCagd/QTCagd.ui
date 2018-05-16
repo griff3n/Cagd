@@ -82,6 +82,10 @@
    <class>OpenGLWidget</class>
    <extends>QOpenGLWidget</extends>
    <header>openglwidget.h</header>
+   <slots>
+    <slot>setHalfEdgeMesh(HalfEdgeMesh*)</slot>
+    <slot>testslot()</slot>
+   </slots>
   </customwidget>
  </customwidgets>
  <resources>
@@ -111,17 +115,35 @@
    <slot>showBunny()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>94</x>
-     <y>62</y>
+     <x>97</x>
+     <y>64</y>
     </hint>
     <hint type="destinationlabel">
-     <x>24</x>
-     <y>50</y>
+     <x>218</x>
+     <y>53</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>QTCagdClass</sender>
+   <signal>meshChanged(HalfEdgeMesh*)</signal>
+   <receiver>openGLWidget</receiver>
+   <slot>setHalfEdgeMesh(HalfEdgeMesh*)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>341</x>
+     <y>58</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>358</x>
+     <y>225</y>
     </hint>
    </hints>
   </connection>
  </connections>
  <slots>
+  <signal>meshChanged(HalfEdgeMesh*)</signal>
+  <signal>test()</signal>
   <slot>closeApplication()</slot>
   <slot>showBunny()</slot>
  </slots>
