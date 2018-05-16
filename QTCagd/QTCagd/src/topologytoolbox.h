@@ -7,8 +7,8 @@
 
 #include "topology.h"
 #include "halfedgemesh.h"
-//#include "iterator.h"
-//#include "features.h"
+#include "iterator.h"
+#include "features.h"
 
 namespace viscas
 {
