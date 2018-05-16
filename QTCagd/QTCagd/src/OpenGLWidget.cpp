@@ -31,6 +31,7 @@ void OpenGLWidget::initializeGL()
 	glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 	glEnable(GL_COLOR_MATERIAL);
 	glDepthFunc(GL_LEQUAL);
+	glLineWidth(2.0f);
 
 	/*
 	glewInit();
@@ -83,7 +84,26 @@ void OpenGLWidget::paintGL()
 		glEnd();
 	}
 	else {
+		float scale = 10.0f;
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		
+		
+		
+		for (halfEdge* edge : mesh->halfEdges) {
+			float x, y, z, x2, y2, z2;
+			x = scale * edge->vert->location.x;
+			y = scale * edge->vert->location.y;
+			z = scale * edge->vert->location.z;
+			x2 = scale * edge->next->vert->location.x;
+			y2 = scale * edge->next->vert->location.y;
+			z2 = scale * edge->next->vert->location.z;
+			glBegin(GL_LINES);
+			glColor3f(0.0, 1.0, 1.0);
+			glVertex3f(x, y, z);
+			glColor3f(0.0, 1.0, 1.0);
+			glVertex3f(x2, y2, z2);
+			glEnd();
+		}
 
 		for (graphicFace* face : mesh->faces) {
 			if (face->valence == 3) {
@@ -92,9 +112,9 @@ void OpenGLWidget::paintGL()
 				glBegin(GL_TRIANGLES);
 				for (int i = 0; i < 3; i++) {
 					float x, y, z;
-					x = 0.2 * current->vert->location.x;
-					y = 0.2 * current->vert->location.y;
-					z = 0.2 * current->vert->location.z;
+					x = scale * current->vert->location.x;
+					y = scale * current->vert->location.y;
+					z = scale * current->vert->location.z;
 
 					//color magic
 					float factor;
@@ -114,7 +134,7 @@ void OpenGLWidget::paintGL()
 					if (factor < 0) factor = 0;
 					glColor3f(factor * 1.0 + 0.0, 0.0, 0.0);
 
-					glVertex3f(x,y,z);
+					glVertex3f(x, y, z);
 					current = current->next;
 				}
 				glEnd();
@@ -125,10 +145,10 @@ void OpenGLWidget::paintGL()
 				glBegin(GL_QUADS);
 				for (int i = 0; i < 4; i++) {
 					float x, y, z;
-					x = 0.2 * current->vert->location.x;
-					y = 0.2 * current->vert->location.y;
-					z = 0.2 * current->vert->location.z;
-					glColor3f(1.0, 0.0, 0.0);
+					x = scale * current->vert->location.x;
+					y = scale * current->vert->location.y;
+					z = scale * current->vert->location.z;
+					glColor3f(0.0, 0.0, 1.0);
 					glVertex3f(x, y, z);
 					current = current->next;
 				}
