@@ -1,12 +1,14 @@
 #include "OpenGLWidget.h"
+#include <Windows.h>
 
 //Orb* sun = nullptr;
 //glm::mat4x4 view;
 //glm::mat4x4 projection;
-
+std::vector<graphicVertex*> selections;
 
 OpenGLWidget::OpenGLWidget(QWidget *parent)
 	: QOpenGLWidget(parent)
+	, nearFar(0.01f, 1000.0f)
 {
 
 }
@@ -71,6 +73,8 @@ void OpenGLWidget::initializeGL()
 
 void OpenGLWidget::paintGL()
 {
+	modelView = view * model;
+
 	if (!mesh) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -88,7 +92,7 @@ void OpenGLWidget::paintGL()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		
-		
+		/*
 		for (halfEdge* edge : mesh->halfEdges) {
 			float x, y, z, x2, y2, z2;
 			x = scale * edge->vert->location.x;
@@ -104,7 +108,7 @@ void OpenGLWidget::paintGL()
 			glVertex3f(x2, y2, z2);
 			glEnd();
 		}
-
+		*/
 		for (graphicFace* face : mesh->faces) {
 			if (face->valence == 3) {
 				halfEdge* start = face->edge;
@@ -132,7 +136,8 @@ void OpenGLWidget::paintGL()
 					glm::normalize(antiLightDir);
 					factor = vertexNormal.x * antiLightDir.x + vertexNormal.y * antiLightDir.y + vertexNormal.z * antiLightDir.z;
 					if (factor < 0) factor = 0;
-					glColor3f(factor * 1.0 + 0.0, 0.0, 0.0);
+					if(current->vert->selected) glColor3f(0.0, 1.0, 0.0);
+					else glColor3f(factor * 1.0 + 0.0, 0.0, 0.0);
 
 					glVertex3f(x, y, z);
 					current = current->next;
@@ -156,7 +161,6 @@ void OpenGLWidget::paintGL()
 			}
 		}
 	}
-
 	//sun->render(view, projection, false false, false);
 }
 
@@ -164,11 +168,104 @@ void OpenGLWidget::resizeGL(int w, int h)
 {
 	
 	glViewport(0, 0, w, h);
+	viewport = QVector4D(0, 0, w, h);
+
+	//proj.setToIdentity();
+	//proj.perspective(60.0f, (float)w / (float)h, nearFar.x(), nearFar.y());
+
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluPerspective(45, (float)w / h, 0.01, 100.0);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	gluLookAt(0, 0, 5, 0, 0, 0, 0, 1, 0);
-	
+
+}
+void OpenGLWidget::mousePressEvent(QMouseEvent *e)
+{
+	lastMousePosition = currentMousePosition = e->pos();
+
+	switch (e->button())
+	{
+	case Qt::RightButton:
+		arcball = true;
+		break;
+	case Qt::MiddleButton:
+		break;
+	case Qt::LeftButton:
+		drag = true;
+		if (mesh)
+		{
+			auto append = e->modifiers() && Qt::ControlModifier;
+			for (graphicVertex* v : selections) {
+				v->selected = false;
+			}
+			selections.clear();
+			pick(QVector2D(lastMousePosition.x(), height() - 1 - lastMousePosition.y()), append);
+		}
+		break;
+	}
+
+}
+void OpenGLWidget::mouseReleaseEvent(QMouseEvent *e)
+{
+
+}
+void OpenGLWidget::mouseMoveEvent(QMouseEvent *e)
+{
+
+}
+void OpenGLWidget::wheelEvent(QWheelEvent* we)
+{
+
+}
+
+void OpenGLWidget::pick(const QVector2D &pos, bool append)
+{
+	//makeCurrent();
+
+	// Project from 2D to 3D.
+	QRect viewp(viewport.x(), viewport.y(), viewport.z(), viewport.w());
+
+	auto begin = QVector3D(pos, 0.0f).unproject(modelView, proj, viewp);
+	auto end = QVector3D(pos, 1.0f).unproject(modelView, proj, viewp);
+
+	// Create ray.
+	QVector3D origin = begin;
+	QVector3D direction = (end - begin).normalized();
+
+	intersect(origin, direction, append);
+
+	emit repaint();
+}
+
+void OpenGLWidget::intersect(const QVector3D &origin, const QVector3D &direction, bool append)
+{
+	float minimum = std::numeric_limits<float>::max();
+	graphicVertex *closest = nullptr;
+	for (graphicVertex *v : mesh->vertices) {
+		QVector3D p = QVector3D(v->location.x, v->location.y, v->location.z);
+		QVector3D op = 10*p - origin;//todo fix
+		QVector3D cross = QVector3D::crossProduct(direction,op);
+		
+		float distance = cross.length() / direction.length();
+
+		if (minimum > distance)
+		{
+			minimum = distance;
+			closest = v;
+		}
+	}
+	/*if (closest->selected) { 
+		closest->selected = false;
+		OutputDebugStringW(L"Deselected");
+	}
+	else {
+		closest->selected = true;
+		OutputDebugStringW(L"Selected");
+	}
+	*/
+	closest->selected = true;
+	selections.push_back(closest);
+	OutputDebugStringW(L"Selected\n");
 }

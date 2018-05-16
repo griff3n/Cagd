@@ -14,6 +14,7 @@ public:
 	float weight = 0.0f;
 	glm::vec4 location;
 	bool hasFlag = false;
+	bool selected = false;
 	int valence = 0;
 	halfEdge* edge = nullptr;
 	graphicVertex* nextLOD = nullptr;
