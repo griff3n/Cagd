@@ -95,7 +95,25 @@ void OpenGLWidget::paintGL()
 					x = 0.2 * current->vert->location.x;
 					y = 0.2 * current->vert->location.y;
 					z = 0.2 * current->vert->location.z;
-					glColor3f(1.0, 0.0, 0.0);
+
+					//color magic
+					float factor;
+					glm::vec3 vertexNormal;
+					halfEdge* start = current->vert->edge;
+					for (int i = 0; i < current->vert->valence; i++) {
+						glm::vec3 firstEdge = glm::vec3(start->next->vert->location - start->vert->location);
+						glm::vec3 secondEdge = glm::vec3(start->next->next->vert->location - start->next->vert->location);
+						glm::vec3 faceNormal = glm::cross(firstEdge, secondEdge);
+						faceNormal = glm::normalize(faceNormal);
+						vertexNormal += faceNormal;
+					}
+					vertexNormal = glm::normalize(vertexNormal);
+					glm::vec3 antiLightDir = glm::vec3(0.0, 1.0, 1.0) - glm::vec3(0.0, 0.0, 0.0);
+					glm::normalize(antiLightDir);
+					factor = vertexNormal.x * antiLightDir.x + vertexNormal.y * antiLightDir.y + vertexNormal.z * antiLightDir.z;
+					if (factor < 0) factor = 0;
+					glColor3f(factor * 1.0 + 0.0, 0.0, 0.0);
+
 					glVertex3f(x,y,z);
 					current = current->next;
 				}
