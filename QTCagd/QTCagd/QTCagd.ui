@@ -84,7 +84,6 @@
    <header>openglwidget.h</header>
    <slots>
     <slot>setHalfEdgeMesh(HalfEdgeMesh*)</slot>
-    <slot>testslot()</slot>
    </slots>
   </customwidget>
  </customwidgets>
@@ -143,7 +142,6 @@
  </connections>
  <slots>
   <signal>meshChanged(HalfEdgeMesh*)</signal>
-  <signal>test()</signal>
   <slot>closeApplication()</slot>
   <slot>showBunny()</slot>
  </slots>

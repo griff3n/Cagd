@@ -6,6 +6,8 @@ std::vector<std::vector<halfEdge*>> acceleration; // Lists of all outgoing Edges
 std::vector<std::vector<HE_edge*>> accelerationOld;
 std::vector<glm::vec2*> HEtextureVertices;
 std::vector<glm::vec3*> HEVertexNormals;
+float bbox[6];
+float intitalSize = 1.0;
 
 bool loadOBJreg(const char * path, HalfEdgeMesh * mesh) {
 	std::string line;
@@ -39,6 +41,23 @@ bool loadOBJreg(const char * path, HalfEdgeMesh * mesh) {
 					float z = std::stof(results[3].str());
 					graphicVertex* newVert = new graphicVertex(glm::vec4(x, y, z, 1.0f));
 					mesh->vertices.push_back(newVert);
+
+					if (bbox[0] == NULL) { //first vertice
+						bbox[0] = newVert->location.x;
+						bbox[1] = newVert->location.x;
+						bbox[2] = newVert->location.y;
+						bbox[3] = newVert->location.y;
+						bbox[4] = newVert->location.z;
+						bbox[5] = newVert->location.z;
+					}
+					else {
+						if (newVert->location.x < bbox[0]) bbox[0] = newVert->location.x;
+						if (newVert->location.x > bbox[1]) bbox[1] = newVert->location.x;
+						if (newVert->location.y < bbox[2]) bbox[2] = newVert->location.y;
+						if (newVert->location.y > bbox[3]) bbox[3] = newVert->location.y;
+						if (newVert->location.z < bbox[4]) bbox[4] = newVert->location.z;
+						if (newVert->location.z > bbox[5]) bbox[5] = newVert->location.z;
+					}
 				}
 				catch(const std::invalid_argument& ia){
 					std::cerr << "Invalid argument: " << ia.what() << '\n';
@@ -108,6 +127,26 @@ bool loadOBJreg(const char * path, HalfEdgeMesh * mesh) {
 			mesh->vertices[i]->valence = acceleration[i].size();
 		}
 		myfile.close();
+
+		//Using bbox to scale and translate the model
+		float xlength = bbox[1] - bbox[0];
+		float ylength = bbox[3] - bbox[2];
+		float zlength = bbox[5] - bbox[4];
+
+		float scale;
+		if (xlength >= ylength && xlength >= zlength) {
+			scale = 2.0f*intitalSize / xlength;
+		}
+		else if (ylength >= xlength && ylength >= zlength) {
+			scale = 2.0f*intitalSize / ylength;
+		}
+		else {
+			scale = 2.0f*intitalSize / zlength;
+		}
+		QVector3D invMiddlepoint = QVector3D(-(xlength / 2 + bbox[0])*scale, -(ylength / 2 + bbox[2])*scale, -(zlength / 2 + bbox[4])*scale);
+		mesh->model.translate(invMiddlepoint);
+		mesh->model.scale(scale);
+
 		return true;
 	}
 	else std::cout << "Unable to open file";

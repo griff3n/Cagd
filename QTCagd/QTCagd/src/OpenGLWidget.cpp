@@ -8,7 +8,6 @@ std::vector<graphicVertex*> selections;
 
 OpenGLWidget::OpenGLWidget(QWidget *parent)
 	: QOpenGLWidget(parent)
-	, nearFar(0.01f, 1000.0f)
 {
 
 }
@@ -21,6 +20,7 @@ OpenGLWidget::~OpenGLWidget()
 void OpenGLWidget::setHalfEdgeMesh(HalfEdgeMesh* mesh)
 {
 	this->mesh = mesh;
+	emit repaint();
 }
 
 void OpenGLWidget::initializeGL()
@@ -34,6 +34,13 @@ void OpenGLWidget::initializeGL()
 	glEnable(GL_COLOR_MATERIAL);
 	glDepthFunc(GL_LEQUAL);
 	glLineWidth(2.0f);
+
+	QVector3D eye, center, up;
+	eye = QVector3D(0, 0, 5);
+	center = QVector3D(0, 0, 0);
+	up = QVector3D(0, 1, 0);
+	view.setToIdentity();
+    view.lookAt(eye, center, up);
 
 	/*
 	glewInit();
@@ -73,8 +80,6 @@ void OpenGLWidget::initializeGL()
 
 void OpenGLWidget::paintGL()
 {
-	modelView = view * model;
-
 	if (!mesh) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -88,10 +93,9 @@ void OpenGLWidget::paintGL()
 		glEnd();
 	}
 	else {
-		float scale = 10.0f;
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
-		
+		modelView = view * mesh->model;
 		/*
 		for (halfEdge* edge : mesh->halfEdges) {
 			float x, y, z, x2, y2, z2;
@@ -116,9 +120,14 @@ void OpenGLWidget::paintGL()
 				glBegin(GL_TRIANGLES);
 				for (int i = 0; i < 3; i++) {
 					float x, y, z;
-					x = scale * current->vert->location.x;
-					y = scale * current->vert->location.y;
-					z = scale * current->vert->location.z;
+					x = current->vert->location.x;
+					y = current->vert->location.y;
+					z = current->vert->location.z;
+					QVector4D location = QVector4D(x,y,z,1);
+					location = mesh->model*location;
+					x = location.x();
+					y = location.y();
+					z = location.z();
 
 					//color magic
 					float factor;
@@ -150,9 +159,16 @@ void OpenGLWidget::paintGL()
 				glBegin(GL_QUADS);
 				for (int i = 0; i < 4; i++) {
 					float x, y, z;
-					x = scale * current->vert->location.x;
-					y = scale * current->vert->location.y;
-					z = scale * current->vert->location.z;
+					x = current->vert->location.x;
+					y = current->vert->location.y;
+					z = current->vert->location.z;
+
+					QVector4D location = QVector4D(x, y, z, 1);
+					location = mesh->model*location;
+					x = location.x();
+					y = location.y();
+					z = location.z();
+
 					glColor3f(0.0, 0.0, 1.0);
 					glVertex3f(x, y, z);
 					current = current->next;
@@ -170,8 +186,8 @@ void OpenGLWidget::resizeGL(int w, int h)
 	glViewport(0, 0, w, h);
 	viewport = QVector4D(0, 0, w, h);
 
-	//proj.setToIdentity();
-	//proj.perspective(60.0f, (float)w / (float)h, nearFar.x(), nearFar.y());
+	projection.setToIdentity();
+	projection.perspective(60.0f, (float)w / (float)h, 0.01, 5000);
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -179,7 +195,6 @@ void OpenGLWidget::resizeGL(int w, int h)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	gluLookAt(0, 0, 5, 0, 0, 0, 0, 1, 0);
-
 }
 void OpenGLWidget::mousePressEvent(QMouseEvent *e)
 {
@@ -227,8 +242,8 @@ void OpenGLWidget::pick(const QVector2D &pos, bool append)
 	// Project from 2D to 3D.
 	QRect viewp(viewport.x(), viewport.y(), viewport.z(), viewport.w());
 
-	auto begin = QVector3D(pos, 0.0f).unproject(modelView, proj, viewp);
-	auto end = QVector3D(pos, 1.0f).unproject(modelView, proj, viewp);
+	auto begin = QVector3D(pos, 0.0f).unproject(modelView, projection, viewp);
+	auto end = QVector3D(pos, 1.0f).unproject(modelView, projection, viewp);
 
 	// Create ray.
 	QVector3D origin = begin;
@@ -245,7 +260,7 @@ void OpenGLWidget::intersect(const QVector3D &origin, const QVector3D &direction
 	graphicVertex *closest = nullptr;
 	for (graphicVertex *v : mesh->vertices) {
 		QVector3D p = QVector3D(v->location.x, v->location.y, v->location.z);
-		QVector3D op = 10*p - origin;//todo fix
+		QVector3D op = p - origin;
 		QVector3D cross = QVector3D::crossProduct(direction,op);
 		
 		float distance = cross.length() / direction.length();
@@ -267,5 +282,7 @@ void OpenGLWidget::intersect(const QVector3D &origin, const QVector3D &direction
 	*/
 	closest->selected = true;
 	selections.push_back(closest);
-	OutputDebugStringW(L"Selected\n");
+	float x = origin.x();
+	qInfo() << "Selected origin " << origin.x() << " " << origin.y() << " " << origin.z() << "\n";
+	qInfo() << "Selected direction " << direction.x() << " " << direction.y() << " " << direction.z();
 }

@@ -40,17 +40,9 @@ private:
 	QPoint currentMousePosition;
 	QMatrix4x4 arcballRotation;
 	QMatrix4x4 view;
-	QMatrix4x4 proj;
-	QMatrix4x4 model;
-
+	QMatrix4x4 projection;
 	QMatrix4x4 modelView;
-
-	QVector3D eye;
-
 	QVector4D viewport;
-	QVector2D nearFar;
-
-	QColor background;
 	void intersect(const QVector3D& origin, const QVector3D& direction, bool append);
 	void pick(const QVector2D &pos, bool append);
 };
