@@ -1,15 +1,6 @@
 #include "OpenGLWidget.h"
 #include <Windows.h>
 
-//Orb* sun = nullptr;
-//glm::mat4x4 view;
-//glm::mat4x4 projection;
-std::vector<graphicVertex*> selections;
-bool massSelection = false;
-QMatrix4x4 arcballRotationMatrix;
-int wdth;
-int hght;
-
 OpenGLWidget::OpenGLWidget(QWidget *parent)
 	: QOpenGLWidget(parent)
 {
@@ -289,6 +280,8 @@ void OpenGLWidget::mouseMoveEvent(QMouseEvent *e)
 			float angle = 90.0f * diff.length();
 			QVector3D axis = QVector3D::crossProduct(last, current);
 
+			QMatrix4x4 arcballRotation;
+
 			arcballRotation.setToIdentity();
 			arcballRotation.rotate(angle, axis);
 
@@ -354,8 +347,8 @@ void OpenGLWidget::intersect(const QVector3D &origin, const QVector3D &direction
 	for (graphicVertex *v : mesh->vertices) {
 		QVector3D p = QVector3D(v->location.x, v->location.y, v->location.z);
 		QVector3D op = p - origin;
-		QVector3D cross = QVector3D::crossProduct(direction,op);
-		
+		QVector3D cross = QVector3D::crossProduct(direction, op);
+
 		float distance = cross.length() / direction.length();
 
 		if (minimum > distance)
@@ -364,6 +357,7 @@ void OpenGLWidget::intersect(const QVector3D &origin, const QVector3D &direction
 			closest = v;
 		}
 	}
+	
 	if (closest) {
 		if (closest->selected && massSelection) {
 			closest->selected = false;

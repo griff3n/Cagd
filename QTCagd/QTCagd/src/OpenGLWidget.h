@@ -36,11 +36,15 @@ protected:
 
 private:
 	HalfEdgeMesh * mesh = nullptr;
-	bool arcball;
-	bool drag;
+	bool arcball = false;
+	bool drag = false;
+	bool massSelection = false;
+	std::vector<graphicVertex*> selections;
+	QMatrix4x4 arcballRotationMatrix;
+	int wdth;
+	int hght;
 	QPoint lastMousePosition;
 	QPoint currentMousePosition;
-	QMatrix4x4 arcballRotation;
 	QVector3D eye;
 	QMatrix4x4 view;
 	QMatrix4x4 projection;
