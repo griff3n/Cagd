@@ -47,8 +47,6 @@ private:
 	QMatrix4x4 modelView;
 	QVector4D viewport;
 	void intersect(const QVector3D& origin, const QVector3D& direction);
-	
-	
-
+	QVector3D projectOntoSphere(const QPoint & pos);
 	void pick(const QVector2D &pos);
 };

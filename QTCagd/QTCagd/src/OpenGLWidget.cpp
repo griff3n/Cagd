@@ -6,6 +6,9 @@
 //glm::mat4x4 projection;
 std::vector<graphicVertex*> selections;
 bool massSelection = false;
+QMatrix4x4 arcballRotationMatrix;
+int wdth;
+int hght;
 
 OpenGLWidget::OpenGLWidget(QWidget *parent)
 	: QOpenGLWidget(parent)
@@ -44,6 +47,7 @@ void OpenGLWidget::initializeGL()
     view.lookAt(eye, center, up);
 
 	setFocusPolicy(Qt::ClickFocus);
+	arcballRotationMatrix.setToIdentity();
 
 	/*
 	glewInit();
@@ -98,7 +102,7 @@ void OpenGLWidget::paintGL()
 	else {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
-		modelView = view * mesh->model;
+		modelView = view * arcballRotationMatrix * mesh->model;
 		
 		for (halfEdge* edge : mesh->halfEdges) {
 			float x, y, z, x2, y2, z2;
@@ -195,6 +199,8 @@ void OpenGLWidget::paintGL()
 
 void OpenGLWidget::resizeGL(int w, int h)
 {
+	wdth = w;
+	hght = h;
 	
 	glViewport(0, 0, w, h);
 	viewport = QVector4D(0, 0, w, h);
@@ -257,12 +263,58 @@ void OpenGLWidget::keyReleaseEvent(QKeyEvent *e) {
 
 void OpenGLWidget::mouseReleaseEvent(QMouseEvent *e)
 {
-
+	switch (e->button())
+	{
+	case Qt::RightButton:
+		arcball = false;
+		break;
+	case Qt::MiddleButton:
+		break;
+	case Qt::LeftButton:
+		break;
+	}
 }
 void OpenGLWidget::mouseMoveEvent(QMouseEvent *e)
 {
+	if (arcball)
+	{
+		currentMousePosition = e->pos();
 
+		if (currentMousePosition != lastMousePosition)
+		{
+			QVector3D last = projectOntoSphere(lastMousePosition);
+			QVector3D current = projectOntoSphere(currentMousePosition);
+			QVector3D diff = last - current;
+
+			float angle = 90.0f * diff.length();
+			QVector3D axis = QVector3D::crossProduct(last, current);
+
+			arcballRotation.setToIdentity();
+			arcballRotation.rotate(angle, axis);
+
+			lastMousePosition = currentMousePosition;
+			arcballRotationMatrix = arcballRotation * arcballRotationMatrix;
+
+			emit repaint();
+		}
+	}
 }
+
+QVector3D OpenGLWidget::projectOntoSphere(const QPoint& pos)
+{
+	QVector3D p;
+
+	p.setX((2.0f * pos.x()) / (float)wdth - 1.0f);
+	p.setY(1.0f - (2.0f * pos.y()) / (float)hght);
+
+	float d = std::min(1.0f, p.lengthSquared());
+
+	p.setZ(std::cosf(glm::pi<float>() * 0.5f * d));
+	p.normalize();
+
+	return p;
+}
+
 void OpenGLWidget::wheelEvent(QWheelEvent* we)
 {
 	QPoint numDegrees = we->angleDelta();
