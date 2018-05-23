@@ -124,7 +124,7 @@ void OpenGLWidget::paintGL()
 					y = current->vert->location.y;
 					z = current->vert->location.z;
 					QVector4D location = QVector4D(x,y,z,1);
-					location = mesh->model*location;
+					location = modelView *location;
 					x = location.x();
 					y = location.y();
 					z = location.z();
@@ -164,7 +164,7 @@ void OpenGLWidget::paintGL()
 					z = current->vert->location.z;
 
 					QVector4D location = QVector4D(x, y, z, 1);
-					location = mesh->model*location;
+					location = modelView *location;
 					x = location.x();
 					y = location.y();
 					z = location.z();
@@ -191,10 +191,11 @@ void OpenGLWidget::resizeGL(int w, int h)
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(45, (float)w / h, 0.01, 100.0);
+	gluPerspective(60, (float)w / h, 0.1, 100.0);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt(0, 0, 5, 0, 0, 0, 0, 1, 0);
+	view.setToIdentity();
+	view.lookAt(QVector3D(0, 0, 5), QVector3D(0, 0, 0), QVector3D(0, 1, 0));
 }
 void OpenGLWidget::mousePressEvent(QMouseEvent *e)
 {
