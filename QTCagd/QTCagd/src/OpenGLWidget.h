@@ -39,6 +39,7 @@ private:
 	QPoint lastMousePosition;
 	QPoint currentMousePosition;
 	QMatrix4x4 arcballRotation;
+	QVector3D eye;
 	QMatrix4x4 view;
 	QMatrix4x4 projection;
 	QMatrix4x4 modelView;

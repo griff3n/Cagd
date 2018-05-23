@@ -35,7 +35,7 @@ void OpenGLWidget::initializeGL()
 	glDepthFunc(GL_LEQUAL);
 	glLineWidth(2.0f);
 
-	QVector3D eye, center, up;
+	QVector3D center, up;
 	eye = QVector3D(0, 0, 5);
 	center = QVector3D(0, 0, 0);
 	up = QVector3D(0, 1, 0);
@@ -96,23 +96,33 @@ void OpenGLWidget::paintGL()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		modelView = view * mesh->model;
-		/*
+		
 		for (halfEdge* edge : mesh->halfEdges) {
 			float x, y, z, x2, y2, z2;
-			x = scale * edge->vert->location.x;
-			y = scale * edge->vert->location.y;
-			z = scale * edge->vert->location.z;
-			x2 = scale * edge->next->vert->location.x;
-			y2 = scale * edge->next->vert->location.y;
-			z2 = scale * edge->next->vert->location.z;
+			x = edge->vert->location.x;
+			y = edge->vert->location.y;
+			z = edge->vert->location.z;
+			x2 = edge->next->vert->location.x;
+			y2 = edge->next->vert->location.y;
+			z2 = edge->next->vert->location.z;
+			QVector4D v1 = QVector4D(x, y, z, 1);
+			QVector4D v2 = QVector4D(x2, y2, z2, 1);
+			v1 = modelView * v1;
+			v2 = modelView * v2;
+			x = v1.x();
+			y = v1.y();
+			z = v1.z();
+			x2 = v2.x();
+			y2 = v2.y();
+			z2 = v2.z();
 			glBegin(GL_LINES);
-			glColor3f(0.0, 1.0, 1.0);
+			glColor3f(0.0, 1.0, 0.0);
 			glVertex3f(x, y, z);
-			glColor3f(0.0, 1.0, 1.0);
+			glColor3f(0.0, 1.0, 0.0);
 			glVertex3f(x2, y2, z2);
 			glEnd();
 		}
-		*/
+		
 		for (graphicFace* face : mesh->faces) {
 			if (face->valence == 3) {
 				halfEdge* start = face->edge;
@@ -194,8 +204,8 @@ void OpenGLWidget::resizeGL(int w, int h)
 	gluPerspective(60, (float)w / h, 0.1, 100.0);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	view.setToIdentity();
-	view.lookAt(QVector3D(0, 0, 5), QVector3D(0, 0, 0), QVector3D(0, 1, 0));
+	//view.setToIdentity();
+	//view.lookAt(eye, { 0, 0, 0 }, { 0, 1, 0 });
 }
 void OpenGLWidget::mousePressEvent(QMouseEvent *e)
 {
@@ -233,7 +243,14 @@ void OpenGLWidget::mouseMoveEvent(QMouseEvent *e)
 }
 void OpenGLWidget::wheelEvent(QWheelEvent* we)
 {
+	QPoint numDegrees = we->angleDelta();
 
+	eye.setZ(eye.z() * (numDegrees.y() < 0 ? 1.1f : 0.9f));
+
+	view.setToIdentity();
+	view.lookAt(eye, { 0.0f, 0.0f, 0.0f }, { 0.0f, 1.0, 0.0f });
+
+	emit repaint();
 }
 
 void OpenGLWidget::pick(const QVector2D &pos, bool append)
@@ -257,7 +274,8 @@ void OpenGLWidget::pick(const QVector2D &pos, bool append)
 
 void OpenGLWidget::intersect(const QVector3D &origin, const QVector3D &direction, bool append)
 {
-	float minimum = std::numeric_limits<float>::max();
+	//float minimum = std::numeric_limits<float>::max();
+	float minimum = 0.003f;
 	graphicVertex *closest = nullptr;
 	for (graphicVertex *v : mesh->vertices) {
 		QVector3D p = QVector3D(v->location.x, v->location.y, v->location.z);
@@ -281,9 +299,9 @@ void OpenGLWidget::intersect(const QVector3D &origin, const QVector3D &direction
 		OutputDebugStringW(L"Selected");
 	}
 	*/
-	closest->selected = true;
-	selections.push_back(closest);
-	float x = origin.x();
-	qInfo() << "Selected origin " << origin.x() << " " << origin.y() << " " << origin.z() << "\n";
-	qInfo() << "Selected direction " << direction.x() << " " << direction.y() << " " << direction.z();
+	if (closest) {
+		closest->selected = true;
+		selections.push_back(closest);
+	}
+	qInfo() << "Minimum: " << minimum << "\n";
 }
