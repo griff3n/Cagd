@@ -31,6 +31,8 @@ protected:
 	void mouseReleaseEvent(QMouseEvent *) Q_DECL_OVERRIDE;
 	void mouseMoveEvent(QMouseEvent *) Q_DECL_OVERRIDE;
 	void wheelEvent(QWheelEvent* we) Q_DECL_OVERRIDE;
+	void keyPressEvent(QKeyEvent * e) Q_DECL_OVERRIDE;
+	void keyReleaseEvent(QKeyEvent * e) Q_DECL_OVERRIDE;
 
 private:
 	HalfEdgeMesh * mesh = nullptr;
@@ -44,6 +46,9 @@ private:
 	QMatrix4x4 projection;
 	QMatrix4x4 modelView;
 	QVector4D viewport;
-	void intersect(const QVector3D& origin, const QVector3D& direction, bool append);
-	void pick(const QVector2D &pos, bool append);
+	void intersect(const QVector3D& origin, const QVector3D& direction);
+	
+	
+
+	void pick(const QVector2D &pos);
 };

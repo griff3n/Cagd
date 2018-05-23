@@ -5,6 +5,7 @@
 //glm::mat4x4 view;
 //glm::mat4x4 projection;
 std::vector<graphicVertex*> selections;
+bool massSelection = false;
 
 OpenGLWidget::OpenGLWidget(QWidget *parent)
 	: QOpenGLWidget(parent)
@@ -41,6 +42,8 @@ void OpenGLWidget::initializeGL()
 	up = QVector3D(0, 1, 0);
 	view.setToIdentity();
     view.lookAt(eye, center, up);
+
+	setFocusPolicy(Qt::ClickFocus);
 
 	/*
 	glewInit();
@@ -209,7 +212,8 @@ void OpenGLWidget::resizeGL(int w, int h)
 }
 void OpenGLWidget::mousePressEvent(QMouseEvent *e)
 {
-	lastMousePosition = currentMousePosition = e->pos();
+	setFocus();
+	lastMousePosition = currentMousePosition = e->pos();	
 
 	switch (e->button())
 	{
@@ -222,17 +226,35 @@ void OpenGLWidget::mousePressEvent(QMouseEvent *e)
 		drag = true;
 		if (mesh)
 		{
-			auto append = e->modifiers() && Qt::ControlModifier;
-			for (graphicVertex* v : selections) {
-				v->selected = false;
+			bool append = e->modifiers() && Qt::ControlModifier;
+			
+			if (!massSelection) { 
+				for (graphicVertex* v : selections) {
+					v->selected = false;
+				}
+				selections.clear();
 			}
-			selections.clear();
-			pick(QVector2D(lastMousePosition.x(), height() - 1 - lastMousePosition.y()), append);
+			pick(QVector2D(lastMousePosition.x(), height() - 1 - lastMousePosition.y()));
 		}
 		break;
 	}
-
 }
+void OpenGLWidget::keyPressEvent(QKeyEvent *e) {
+	switch (e->key()) 
+	{
+	case Qt::Key_Control:
+		massSelection = true;
+	}
+}
+
+void OpenGLWidget::keyReleaseEvent(QKeyEvent *e) {
+	switch (e->key())
+	{
+	case Qt::Key_Control:
+		massSelection = false;
+	}
+}
+
 void OpenGLWidget::mouseReleaseEvent(QMouseEvent *e)
 {
 
@@ -253,7 +275,7 @@ void OpenGLWidget::wheelEvent(QWheelEvent* we)
 	emit repaint();
 }
 
-void OpenGLWidget::pick(const QVector2D &pos, bool append)
+void OpenGLWidget::pick(const QVector2D &pos)
 {
 	//makeCurrent();
 
@@ -267,12 +289,12 @@ void OpenGLWidget::pick(const QVector2D &pos, bool append)
 	QVector3D origin = begin;
 	QVector3D direction = (end - begin).normalized();
 
-	intersect(origin, direction, append);
+	intersect(origin, direction);
 
 	emit repaint();
 }
 
-void OpenGLWidget::intersect(const QVector3D &origin, const QVector3D &direction, bool append)
+void OpenGLWidget::intersect(const QVector3D &origin, const QVector3D &direction)
 {
 	//float minimum = std::numeric_limits<float>::max();
 	float minimum = 0.003f;
@@ -290,18 +312,19 @@ void OpenGLWidget::intersect(const QVector3D &origin, const QVector3D &direction
 			closest = v;
 		}
 	}
-	/*if (closest->selected) { 
-		closest->selected = false;
-		OutputDebugStringW(L"Deselected");
-	}
-	else {
-		closest->selected = true;
-		OutputDebugStringW(L"Selected");
-	}
-	*/
 	if (closest) {
-		closest->selected = true;
-		selections.push_back(closest);
+		if (closest->selected && massSelection) {
+			closest->selected = false;
+			OutputDebugStringW(L"Deselected");
+			for (int i = 0; i < selections.size(); i++) {
+				if (selections[i] == closest) selections.erase(selections.begin() + i);
+			}
+		}
+		else {
+			closest->selected = true;
+			OutputDebugStringW(L"Selected");
+			selections.push_back(closest);
+		}
 	}
 	qInfo() << "Minimum: " << minimum << "\n";
 }
