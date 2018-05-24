@@ -15,6 +15,18 @@ OpenGLWidget::~OpenGLWidget()
 void OpenGLWidget::setHalfEdgeMesh(HalfEdgeMesh* mesh)
 {
 	this->mesh = mesh;
+
+	//reset View
+	QVector3D center, up;
+	eye = QVector3D(0, 0, 5);
+	center = QVector3D(0, 0, 0);
+	up = QVector3D(0, 1, 0);
+	view.setToIdentity();
+	view.lookAt(eye, center, up);
+
+	//reset arcball
+	arcballRotationMatrix.setToIdentity();
+
 	emit repaint();
 }
 
@@ -342,7 +354,7 @@ void OpenGLWidget::pick(const QVector2D &pos)
 void OpenGLWidget::intersect(const QVector3D &origin, const QVector3D &direction)
 {
 	//float minimum = std::numeric_limits<float>::max();
-	float minimum = 0.003f;
+	float minimum = 0.003f; //TODO change this to value depending on mesh bounding box
 	graphicVertex *closest = nullptr;
 	for (graphicVertex *v : mesh->vertices) {
 		QVector3D p = QVector3D(v->location.x, v->location.y, v->location.z);

@@ -2,19 +2,22 @@
 #include "ObjectLoader.h"
 
 
-std::vector<std::vector<halfEdge*>> acceleration; // Lists of all outgoing Edges of every Vertex to speed up the Process
+ // Lists of all outgoing Edges of every Vertex to speed up the Process
 std::vector<std::vector<HE_edge*>> accelerationOld;
 std::vector<glm::vec2*> HEtextureVertices;
 std::vector<glm::vec3*> HEVertexNormals;
-float bbox[6];
-float intitalSize = 1.0;
 
-bool loadOBJreg(const char * path, HalfEdgeMesh * mesh) {
+HalfEdgeMesh* loadOBJreg(std::string path) {
+	std::vector<std::vector<halfEdge*>> acceleration;
+	float bbox[6];
+	float intitalSize = 1.0;
+
 	std::string line;
 	std::string name;
 	std::regex skip("^# | ^\\s*$"); // Comments and empty Lines
 	std::regex reg("[\\w.-]+"); // Words or Numbers
 	std::ifstream myfile(path);
+	HalfEdgeMesh* mesh = new HalfEdgeMesh();
 
 	if (myfile.is_open())
 	{
@@ -147,10 +150,10 @@ bool loadOBJreg(const char * path, HalfEdgeMesh * mesh) {
 		mesh->model.translate(invMiddlepoint);
 		mesh->model.scale(scale);
 
-		return true;
+		return mesh;
 	}
 	else std::cout << "Unable to open file";
-	return false;
+	return nullptr;
 }
 
 

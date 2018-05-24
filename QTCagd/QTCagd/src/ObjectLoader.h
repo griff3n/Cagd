@@ -33,7 +33,7 @@ struct HE_face{
 	int valence;
 };
 
-bool loadOBJreg(const char * path, HalfEdgeMesh * mesh);
+HalfEdgeMesh* loadOBJreg(std::string path);
 
 bool loadOBJ(const char * path, std::vector<glm::vec3> & out_vertices, std::vector<GLuint> &out_indices, std::vector<HE_vert*> &out_HEvertices, std::vector<HE_face*> &out_HEfaces, std::vector<HE_edge*> &out_HEedges, std::vector<float> &bbox);
 

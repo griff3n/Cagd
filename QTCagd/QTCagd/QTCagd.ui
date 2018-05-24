@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>691</width>
-    <height>527</height>
+    <width>747</width>
+    <height>557</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,26 +18,30 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout_2">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
     <item>
-     <layout class="QVBoxLayout" name="verticalLayout">
-      <item>
-       <widget class="QPushButton" name="pushButton">
-        <property name="text">
-         <string>Show Bunny</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="OpenGLWidget" name="openGLWidget">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-       </widget>
-      </item>
-     </layout>
+     <widget class="OpenGLWidget" name="openGLWidget">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -46,7 +50,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>691</width>
+     <width>747</width>
      <height>21</height>
     </rect>
    </property>
@@ -57,7 +61,9 @@
     <property name="title">
      <string>Datei</string>
     </property>
-    <addaction name="actionBeenden"/>
+    <addaction name="action_Open"/>
+    <addaction name="separator"/>
+    <addaction name="actionQuit"/>
    </widget>
    <addaction name="menuDatei"/>
   </widget>
@@ -70,9 +76,21 @@
    </attribute>
    <addaction name="separator"/>
   </widget>
-  <action name="actionBeenden">
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionQuit">
    <property name="text">
     <string>Beenden</string>
+   </property>
+  </action>
+  <action name="action_Open">
+   <property name="text">
+    <string>Öffnen</string>
+   </property>
+   <property name="toolTip">
+    <string>Öffne eine obj Datei</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::WindowShortcut</enum>
    </property>
   </action>
  </widget>
@@ -92,7 +110,7 @@
  </resources>
  <connections>
   <connection>
-   <sender>actionBeenden</sender>
+   <sender>actionQuit</sender>
    <signal>triggered()</signal>
    <receiver>QTCagdClass</receiver>
    <slot>closeApplication()</slot>
@@ -108,18 +126,18 @@
    </hints>
   </connection>
   <connection>
-   <sender>pushButton</sender>
-   <signal>clicked()</signal>
+   <sender>action_Open</sender>
+   <signal>triggered()</signal>
    <receiver>QTCagdClass</receiver>
-   <slot>showBunny()</slot>
+   <slot>openFile()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>97</x>
-     <y>64</y>
+     <x>-1</x>
+     <y>-1</y>
     </hint>
     <hint type="destinationlabel">
-     <x>218</x>
-     <y>53</y>
+     <x>345</x>
+     <y>263</y>
     </hint>
    </hints>
   </connection>
@@ -144,5 +162,6 @@
   <signal>meshChanged(HalfEdgeMesh*)</signal>
   <slot>closeApplication()</slot>
   <slot>showBunny()</slot>
+  <slot>openFile()</slot>
  </slots>
 </ui>
