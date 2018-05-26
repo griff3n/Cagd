@@ -10,6 +10,12 @@ std::vector<glm::vec3*> HEVertexNormals;
 HalfEdgeMesh* loadOBJreg(std::string path) {
 	std::vector<std::vector<halfEdge*>> acceleration;
 	float bbox[6];
+	bbox[0] = FLT_MAX;
+	bbox[1] = FLT_MIN;
+	bbox[2] = FLT_MAX;
+	bbox[3] = FLT_MIN;
+	bbox[4] = FLT_MAX;
+	bbox[5] = FLT_MIN;
 	float intitalSize = 1.0;
 
 	std::string line;
@@ -45,22 +51,12 @@ HalfEdgeMesh* loadOBJreg(std::string path) {
 					graphicVertex* newVert = new graphicVertex(glm::vec4(x, y, z, 1.0f));
 					mesh->vertices.push_back(newVert);
 
-					if (bbox[0] == NULL) { //first vertice
-						bbox[0] = newVert->location.x;
-						bbox[1] = newVert->location.x;
-						bbox[2] = newVert->location.y;
-						bbox[3] = newVert->location.y;
-						bbox[4] = newVert->location.z;
-						bbox[5] = newVert->location.z;
-					}
-					else {
-						if (newVert->location.x < bbox[0]) bbox[0] = newVert->location.x;
-						if (newVert->location.x > bbox[1]) bbox[1] = newVert->location.x;
-						if (newVert->location.y < bbox[2]) bbox[2] = newVert->location.y;
-						if (newVert->location.y > bbox[3]) bbox[3] = newVert->location.y;
-						if (newVert->location.z < bbox[4]) bbox[4] = newVert->location.z;
-						if (newVert->location.z > bbox[5]) bbox[5] = newVert->location.z;
-					}
+					if (newVert->location.x < bbox[0]) bbox[0] = newVert->location.x;
+					if (newVert->location.x > bbox[1]) bbox[1] = newVert->location.x;
+					if (newVert->location.y < bbox[2]) bbox[2] = newVert->location.y;
+					if (newVert->location.y > bbox[3]) bbox[3] = newVert->location.y;
+					if (newVert->location.z < bbox[4]) bbox[4] = newVert->location.z;
+					if (newVert->location.z > bbox[5]) bbox[5] = newVert->location.z;
 				}
 				catch(const std::invalid_argument& ia){
 					std::cerr << "Invalid argument: " << ia.what() << '\n';
