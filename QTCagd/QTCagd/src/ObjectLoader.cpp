@@ -10,12 +10,12 @@ std::vector<glm::vec3*> HEVertexNormals;
 HalfEdgeMesh* loadOBJreg(std::string path) {
 	std::vector<std::vector<halfEdge*>> acceleration;
 	float bbox[6];
-	bbox[0] = FLT_MAX;
-	bbox[1] = FLT_MIN;
-	bbox[2] = FLT_MAX;
-	bbox[3] = FLT_MIN;
-	bbox[4] = FLT_MAX;
-	bbox[5] = FLT_MIN;
+	bbox[0] = std::numeric_limits<float>::max();
+	bbox[1] = -std::numeric_limits<float>::max();
+	bbox[2] = std::numeric_limits<float>::max();
+	bbox[3] = -std::numeric_limits<float>::max();
+	bbox[4] = std::numeric_limits<float>::max();
+	bbox[5] = -std::numeric_limits<float>::max();
 	float intitalSize = 1.0;
 
 	std::string line;
