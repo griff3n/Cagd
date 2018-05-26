@@ -8,11 +8,5 @@ halfEdge::halfEdge(Design * design, ObjectMemory * sMem)
 	this->sMem = sMem;
 }
 
-halfEdge::~halfEdge()
-{
-	delete vert;
-	delete pair;
-	delete face;
-	delete next;
-}
+halfEdge::~halfEdge() {}
 

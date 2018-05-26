@@ -13,5 +13,4 @@ graphicVertex::~graphicVertex()
 {
 	delete lastLOD;
 	delete nextLOD;
-	delete edge;
 }
