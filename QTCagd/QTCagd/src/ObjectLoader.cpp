@@ -1,8 +1,157 @@
+#include <regex>
 #include "ObjectLoader.h"
 
-std::vector<std::vector<HE_edge*>> acceleration;
+
+ // Lists of all outgoing Edges of every Vertex to speed up the Process
+std::vector<std::vector<HE_edge*>> accelerationOld;
 std::vector<glm::vec2*> HEtextureVertices;
 std::vector<glm::vec3*> HEVertexNormals;
+
+HalfEdgeMesh* loadOBJreg(std::string path) {
+	std::vector<std::vector<halfEdge*>> acceleration;
+	float bbox[6];
+	bbox[0] = std::numeric_limits<float>::max();
+	bbox[1] = -std::numeric_limits<float>::max();
+	bbox[2] = std::numeric_limits<float>::max();
+	bbox[3] = -std::numeric_limits<float>::max();
+	bbox[4] = std::numeric_limits<float>::max();
+	bbox[5] = -std::numeric_limits<float>::max();
+	float intitalSize = 1.0;
+
+	std::string line;
+	std::string name;
+	std::regex skip("^# | ^\\s*$"); // Comments and empty Lines
+	std::regex reg("[\\w.-]+"); // Words or Numbers
+	std::ifstream myfile(path);
+	HalfEdgeMesh* mesh = new HalfEdgeMesh();
+
+	if (myfile.is_open())
+	{
+		while (getline(myfile, line))
+		{
+			if (std::regex_search(line, skip))
+			{// Skip unimportant lines and continue
+				continue;
+			}
+			std::vector<std::smatch> results;
+			std::sregex_iterator next(line.begin(), line.end(), reg);
+			std::sregex_iterator end;
+			while (next != end)
+			{
+				std::smatch match = *next;
+				results.push_back(match);
+				next++;
+			}
+			if (results[0].str() == "v")
+			{
+				try {
+					float x = std::stof(results[1].str());
+					float y = std::stof(results[2].str());
+					float z = std::stof(results[3].str());
+					graphicVertex* newVert = new graphicVertex(glm::vec4(x, y, z, 1.0f));
+					mesh->vertices.push_back(newVert);
+
+					if (newVert->location.x < bbox[0]) bbox[0] = newVert->location.x;
+					if (newVert->location.x > bbox[1]) bbox[1] = newVert->location.x;
+					if (newVert->location.y < bbox[2]) bbox[2] = newVert->location.y;
+					if (newVert->location.y > bbox[3]) bbox[3] = newVert->location.y;
+					if (newVert->location.z < bbox[4]) bbox[4] = newVert->location.z;
+					if (newVert->location.z > bbox[5]) bbox[5] = newVert->location.z;
+				}
+				catch(const std::invalid_argument& ia){
+					std::cerr << "Invalid argument: " << ia.what() << '\n';
+				}
+			}
+			else if (results[0].str() == "f")
+			{
+				if (acceleration.size() == 0) acceleration.resize(mesh->vertices.size()); //Only once after reading all vertices
+				
+				std::vector<int> indices; // Indices of Vertices of the current Face
+				try {
+					for (int i = 1; i < results.size(); i++) {
+						indices.push_back(stoi(results[i].str()));
+					}
+				}
+				catch (const std::invalid_argument& ia) {
+					std::cerr << "Invalid argument: " << ia.what() << '\n';
+				}
+				graphicFace * face = new graphicFace;
+				halfEdge *previous = nullptr;
+				halfEdge *first = nullptr;
+				for (int j = 0; j < indices.size(); j++) {
+					halfEdge *edge = new halfEdge;
+					edge->face = face;
+					graphicVertex *vert = mesh->vertices[indices[j] - 1];
+					if (vert->edge == nullptr) {
+						vert->edge = edge;
+					}
+					acceleration[indices[j] - 1].push_back(edge);
+					edge->vert = vert;
+					if (previous == nullptr) {
+						first = edge;
+					}
+					else {
+						previous->next = edge;
+					}
+					previous = edge;
+					mesh->halfEdges.push_back(edge);
+				}
+				previous->next = first;
+				face->edge = first;
+				face->valence = indices.size(); //Face valences
+				mesh->faces.push_back(face);
+				// setting Pairs
+				for (int k = 0; k < indices.size(); k++) {
+					graphicVertex *start = first->vert;
+					graphicVertex *end = first->next->vert;
+					int index = indices[(k + 1) % indices.size()] - 1;
+					for (int n = 0; n < acceleration[index].size(); n++) {
+						if (acceleration[index][n]->next != nullptr) {
+							if (acceleration[index][n]->next->vert == start) {
+								first->pair = acceleration[index][n];
+								acceleration[index][n]->pair = first;
+							}
+						}
+					}
+					first = first->next;
+				}
+			}
+			else
+			{
+				//something else
+			}
+		}
+		//Vertice valences
+		for (int i = 0; i < mesh->vertices.size(); i++) {
+			mesh->vertices[i]->valence = acceleration[i].size();
+		}
+		myfile.close();
+
+		//Using bbox to scale and translate the model
+		float xlength = bbox[1] - bbox[0];
+		float ylength = bbox[3] - bbox[2];
+		float zlength = bbox[5] - bbox[4];
+
+		float scale;
+		if (xlength >= ylength && xlength >= zlength) {
+			scale = 2.0f*intitalSize / xlength;
+		}
+		else if (ylength >= xlength && ylength >= zlength) {
+			scale = 2.0f*intitalSize / ylength;
+		}
+		else {
+			scale = 2.0f*intitalSize / zlength;
+		}
+		QVector3D invMiddlepoint = QVector3D(-(xlength / 2 + bbox[0])*scale, -(ylength / 2 + bbox[2])*scale, -(zlength / 2 + bbox[4])*scale);
+		mesh->model.translate(invMiddlepoint);
+		mesh->model.scale(scale);
+
+		return mesh;
+	}
+	else std::cout << "Unable to open file";
+	return nullptr;
+}
+
 
 bool loadOBJ(const char * path, std::vector<glm::vec3> & out_vertices, std::vector<GLuint> &out_indices, std::vector<HE_vert*> &out_HEvertices, std::vector<HE_face*> &out_HEfaces, std::vector<HE_edge*> &out_HEedges, std::vector<float> &bbox) {
 	std::string line;
@@ -62,7 +211,7 @@ bool loadOBJ(const char * path, std::vector<glm::vec3> & out_vertices, std::vect
 			}
 			else if (line[0] == 'f') {
 				//BEGIN HE datastructure =====================================
-				if (acceleration.size() == 0) acceleration.resize(out_HEvertices.size()); //Only once after reading all vertices
+				if (accelerationOld.size() == 0) accelerationOld.resize(out_HEvertices.size()); //Only once after reading all vertices
 																						  //END HE datastructure =======================================
 				std::string delimiter = " ";
 				if (line[2] == ' ') {
@@ -99,7 +248,7 @@ bool loadOBJ(const char * path, std::vector<glm::vec3> & out_vertices, std::vect
 					if (vert->edge == nullptr) {
 						vert->edge = edge;
 					}
-					acceleration[indices[j] - 1].push_back(edge);
+					accelerationOld[indices[j] - 1].push_back(edge);
 					edge->vert = vert;
 					if (previous == nullptr) {
 						first = edge;
@@ -119,11 +268,11 @@ bool loadOBJ(const char * path, std::vector<glm::vec3> & out_vertices, std::vect
 					HE_vert *start = first->vert;
 					HE_vert *end = first->next->vert;
 					int index = indices[(k + 1) % indices.size()] - 1;
-					for (int n = 0; n < acceleration[index].size(); n++) {
-						if (acceleration[index][n]->next != nullptr) {
-							if (acceleration[index][n]->next->vert == start) {
-								first->pair = acceleration[index][n];
-								acceleration[index][n]->pair = first;
+					for (int n = 0; n < accelerationOld[index].size(); n++) {
+						if (accelerationOld[index][n]->next != nullptr) {
+							if (accelerationOld[index][n]->next->vert == start) {
+								first->pair = accelerationOld[index][n];
+								accelerationOld[index][n]->pair = first;
 							}
 						}
 					}
@@ -134,7 +283,7 @@ bool loadOBJ(const char * path, std::vector<glm::vec3> & out_vertices, std::vect
 		}
 		//Vertice valences
 		for (int i = 0; i < out_HEvertices.size(); i++) {
-			out_HEvertices[i]->valence = acceleration[i].size();
+			out_HEvertices[i]->valence = accelerationOld[i].size();
 		}
 		myfile.close();
 		return true;
@@ -248,7 +397,7 @@ bool loadMayaOBJ(const char * path, std::vector<glm::vec3> & out_vertices, std::
 			}
 			else if (line[0] == 'f') {
 				//BEGIN HE datastructure =====================================
-				if (acceleration.size() == 0) acceleration.resize(out_HEvertices.size()); //Only once after reading all vertices
+				if (accelerationOld.size() == 0) accelerationOld.resize(out_HEvertices.size()); //Only once after reading all vertices
 																						  //END HE datastructure =======================================
 				std::string delimiter = " ";
 				if (line[2] == ' ') {
@@ -313,7 +462,7 @@ bool loadMayaOBJ(const char * path, std::vector<glm::vec3> & out_vertices, std::
 					if (vert->normal == nullptr) {
 						vert->normal = HEVertexNormals[vnIndices[j] - 1];
 					}
-					acceleration[indices[j] - 1].push_back(edge);
+					accelerationOld[indices[j] - 1].push_back(edge);
 					edge->vert = vert;
 					if (previous == nullptr) {
 						first = edge;
@@ -333,11 +482,11 @@ bool loadMayaOBJ(const char * path, std::vector<glm::vec3> & out_vertices, std::
 					HE_vert *start = first->vert;
 					HE_vert *end = first->next->vert;
 					int index = indices[(k + 1) % indices.size()] - 1;
-					for (int n = 0; n < acceleration[index].size(); n++) {
-						if (acceleration[index][n]->next != nullptr) {
-							if (acceleration[index][n]->next->vert == start) {
-								first->pair = acceleration[index][n];
-								acceleration[index][n]->pair = first;
+					for (int n = 0; n < accelerationOld[index].size(); n++) {
+						if (accelerationOld[index][n]->next != nullptr) {
+							if (accelerationOld[index][n]->next->vert == start) {
+								first->pair = accelerationOld[index][n];
+								accelerationOld[index][n]->pair = first;
 							}
 						}
 					}
@@ -348,7 +497,7 @@ bool loadMayaOBJ(const char * path, std::vector<glm::vec3> & out_vertices, std::
 		}
 		//Vertice valences
 		for (int i = 0; i < out_HEvertices.size(); i++) {
-			out_HEvertices[i]->valence = acceleration[i].size();
+			out_HEvertices[i]->valence = accelerationOld[i].size();
 		}
 		std::cout << "v " << out_HEvertices.size() << ", vt " << HEtextureVertices.size() << ", vn " << HEVertexNormals.size() << std::endl;
 		myfile.close();

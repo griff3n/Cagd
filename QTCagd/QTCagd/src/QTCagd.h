@@ -5,6 +5,9 @@
 
 #include <GL/glew.h>
 #include <QtWidgets/QMainWindow>
+#include <QFileDialog>
+#include <QtConcurrent/QtConcurrent>
+#include <QFuture>
 #include "ui_QTCagd.h"
 #include "ObjectLoader.h"
 #include "Orb.h"
@@ -18,10 +21,15 @@ public:
 
 public slots:
 	void closeApplication();
-	void showBunny();
+	void openFile();
+	void parsingDone();
+
+signals:
+	void meshChanged(HalfEdgeMesh*);
 
 private:
 	Ui::QTCagdClass ui;
+	QFutureWatcher<HalfEdgeMesh*> parseWatcher;
 };
 
 #endif // QTCAGD_H
