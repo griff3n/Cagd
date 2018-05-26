@@ -1,16 +1,19 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
-#include <string>
 
+#include "graphicVertex.h"
+
+/*
 #include "HalfEdgeMesh.h"
 #include "HalfEdgeMesh.cpp"
-
+*/
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace TestQTCagd
 {
 	TEST_CLASS(TestHalfEdgeMesh) {
+		/*/
 		TEST_METHOD(testKonstruktor) {
 			HalfEdgeMesh * testHEM = new HalfEdgeMesh();
 			Assert::IsNotNull(testHEM);
@@ -18,8 +21,8 @@ namespace TestQTCagd
 			Assert::AreEqual(0uLL, 0 + testHEM->halfEdges.size());
 			Assert::AreEqual(0uLL, 0 + testHEM->faces.size());
 		}
+		*/
 		
-		/*
 		TEST_METHOD(testDestruktor) {
 			glm::vec4 posA = glm::vec4(2, 2, 1, 1);
 			glm::vec4 posB = glm::vec4(8, 2, 2, 1);
@@ -39,6 +42,23 @@ namespace TestQTCagd
 			halfEdge * ba = new halfEdge();
 			graphicFace * abcda = new graphicFace();
 			graphicFace * dcbad = new graphicFace();
+
+			/*/
+			a->id = 1;
+			b->id = 2;
+			c->id = 3;
+			d->id = 4;
+			ab->id = 5;
+			bc->id = 6;
+			cd->id = 7;
+			da->id = 8;
+			ad->id = 9;
+			dc->id = 10;
+			cb->id = 11;
+			ba->id = 12;
+			abcda->id = 13;
+			dcbad->id = 14;
+			*/
 
 			a->edge = ab;
 			b->edge = bc;
@@ -78,6 +98,23 @@ namespace TestQTCagd
 			ba->next = ad;
 			abcda->edge = ab;
 			dcbad->edge = ba;
+			
+			delete a;
+			delete b;
+			delete c;
+			delete d;
+			delete ab;
+			delete bc;
+			delete cd;
+			delete da;
+			delete ad;
+			delete dc;
+			delete cb;
+			delete ba;
+			delete abcda;
+			delete dcbad;
+			
+			/*
 			HalfEdgeMesh * testHEM = new HalfEdgeMesh();
 			testHEM->vertices.push_back(a);
 			testHEM->vertices.push_back(b);
@@ -93,9 +130,13 @@ namespace TestQTCagd
 			testHEM->halfEdges.push_back(ba);
 			testHEM->faces.push_back(abcda);
 			testHEM->faces.push_back(dcbad);
-
 			delete testHEM;
+			*/
+			//_CrtDumpMemoryLeaks();
 		}
-		*/
+
+		TEST_CLASS_CLEANUP(clean) {
+			_CrtDumpMemoryLeaks();
+		}
 	};
 }

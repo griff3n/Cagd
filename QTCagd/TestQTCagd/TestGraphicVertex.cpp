@@ -22,6 +22,7 @@ namespace TestQTCagd
 			Assert::IsNull(testGV->edge);
 			Assert::IsNull(testGV->lastLOD);
 			Assert::IsNull(testGV->nextLOD);
+			delete testGV;
 		}
 
 		TEST_METHOD(testKonstruktor2) {
@@ -50,6 +51,7 @@ namespace TestQTCagd
 			Assert::IsTrue(lastLOD == testGV->lastLOD);
 			Assert::IsNotNull(testGV->nextLOD);
 			Assert::IsTrue(nextLOD == testGV->nextLOD);
+			delete testGV;
 		}
 
 		TEST_METHOD(testDestruktor) {
@@ -88,6 +90,12 @@ namespace TestQTCagd
 			Assert::IsTrue(nextLOD == testGV->nextLOD);
 			Assert::IsNotNull(testGV->lastLOD);
 			Assert::IsTrue(lastLOD == testGV->lastLOD);
+			delete edge;
+			delete testGV;
+		}
+
+		TEST_CLASS_CLEANUP(clean) {
+			_CrtDumpMemoryLeaks();
 		}
 	};
 }

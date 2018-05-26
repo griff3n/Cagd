@@ -9,6 +9,5 @@ graphicFace::graphicFace(Design * design, ObjectMemory * sMem)
 
 graphicFace::~graphicFace()
 {
-	delete edge;
 	delete nextLOD;
 }

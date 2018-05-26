@@ -1,6 +1,10 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
 
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
+
 #include "Design.h"
 #include "Design.cpp"
 #include "graphicFace.h"
@@ -34,6 +38,7 @@ namespace TestQTCagd
 			Assert::IsNull(testHE->pair);
 			Assert::IsNull(testHE->face);
 			Assert::IsNull(testHE->next);
+			delete testHE;
 		}
 
 		TEST_METHOD(testKonstruktor2) {
@@ -51,12 +56,13 @@ namespace TestQTCagd
 			Assert::IsNull(testHE->pair);
 			Assert::IsNull(testHE->face);
 			Assert::IsNull(testHE->next);
+			delete testHE;
 		}
 
 		TEST_METHOD(testDestruktor) {
 			Skin * testSkin = new Skin();
 			Skin * testSkin2 = new Skin();
-			Design * testDesign = new Design(testSkin, testSkin);
+			Design * testDesign = new Design(testSkin, testSkin2);
 			ObjectMemory * testOMemory = new ObjectMemory();
 			halfEdge * testHE = new halfEdge(testDesign, testOMemory);
 			graphicVertex * vert = new graphicVertex(glm::vec4(0.0f, 0.0f, 0.0f, 0.0f), nullptr, nullptr);
@@ -67,6 +73,10 @@ namespace TestQTCagd
 			testHE->pair = pair;
 			testHE->face = face;
 			testHE->next = next;
+			delete next;
+			delete face;
+			delete pair;
+			delete vert;
 			delete testHE;
 		}
 
@@ -88,7 +98,15 @@ namespace TestQTCagd
 			Assert::IsTrue(face == testHE->face);
 			Assert::IsNotNull(testHE->next);
 			Assert::IsTrue(next == testHE->next);
+			delete next;
+			delete face;
+			delete pair;
+			delete vert;
+			delete testHE;
 		}
 
+		TEST_CLASS_CLEANUP(clean) {
+			_CrtDumpMemoryLeaks();
+		}
 	};
 }
