@@ -22,6 +22,8 @@ public:
 
 public slots:
 	void setHalfEdgeMesh(HalfEdgeMesh*);
+signals:
+	void vertexSelected(graphicVertex*);
 
 protected:
 	void initializeGL();

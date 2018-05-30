@@ -244,6 +244,12 @@ void OpenGLWidget::mousePressEvent(QMouseEvent *e)
 				selections.clear();
 			}
 			pick(QVector2D(lastMousePosition.x(), height() - 1 - lastMousePosition.y()));
+			if (selections.size() == 1) {
+				emit vertexSelected(selections.at(0));
+			}
+			else {
+				emit vertexSelected(nullptr);
+			}
 		}
 		break;
 	}

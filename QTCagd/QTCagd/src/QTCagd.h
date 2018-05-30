@@ -23,6 +23,10 @@ public slots:
 	void closeApplication();
 	void openFile();
 	void parsingDone();
+	void showSelectedVertexProperties(graphicVertex*);
+	void xCoordChanged(double);
+	void yCoordChanged(double);
+	void zCoordChanged(double);
 
 signals:
 	void meshChanged(HalfEdgeMesh*);
@@ -30,6 +34,7 @@ signals:
 private:
 	Ui::QTCagdClass ui;
 	QFutureWatcher<HalfEdgeMesh*> parseWatcher;
+	graphicVertex* selectedVertex = nullptr;
 };
 
 #endif // QTCAGD_H

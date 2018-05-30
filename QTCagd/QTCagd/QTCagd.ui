@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>747</width>
-    <height>557</height>
+    <width>657</width>
+    <height>453</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -34,12 +34,207 @@
      <number>0</number>
     </property>
     <item>
-     <widget class="OpenGLWidget" name="openGLWidget">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
+     <widget class="QSplitter" name="splitter">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="opaqueResize">
+       <bool>false</bool>
+      </property>
+      <property name="childrenCollapsible">
+       <bool>false</bool>
+      </property>
+      <widget class="QWidget" name="horizontalLayoutWidget">
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="OpenGLWidget" name="openGLWidget">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>320</width>
+            <height>240</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="Line" name="line">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="verticalLayoutWidget">
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="Line" name="line_4">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="label">
+            <property name="minimumSize">
+             <size>
+              <width>160</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0.5, y2:0, stop:0 rgba(0, 0, 0, 0), stop:1 rgba(0, 0, 0, 32));</string>
+            </property>
+            <property name="text">
+             <string>Eigenschaften</string>
+            </property>
+            <property name="margin">
+             <number>6</number>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="Line" name="line_2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QStackedWidget" name="stackedWidget">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>160</width>
+              <height>120</height>
+             </size>
+            </property>
+            <property name="currentIndex">
+             <number>0</number>
+            </property>
+            <widget class="QWidget" name="Empty"/>
+            <widget class="QWidget" name="Vertex">
+             <widget class="QWidget" name="verticalLayoutWidget_3">
+              <property name="geometry">
+               <rect>
+                <x>10</x>
+                <y>10</y>
+                <width>160</width>
+                <height>151</height>
+               </rect>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_3">
+               <property name="spacing">
+                <number>6</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="xLabel">
+                 <property name="text">
+                  <string>X-Koordinate</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QDoubleSpinBox" name="xSpinBox">
+                 <property name="readOnly">
+                  <bool>false</bool>
+                 </property>
+                 <property name="decimals">
+                  <number>10</number>
+                 </property>
+                 <property name="minimum">
+                  <double>-99.999999000000003</double>
+                 </property>
+                 <property name="maximum">
+                  <double>99.999999000000003</double>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.010000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="yLabel">
+                 <property name="text">
+                  <string>Y-Koordinate</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QDoubleSpinBox" name="ySpinBox">
+                 <property name="decimals">
+                  <number>10</number>
+                 </property>
+                 <property name="minimum">
+                  <double>-99.999999000000003</double>
+                 </property>
+                 <property name="maximum">
+                  <double>99.999999000000003</double>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.010000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="zLabel">
+                 <property name="text">
+                  <string>Z-Koordinate</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QDoubleSpinBox" name="zSpinBox">
+                 <property name="decimals">
+                  <number>10</number>
+                 </property>
+                 <property name="minimum">
+                  <double>-99.999999000000003</double>
+                 </property>
+                 <property name="maximum">
+                  <double>99.999999000000003</double>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.010000000000000</double>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+            <widget class="QWidget" name="Edge"/>
+            <widget class="QWidget" name="Face"/>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+    <item>
+     <widget class="Line" name="line_3">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
       </property>
      </widget>
     </item>
@@ -50,7 +245,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>747</width>
+     <width>657</width>
      <height>21</height>
     </rect>
    </property>
@@ -101,6 +296,7 @@
    <extends>QOpenGLWidget</extends>
    <header>openglwidget.h</header>
    <slots>
+    <signal>vertexSelected(graphicVertex*)</signal>
     <slot>setHalfEdgeMesh(HalfEdgeMesh*)</slot>
    </slots>
   </customwidget>
@@ -152,8 +348,72 @@
      <y>58</y>
     </hint>
     <hint type="destinationlabel">
-     <x>358</x>
-     <y>225</y>
+     <x>321</x>
+     <y>259</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>openGLWidget</sender>
+   <signal>vertexSelected(graphicVertex*)</signal>
+   <receiver>QTCagdClass</receiver>
+   <slot>showSelectedVertexProperties(graphicVertex*)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>123</x>
+     <y>338</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-3</x>
+     <y>430</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>xSpinBox</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>QTCagdClass</receiver>
+   <slot>xCoordChanged(double)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>433</x>
+     <y>109</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>660</x>
+     <y>419</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ySpinBox</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>QTCagdClass</receiver>
+   <slot>yCoordChanged(double)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>422</x>
+     <y>163</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>661</x>
+     <y>401</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>zSpinBox</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>QTCagdClass</receiver>
+   <slot>zCoordChanged(double)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>396</x>
+     <y>210</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>661</x>
+     <y>389</y>
     </hint>
    </hints>
   </connection>
@@ -163,5 +423,9 @@
   <slot>closeApplication()</slot>
   <slot>showBunny()</slot>
   <slot>openFile()</slot>
+  <slot>showSelectedVertexProperties(graphicVertex*)</slot>
+  <slot>xCoordChanged(double)</slot>
+  <slot>yCoordChanged(double)</slot>
+  <slot>zCoordChanged(double)</slot>
  </slots>
 </ui>
