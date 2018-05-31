@@ -9,11 +9,12 @@ OpenGLWidget::OpenGLWidget(QWidget *parent)
 
 OpenGLWidget::~OpenGLWidget()
 {
-
+	delete mesh;
 }
 
 void OpenGLWidget::setHalfEdgeMesh(HalfEdgeMesh* mesh)
 {
+	delete this->mesh;
 	this->mesh = mesh;
 
 	//reset View
