@@ -22,6 +22,7 @@ public:
 
 public slots:
 	void setHalfEdgeMesh(HalfEdgeMesh*);
+	void vertexMovementRepaint();
 signals:
 	void vertexSelected(graphicVertex*);
 

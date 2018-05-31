@@ -30,6 +30,7 @@ public slots:
 
 signals:
 	void meshChanged(HalfEdgeMesh*);
+	void vertexMoved();
 
 private:
 	Ui::QTCagdClass ui;

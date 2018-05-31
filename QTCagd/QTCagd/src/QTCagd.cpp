@@ -65,6 +65,7 @@ void QTCagd::xCoordChanged(double newX)
 	if (selectedVertex) {
 		glm::vec4 oldLocation = selectedVertex->location;
 		selectedVertex->location = glm::vec4(newX, oldLocation.y, oldLocation.z, oldLocation.w);
+		emit vertexMoved();
 	}
 }
 
@@ -73,6 +74,7 @@ void QTCagd::yCoordChanged(double newY)
 	if (selectedVertex) {
 		glm::vec4 oldLocation = selectedVertex->location;
 		selectedVertex->location = glm::vec4(oldLocation.x, newY, oldLocation.z, oldLocation.w);
+		emit vertexMoved();
 	}
 }
 
@@ -81,5 +83,6 @@ void QTCagd::zCoordChanged(double newZ)
 	if (selectedVertex) {
 		glm::vec4 oldLocation = selectedVertex->location;
 		selectedVertex->location = glm::vec4(oldLocation.x, oldLocation.y, newZ, oldLocation.w);
+		emit vertexMoved();
 	}
 }

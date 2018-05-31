@@ -12,6 +12,11 @@ OpenGLWidget::~OpenGLWidget()
 
 }
 
+void OpenGLWidget::vertexMovementRepaint()
+{
+	emit repaint();
+}
+
 void OpenGLWidget::setHalfEdgeMesh(HalfEdgeMesh* mesh)
 {
 	this->mesh = mesh;
