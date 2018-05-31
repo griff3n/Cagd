@@ -27,14 +27,12 @@ namespace TestQTCagd
 
 		TEST_METHOD(testKonstruktor2) {
 			glm::vec4 pos0 = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
-			glm::vec4 pos1 = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 			glm::vec4 pos = glm::vec4(4.0f, 3.0f, 2.0f, 1.0f);
 			graphicVertex * lastLOD = new graphicVertex(pos0);
-			graphicVertex * nextLOD = new graphicVertex(pos0);
 			Skin * testSkin = new Skin();
 			Design * design = new Design(testSkin, testSkin);
 			ObjectMemory * sMem = new ObjectMemory();
-			graphicVertex * testGV = new graphicVertex(pos, lastLOD, nextLOD, design, sMem);
+			graphicVertex * testGV = new graphicVertex(pos, lastLOD, design, sMem);
 			Assert::IsNotNull(testGV);
 			Assert::IsFalse(testGV->getIsSelected());
 			Assert::IsNotNull(testGV->getDesign());
@@ -49,21 +47,18 @@ namespace TestQTCagd
 			Assert::IsNull(testGV->edge);
 			Assert::IsNotNull(testGV->lastLOD);
 			Assert::IsTrue(lastLOD == testGV->lastLOD);
-			Assert::IsNotNull(testGV->nextLOD);
-			Assert::IsTrue(nextLOD == testGV->nextLOD);
+			Assert::IsNull(testGV->nextLOD);
 			delete testGV;
 		}
 
 		TEST_METHOD(testDestruktor) {
 			glm::vec4 pos0 = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
-			glm::vec4 pos1 = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 			glm::vec4 pos = glm::vec4(4.0f, 3.0f, 2.0f, 1.0f);
 			graphicVertex * lastLOD = new graphicVertex(pos0);
-			graphicVertex * nextLOD = new graphicVertex(pos0);
 			Skin * testSkin = new Skin();
 			Design * design = new Design(testSkin, testSkin);
 			ObjectMemory * sMem = new ObjectMemory();
-			graphicVertex * testGV = new graphicVertex(pos, lastLOD, nextLOD, design, sMem);
+			graphicVertex * testGV = new graphicVertex(pos, lastLOD, design, sMem);
 			delete testGV;
 		}
 
