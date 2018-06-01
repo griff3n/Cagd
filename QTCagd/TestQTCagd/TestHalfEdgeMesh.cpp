@@ -1,28 +1,45 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
 
-#include "graphicVertex.h"
-
-/*
 #include "HalfEdgeMesh.h"
 #include "HalfEdgeMesh.cpp"
-*/
+
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace TestQTCagd
 {
 	TEST_CLASS(TestHalfEdgeMesh) {
-		/*/
+		
+		TEST_CLASS_INITIALIZE(init) {
+			_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+		}
+
 		TEST_METHOD(testKonstruktor) {
 			HalfEdgeMesh * testHEM = new HalfEdgeMesh();
 			Assert::IsNotNull(testHEM);
 			Assert::AreEqual(0uLL, 0 + testHEM->vertices.size());
 			Assert::AreEqual(0uLL, 0 + testHEM->halfEdges.size());
 			Assert::AreEqual(0uLL, 0 + testHEM->faces.size());
+			Assert::AreEqual(1.0f, testHEM->model.column(0)[0]);
+			Assert::AreEqual(0.0f, testHEM->model.column(0)[1]);
+			Assert::AreEqual(0.0f, testHEM->model.column(0)[2]);
+			Assert::AreEqual(0.0f, testHEM->model.column(0)[3]);
+			Assert::AreEqual(0.0f, testHEM->model.column(1)[0]);
+			Assert::AreEqual(1.0f, testHEM->model.column(1)[1]);
+			Assert::AreEqual(0.0f, testHEM->model.column(1)[2]);
+			Assert::AreEqual(0.0f, testHEM->model.column(1)[3]);
+			Assert::AreEqual(0.0f, testHEM->model.column(2)[0]);
+			Assert::AreEqual(0.0f, testHEM->model.column(2)[1]);
+			Assert::AreEqual(1.0f, testHEM->model.column(2)[2]);
+			Assert::AreEqual(0.0f, testHEM->model.column(2)[3]);
+			Assert::AreEqual(0.0f, testHEM->model.column(3)[0]);
+			Assert::AreEqual(0.0f, testHEM->model.column(3)[1]);
+			Assert::AreEqual(0.0f, testHEM->model.column(3)[2]);
+			Assert::AreEqual(1.0f, testHEM->model.column(3)[3]);
+			delete testHEM;
 		}
-		*/
-		
+				
 		TEST_METHOD(testDestruktor) {
 			glm::vec4 posA = glm::vec4(2, 2, 1, 1);
 			glm::vec4 posB = glm::vec4(8, 2, 2, 1);
@@ -58,7 +75,7 @@ namespace TestQTCagd
 			ba->id = 12;
 			abcda->id = 13;
 			dcbad->id = 14;
-			*/
+			//*/
 
 			a->edge = ab;
 			b->edge = bc;
@@ -98,23 +115,7 @@ namespace TestQTCagd
 			ba->next = ad;
 			abcda->edge = ab;
 			dcbad->edge = ba;
-			
-			delete a;
-			delete b;
-			delete c;
-			delete d;
-			delete ab;
-			delete bc;
-			delete cd;
-			delete da;
-			delete ad;
-			delete dc;
-			delete cb;
-			delete ba;
-			delete abcda;
-			delete dcbad;
-			
-			/*
+									
 			HalfEdgeMesh * testHEM = new HalfEdgeMesh();
 			testHEM->vertices.push_back(a);
 			testHEM->vertices.push_back(b);
@@ -131,12 +132,6 @@ namespace TestQTCagd
 			testHEM->faces.push_back(abcda);
 			testHEM->faces.push_back(dcbad);
 			delete testHEM;
-			*/
-			//_CrtDumpMemoryLeaks();
-		}
-
-		TEST_CLASS_CLEANUP(clean) {
-			_CrtDumpMemoryLeaks();
 		}
 	};
 }
