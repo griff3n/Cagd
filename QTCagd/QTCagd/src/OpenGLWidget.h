@@ -41,7 +41,7 @@ private:
 	HalfEdgeMesh * mesh = nullptr;
 	bool arcball = false;
 	bool drag = false;
-	bool massSelection = false;
+	bool multSelection = false;
 	std::vector<graphicVertex*> selections;
 	QMatrix4x4 arcballRotationMatrix;
 	int wdth;

@@ -38,6 +38,9 @@ void OpenGLWidget::setHalfEdgeMesh(HalfEdgeMesh* mesh)
 	arcballRotationMatrix.setToIdentity();
 
 	emit repaint();
+
+	//Set Focus for multSelection
+	setFocus();
 }
 
 void OpenGLWidget::initializeGL()
@@ -210,9 +213,7 @@ void OpenGLWidget::mousePressEvent(QMouseEvent *e)
 		drag = true;
 		if (mesh)
 		{
-			bool append = e->modifiers() && Qt::ControlModifier;
-			
-			if (!massSelection) { 
+			if (!multSelection) { 
 				for (graphicVertex* v : selections) {
 					v->selected = false;
 				}
@@ -233,7 +234,7 @@ void OpenGLWidget::keyPressEvent(QKeyEvent *e) {
 	switch (e->key())
 	{
 	case Qt::Key_Control:
-		massSelection = true;
+		multSelection = true;
 		break;
 	case Qt::Key_X:
 		//check if any other axis is currently hold and ignore in that case
@@ -264,7 +265,7 @@ void OpenGLWidget::keyReleaseEvent(QKeyEvent *e) {
 	switch (e->key())
 	{
 	case Qt::Key_Control:
-		massSelection = false;
+		multSelection = false;
 		break;
 	case Qt::Key_X:
 		//check if THIS axis is hold else ignore
@@ -300,11 +301,48 @@ void OpenGLWidget::mouseReleaseEvent(QMouseEvent *e)
 	case Qt::MiddleButton:
 		break;
 	case Qt::LeftButton:
+		drag = false;
 		break;
 	}
 }
 void OpenGLWidget::mouseMoveEvent(QMouseEvent *e)
 {
+	currentMousePosition = e->pos();
+
+	if (drag && selections.size()!=0)
+	{
+		//TODO Clean up messy Code
+		graphicVertex* lastSelected = selections.at(selections.size() - 1);
+
+		QVector2D posOld = QVector2D(lastMousePosition.x(), height() - 1 - lastMousePosition.y());
+		QVector2D pos = QVector2D(currentMousePosition.x(), height() - 1 - currentMousePosition.y());
+		QRect viewp(viewport.x(), viewport.y(), viewport.z(), viewport.w());
+
+		QVector3D beginOld = QVector3D(posOld, 0.0f).unproject(modelView, projection, viewp);
+		QVector3D endOld = QVector3D(posOld, 1.0f).unproject(modelView, projection, viewp);
+
+		QVector3D begin = QVector3D(pos, 0.0f).unproject(modelView, projection, viewp);
+		QVector3D end = QVector3D(pos, 1.0f).unproject(modelView, projection, viewp);
+
+		QVector3D selectedPos = QVector3D(lastSelected->location.x, lastSelected->location.y, lastSelected->location.z);
+		QVector3D difference = selectedPos - beginOld;
+		float distance = difference.length();
+
+		QVector3D move = distance * (end - begin).normalized() - distance * (endOld - beginOld).normalized();
+		for (graphicVertex* v : selections) {
+			QVector3D position = QVector3D(v->location.x, v->location.y, v->location.z);
+			QVector3D newPosition = position + move;
+			v->location.x = newPosition.x();
+			v->location.y = newPosition.y();
+			v->location.z = newPosition.z();
+		}
+		emit repaint();
+
+		//Update SpinBoxes
+		if(selections.size() == 1) emit vertexSelected(selections.at(0));
+
+		lastMousePosition = currentMousePosition;
+	}
 	if (arcball)
 	{
 		currentMousePosition = e->pos();
@@ -367,8 +405,8 @@ void OpenGLWidget::pick(const QVector2D &pos)
 	// Project from 2D to 3D.
 	QRect viewp(viewport.x(), viewport.y(), viewport.z(), viewport.w());
 
-	auto begin = QVector3D(pos, 0.0f).unproject(modelView, projection, viewp);
-	auto end = QVector3D(pos, 1.0f).unproject(modelView, projection, viewp);
+	QVector3D begin = QVector3D(pos, 0.0f).unproject(modelView, projection, viewp);
+	QVector3D end = QVector3D(pos, 1.0f).unproject(modelView, projection, viewp);
 
 	// Create ray.
 	QVector3D origin = begin;
@@ -399,7 +437,7 @@ void OpenGLWidget::intersect(const QVector3D &origin, const QVector3D &direction
 	}
 	
 	if (closest) {
-		if (closest->selected && massSelection) {
+		if (closest->selected && multSelection) {
 			closest->selected = false;
 			OutputDebugStringW(L"Deselected");
 			for (int i = 0; i < selections.size(); i++) {
