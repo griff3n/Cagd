@@ -230,10 +230,33 @@ void OpenGLWidget::mousePressEvent(QMouseEvent *e)
 	}
 }
 void OpenGLWidget::keyPressEvent(QKeyEvent *e) {
-	switch (e->key()) 
+	switch (e->key())
 	{
 	case Qt::Key_Control:
 		massSelection = true;
+		break;
+	case Qt::Key_X:
+		//check if any other axis is currently hold and ignore in that case
+		if (!(axisYModified||axisZModified)) {
+			//modify axisvector to only have x value
+			axisModifierVector = xAxisModifier;
+			//indicate x-axis is currently active
+			axisXModified = true;
+			//change to axis.selectedSkin here
+		}
+		break;
+	case Qt::Key_Y:
+		if (!(axisXModified || axisZModified)) {
+			axisModifierVector = yAxisModifier;
+			axisYModified = true;
+		}
+		break;
+	case Qt::Key_Z  :
+		if (!(axisYModified || axisXModified)) {
+			axisModifierVector = zAxisModifier;
+			axisZModified = true;
+		}
+		break;
 	}
 }
 
@@ -242,6 +265,28 @@ void OpenGLWidget::keyReleaseEvent(QKeyEvent *e) {
 	{
 	case Qt::Key_Control:
 		massSelection = false;
+		break;
+	case Qt::Key_X:
+		//check if THIS axis is hold else ignore
+		if (axisXModified) {
+			//reset to standard actions
+			axisModifierVector = standardAxisModifier;
+			//reset modified status
+			axisXModified = false;
+		}
+		break;
+	case Qt::Key_Y:
+		if (axisYModified) {
+			axisModifierVector = standardAxisModifier;
+			axisYModified = false;
+		}
+		break;
+	case Qt::Key_Z:
+		if (axisZModified) {
+			axisModifierVector = standardAxisModifier;
+			axisZModified = false;
+		}
+		break;
 	}
 }
 
@@ -275,6 +320,8 @@ void OpenGLWidget::mouseMoveEvent(QMouseEvent *e)
 
 			QMatrix4x4 arcballRotation;
 
+			axis = axis * axisModifierVector;
+			qInfo() << axis;
 			arcballRotation.setToIdentity();
 			arcballRotation.rotate(angle, axis);
 

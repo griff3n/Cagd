@@ -53,6 +53,19 @@ private:
 	QMatrix4x4 projection;
 	QMatrix4x4 modelView;
 	QVector4D viewport;
+	//Booleans to save currently hold axis and reset only in the correct case
+	//maybe there is an easier solution to this
+	bool axisXModified=false;
+	bool axisYModified=false;
+	bool axisZModified=false;
+	//Modification vectors to only operate on an specific axis
+	QVector3D xAxisModifier = QVector3D(1, 0, 0);
+	QVector3D yAxisModifier = QVector3D(0, 1, 0);
+	QVector3D zAxisModifier = QVector3D(0, 0, 1);
+	//Standardvector to operate on all axis. Must be set again after modification.
+	QVector3D standardAxisModifier = QVector3D(1, 1, 1);
+	//The current modify vector to work with.
+	QVector3D axisModifierVector = standardAxisModifier;
 	void intersect(const QVector3D& origin, const QVector3D& direction);
 	QVector3D projectOntoSphere(const QPoint & pos);
 	void pick(const QVector2D &pos);

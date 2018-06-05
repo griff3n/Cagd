@@ -20,7 +20,6 @@ void QTCagd::openFile()
 	if (filename.isEmpty())
 		return;
 
-	HalfEdgeMesh* newMesh = new HalfEdgeMesh();
 	QFuture<HalfEdgeMesh *> future = QtConcurrent::run(loadOBJreg, filename.toStdString());
 
 	ui.action_Open->setEnabled(false);
