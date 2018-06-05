@@ -146,6 +146,7 @@ HalfEdgeMesh* loadOBJreg(std::string path) {
 		mesh->model.translate(invMiddlepoint);
 		mesh->model.scale(scale);
 
+		mesh->scale = scale;
 		return mesh;
 	}
 	else std::cout << "Unable to open file";

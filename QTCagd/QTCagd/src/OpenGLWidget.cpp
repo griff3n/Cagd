@@ -420,7 +420,7 @@ void OpenGLWidget::pick(const QVector2D &pos)
 void OpenGLWidget::intersect(const QVector3D &origin, const QVector3D &direction)
 {
 	//float minimum = std::numeric_limits<float>::max();
-	float minimum = 0.003f; //TODO change this to value depending on mesh bounding box
+	float minimum = 0.5 / mesh->scale;
 	graphicVertex *closest = nullptr;
 	for (graphicVertex *v : mesh->vertices) {
 		QVector3D p = QVector3D(v->location.x, v->location.y, v->location.z);

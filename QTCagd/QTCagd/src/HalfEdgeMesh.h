@@ -16,4 +16,5 @@ public:
 	std::vector<halfEdge*> halfEdges;
 	std::vector<graphicFace*> faces;
 	QMatrix4x4 model;
+	float scale = 1.0f;
 };
