@@ -328,7 +328,7 @@ void OpenGLWidget::mouseMoveEvent(QMouseEvent *e)
 		QVector3D difference = selectedPos - beginOld;
 		float distance = difference.length();
 
-		QVector3D move = distance * (end - begin).normalized() - distance * (endOld - beginOld).normalized();
+		QVector3D move = axisModifierVector *(distance * (end - begin).normalized() - distance * (endOld - beginOld).normalized());
 		for (graphicVertex* v : selections) {
 			QVector3D position = QVector3D(v->location.x, v->location.y, v->location.z);
 			QVector3D newPosition = position + move;
