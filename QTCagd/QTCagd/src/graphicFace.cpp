@@ -7,7 +7,4 @@ graphicFace::graphicFace(Design * design, ObjectMemory * sMem)
 	this->sMem = sMem;
 }
 
-graphicFace::~graphicFace()
-{
-	delete nextLOD;
-}
+graphicFace::~graphicFace() {}

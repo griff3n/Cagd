@@ -8,8 +8,4 @@ graphicVertex::graphicVertex(glm::vec4 location, graphicVertex * lastLOD, Design
 	this->lastLOD = lastLOD;
 }
 
-graphicVertex::~graphicVertex()
-{
-	delete lastLOD;
-	delete nextLOD;
-}
+graphicVertex::~graphicVertex() {}

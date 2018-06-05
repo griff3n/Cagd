@@ -9,7 +9,7 @@ OpenGLWidget::OpenGLWidget(QWidget *parent)
 
 OpenGLWidget::~OpenGLWidget()
 {
-
+	delete this->mesh;
 }
 
 void OpenGLWidget::vertexMovementRepaint()
@@ -19,6 +19,11 @@ void OpenGLWidget::vertexMovementRepaint()
 
 void OpenGLWidget::setHalfEdgeMesh(HalfEdgeMesh* mesh)
 {
+	//clean up existing mesh
+	delete this->mesh;
+	selections.clear();
+	emit vertexSelected(nullptr);
+
 	this->mesh = mesh;
 
 	//reset View
@@ -56,40 +61,6 @@ void OpenGLWidget::initializeGL()
 
 	setFocusPolicy(Qt::ClickFocus);
 	arcballRotationMatrix.setToIdentity();
-
-	/*
-	glewInit();
-
-	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LEQUAL);
-
-	// Width of the lines.
-	glLineWidth(1.0f);
-
-	glm::vec3 eye = { 0.0f, 0.0f, 4.0f };
-	glm::vec3 center = { 0.0f, 0.0f, 0.0f };
-	glm::vec3 up(0.0f, 1.0f, 0.0f);
-
-	view = glm::lookAt(eye, center, up);
-
-
-	char* bunny = "stanford_bunny_closed.obj";
-	sun = new Orb(glm::vec3(0.0f, 0.0f, 0.0f), 0, 1.5f, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 0.0f));
-	sun->addCustomModel(bunny, 1.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-
-	int width = 640;
-	int height = 480;
-	height = height < 1 ? 1 : height;
-	glViewport(0, 0, width, height);
-
-	// Construct projection matrix.
-	float zNear = 0.1f;
-	float zFar = 100.0f;
-	projection = glm::perspective(45.0f, (float)width / height, zNear, zFar);
-	
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	*/
 	
 }
 
@@ -202,7 +173,6 @@ void OpenGLWidget::paintGL()
 			}
 		}
 	}
-	//sun->render(view, projection, false false, false);
 }
 
 void OpenGLWidget::resizeGL(int w, int h)
