@@ -2,7 +2,7 @@
 
 
 
-Design::Design(Skin* normal, Skin* selected)
+Design::Design(SkinSphereVertex* normal, SkinSphereVertex* selected)
 {
 	this->normal = normal;
 	this->selected = selected;
@@ -20,7 +20,7 @@ Design::~Design()
 	}
 }
 
-Skin* Design::getActiveSkin()
+SkinSphereVertex* Design::getActiveSkin()
 {
 	return active;
 }

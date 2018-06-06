@@ -10,7 +10,6 @@
 #include <QFuture>
 #include "ui_QTCagd.h"
 #include "ObjectLoader.h"
-#include "Orb.h"
 
 class QTCagd : public QMainWindow
 {

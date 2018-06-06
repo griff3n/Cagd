@@ -1,5 +1,7 @@
 #include "OpenGLWidget.h"
 #include <Windows.h>
+#include <Qt3DCore>
+#include <Qt3DExtras>
 
 OpenGLWidget::OpenGLWidget(QWidget *parent)
 	: QOpenGLWidget(parent)
@@ -86,6 +88,25 @@ void OpenGLWidget::paintGL()
 		
 		modelView = view * arcballRotationMatrix * mesh->model;
 		
+		for (graphicVertex* vertex : mesh->vertices) {
+		
+			Qt3DCore::QTransform *sphereTransform = new Qt3DCore::QTransform();
+
+			sphereTransform->setScale(1.3f);
+			sphereTransform->setTranslation(QVector3D(vertex->location.x, vertex->location.y, vertex->location.z));
+
+			Qt3DExtras::QPhongMaterial *sphereMaterial = new Qt3DExtras::QPhongMaterial();
+			sphereMaterial->setDiffuse(QColor(QRgb(0xa69929)));
+
+			// Sphere
+
+			Qt3DCore::QEntity* m_sphereEntity = new Qt3DCore::QEntity();
+			m_sphereEntity->addComponent(vertex->getDesign()->getActiveSkin()->returnSkinObject());
+			m_sphereEntity->addComponent(sphereMaterial);
+			m_sphereEntity->addComponent(sphereTransform);
+			m_sphereEntity->setEnabled(true);
+		}
+
 		for (halfEdge* edge : mesh->halfEdges) {
 			float x, y, z, x2, y2, z2;
 			x = edge->vert->location.x;

@@ -8,7 +8,6 @@
 #include <gl/GL.h>
 #include <QMouseEvent>
 #include "ObjectLoader.h"
-#include "Orb.h"
 #include "HalfEdgeMesh.h"
 
 class OpenGLWidget : public QOpenGLWidget

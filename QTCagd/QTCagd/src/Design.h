@@ -1,19 +1,19 @@
 #include "ISelectableDesign.h"
-#include "Skin.h"
+#include "SkinSphereVertex.h"
 
 #pragma once
 class Design: public ISelectableDesign
 {
 public:
-	Design(Skin* normal, Skin* selected);
+	Design(SkinSphereVertex* normal, SkinSphereVertex* selected);
 	~Design();
-	Skin* getActiveSkin();
+	SkinSphereVertex* getActiveSkin();
 	void applySelectedDesign();
 	void applyStandardDesign();
 
 protected:
-	Skin *normal;
-	Skin *selected;
-	Skin *active;
+	SkinSphereVertex *normal;
+	SkinSphereVertex *selected;
+	SkinSphereVertex *active;
 };
 

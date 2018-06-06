@@ -1,12 +1,9 @@
 #include "Skin.h"
 
-
-
-Skin::Skin()
-{
-}
-
-
 Skin::~Skin()
 {
 }
+
+//void Skin::returnSkinObject()
+//{
+//}

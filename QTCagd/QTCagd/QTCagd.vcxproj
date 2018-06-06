@@ -121,6 +121,7 @@
     </QtRcc>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="SkinSphereVertex.cpp" />
     <ClCompile Include="src\Design.cpp" />
     <ClCompile Include="src\graphicFace.cpp" />
     <ClCompile Include="src\GraphicObject.cpp" />
@@ -157,6 +158,7 @@
     <QtRcc Include="QTCagd.qrc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="SkinSphereVertex.h" />
     <ClInclude Include="src\Design.h" />
     <ClInclude Include="src\graphicFace.h" />
     <ClInclude Include="src\GraphicObject.h" />

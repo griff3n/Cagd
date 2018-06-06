@@ -3,7 +3,7 @@
 class Skin
 {
 public:
-	Skin();
 	virtual ~Skin();
+	//void returnSkinObject();
 };
 
