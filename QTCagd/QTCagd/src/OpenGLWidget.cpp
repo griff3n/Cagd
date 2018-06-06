@@ -65,6 +65,11 @@ void OpenGLWidget::initializeGL()
 	setFocusPolicy(Qt::ClickFocus);
 	arcballRotationMatrix.setToIdentity();
 	
+	//Shader Setup
+	program->addShaderFromSourceFile(QOpenGLShader::Vertex, "shader/simple.vert");
+	program->addShaderFromSourceFile(QOpenGLShader::Fragment, "shader/simple.frag");
+	program->link();
+	program->bind();
 }
 
 void OpenGLWidget::paintGL()
@@ -72,87 +77,86 @@ void OpenGLWidget::paintGL()
 	if (!mesh) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		glBegin(GL_TRIANGLES);
-		glColor3f(1.0, 0.0, 0.0);
-		glVertex3f(-0.5, -0.5, 0);
-		glColor3f(0.0, 1.0, 0.0);
-		glVertex3f(0.5, -0.5, 0);
-		glColor3f(0.0, 0.0, 1.0);
-		glVertex3f(0.0, 0.5, 0);
-		glEnd();
+		int vertexLocation = program->attributeLocation("vertex");
+		int matrixLocation = program->uniformLocation("matrix");
+		int colorLocation = program->uniformLocation("color");
+
+		std:vector<GLfloat> triangleVertices;
+		triangleVertices.push_back(-0.5f);
+		triangleVertices.push_back(-0.5f);
+		triangleVertices.push_back(0.0f);
+		triangleVertices.push_back(0.5f);
+		triangleVertices.push_back(-0.5f);
+		triangleVertices.push_back(0.0f);
+		triangleVertices.push_back(0.0f);
+		triangleVertices.push_back(1.0f);
+		triangleVertices.push_back(0.0f);
+
+		QColor color(0, 255, 0, 255);
+
+		QMatrix4x4 pmvMatrix;
+		modelView = view * arcballRotationMatrix;
+		pmvMatrix = projection * modelView;
+
+		program->enableAttributeArray(vertexLocation);
+		program->setAttributeArray(vertexLocation, triangleVertices.data(), 3);
+		program->setUniformValue(matrixLocation, pmvMatrix);
+		program->setUniformValue(colorLocation, color);
+
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		program->disableAttributeArray(vertexLocation);
 	}
 	else {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		
+
+		int vertexLocation = program->attributeLocation("vertex");
+		int matrixLocation = program->uniformLocation("matrix");
+		int colorLocation = program->uniformLocation("color");
+
+		QMatrix4x4 pmvMatrix;
 		modelView = view * arcballRotationMatrix * mesh->model;
+		pmvMatrix = projection * modelView;
+
+		std::vector<GLfloat> halfEdges;
+		std::vector<GLfloat> faces;
+
+		QColor green(0, 255, 0, 255);
+		QColor red(255, 0, 0, 255);
 		
 		for (halfEdge* edge : mesh->halfEdges) {
-			float x, y, z, x2, y2, z2;
-			x = edge->vert->location.x;
-			y = edge->vert->location.y;
-			z = edge->vert->location.z;
-			x2 = edge->next->vert->location.x;
-			y2 = edge->next->vert->location.y;
-			z2 = edge->next->vert->location.z;
-			QVector4D v1 = QVector4D(x, y, z, 1);
-			QVector4D v2 = QVector4D(x2, y2, z2, 1);
-			v1 = modelView * v1;
-			v2 = modelView * v2;
-			x = v1.x();
-			y = v1.y();
-			z = v1.z();
-			x2 = v2.x();
-			y2 = v2.y();
-			z2 = v2.z();
-			glBegin(GL_LINES);
-			glColor3f(0.0, 1.0, 0.0);
-			glVertex3f(x, y, z);
-			glColor3f(0.0, 1.0, 0.0);
-			glVertex3f(x2, y2, z2);
-			glEnd();
+			halfEdges.push_back(edge->vert->location.x);
+			halfEdges.push_back(edge->vert->location.y);
+			halfEdges.push_back(edge->vert->location.z);
+			halfEdges.push_back(edge->next->vert->location.x);
+			halfEdges.push_back(edge->next->vert->location.y);
+			halfEdges.push_back(edge->next->vert->location.z);
 		}
+
+		program->enableAttributeArray(vertexLocation);
+		program->setAttributeArray(vertexLocation, halfEdges.data(), 3);
+		program->setUniformValue(matrixLocation, pmvMatrix);
+		program->setUniformValue(colorLocation, green);
+
+		int numberOfEdgeVertices = mesh->halfEdges.size() * 2;
+		glDrawArrays(GL_LINES, 0, numberOfEdgeVertices);
+
+		program->disableAttributeArray(vertexLocation);
 		
 		for (graphicFace* face : mesh->faces) {
 			if (face->valence == 3) {
 				halfEdge* start = face->edge;
 				halfEdge* current = face->edge;
-				glBegin(GL_TRIANGLES);
 				for (int i = 0; i < 3; i++) {
-					float x, y, z;
-					x = current->vert->location.x;
-					y = current->vert->location.y;
-					z = current->vert->location.z;
-					QVector4D location = QVector4D(x,y,z,1);
-					location = modelView *location;
-					x = location.x();
-					y = location.y();
-					z = location.z();
-
-					//color magic
-					float factor;
-					glm::vec3 vertexNormal;
-					halfEdge* start = current->vert->edge;
-					for (int i = 0; i < current->vert->valence; i++) {
-						glm::vec3 firstEdge = glm::vec3(start->next->vert->location - start->vert->location);
-						glm::vec3 secondEdge = glm::vec3(start->next->next->vert->location - start->next->vert->location);
-						glm::vec3 faceNormal = glm::cross(firstEdge, secondEdge);
-						faceNormal = glm::normalize(faceNormal);
-						vertexNormal += faceNormal;
-					}
-					vertexNormal = glm::normalize(vertexNormal);
-					glm::vec3 antiLightDir = glm::vec3(0.0, 1.0, 1.0) - glm::vec3(0.0, 0.0, 0.0);
-					glm::normalize(antiLightDir);
-					factor = vertexNormal.x * antiLightDir.x + vertexNormal.y * antiLightDir.y + vertexNormal.z * antiLightDir.z;
-					if (factor < 0) factor = 0;
-					if(current->vert->selected) glColor3f(0.0, 1.0, 0.0);
-					else glColor3f(factor * 1.0 + 0.0, 0.0, 0.0);
-
-					glVertex3f(x, y, z);
+					faces.push_back(current->vert->location.x);
+					faces.push_back(current->vert->location.y);
+					faces.push_back(current->vert->location.z);
 					current = current->next;
 				}
-				glEnd();
 			}
 			else if (face->valence == 4) {
+				//TODO Change ObjectLoader to only create triangles
+				/*
 				halfEdge* start = face->edge;
 				halfEdge* current = face->edge;
 				glBegin(GL_QUADS);
@@ -173,8 +177,18 @@ void OpenGLWidget::paintGL()
 					current = current->next;
 				}
 				glEnd();
+				*/
 			}
 		}
+		program->enableAttributeArray(vertexLocation);
+		program->setAttributeArray(vertexLocation, faces.data(), 3);
+		program->setUniformValue(matrixLocation, pmvMatrix);
+		program->setUniformValue(colorLocation, red);
+
+		int numberOfFaceVertices = mesh->faces.size() * 3;
+		glDrawArrays(GL_TRIANGLES, 0, numberOfFaceVertices);
+
+		program->disableAttributeArray(vertexLocation);
 	}
 }
 
@@ -359,7 +373,7 @@ void OpenGLWidget::mouseMoveEvent(QMouseEvent *e)
 			QMatrix4x4 arcballRotation;
 
 			axis = axis * axisModifierVector;
-			qInfo() << axis;
+			//qInfo() << axis;
 			arcballRotation.setToIdentity();
 			arcballRotation.rotate(angle, axis);
 

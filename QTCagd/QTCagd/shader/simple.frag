@@ -1,10 +1,5 @@
-#version 330
-
-out vec3 fragColor;
-in vec3 fragmentColor;
-
-void main()
+uniform mediump vec4 color;
+void main(void)
 {
-	fragColor = fragmentColor;
+    gl_FragColor = color;
 }
-
