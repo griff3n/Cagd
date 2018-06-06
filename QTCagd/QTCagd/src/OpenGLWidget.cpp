@@ -90,7 +90,6 @@ void OpenGLWidget::paintGL()
 			Qt3DCore::QEntity *m_sphereEntity = vertex->getDesign()->getActiveSkin()->returnSkinObject();
 
 			Qt3DCore::QTransform *sphereTransform = new Qt3DCore::QTransform();
-
 			sphereTransform->setScale(1.3f);
 			sphereTransform->setTranslation(QVector3D(vertex->location.x, vertex->location.y, vertex->location.z));	
 

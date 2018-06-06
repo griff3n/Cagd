@@ -1,5 +1,5 @@
 #include "ISelectableDesign.h"
-#include "SkinSphereVertex.h"
+#include "Skin.h"
 
 #pragma once
 class Design: public ISelectableDesign

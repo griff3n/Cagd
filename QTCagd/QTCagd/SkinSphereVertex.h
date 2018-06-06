@@ -1,7 +1,7 @@
 #pragma once
 #include <Qt3DCore>
 #include <Qt3DExtras>
-#include "Skin.h"
+#include "src/Skin.h"
 
 class SkinSphereVertex : public Skin
 {

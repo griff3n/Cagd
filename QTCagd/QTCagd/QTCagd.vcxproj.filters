@@ -170,10 +170,10 @@
     <ClInclude Include="src\HalfEdgeMesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SkinSphereVertex.h">
+    <ClInclude Include="src\Skin.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Skin.h">
+    <ClInclude Include="SkinSphereVertex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

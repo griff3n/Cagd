@@ -167,10 +167,7 @@
     <ClInclude Include="src\ISelectableGraphic.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="src\ObjectMemory.h" />
-    <ClInclude Include="src\Skin.h">
-      <DeploymentContent>true</DeploymentContent>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClInclude>
+    <ClInclude Include="src\Skin.h" />
     <ClInclude Include="src\Axis.h" />
     <ClInclude Include="src\BBox.h" />
     <ClInclude Include="src\BCurve.h" />
