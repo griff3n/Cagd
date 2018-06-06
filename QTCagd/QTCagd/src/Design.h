@@ -5,15 +5,15 @@
 class Design: public ISelectableDesign
 {
 public:
-	Design(SkinSphereVertex* normal, SkinSphereVertex* selected);
+	Design(Skin* normal, Skin* selected);
 	~Design();
-	SkinSphereVertex* getActiveSkin();
+	Skin* getActiveSkin();
 	void applySelectedDesign();
 	void applyStandardDesign();
 
 protected:
-	SkinSphereVertex *normal;
-	SkinSphereVertex *selected;
-	SkinSphereVertex *active;
+	Skin *normal;
+	Skin *selected;
+	Skin *active;
 };
 

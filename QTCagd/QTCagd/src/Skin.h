@@ -1,9 +1,10 @@
 #pragma once
+#include <Qt3DCore>
+#include <Qt3DExtras>
 //TODO
-class Skin
-{
+class Skin{
 public:
 	virtual ~Skin();
-	//void returnSkinObject();
+	virtual Qt3DCore::QEntity* returnSkinObject();
 };
 

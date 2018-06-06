@@ -4,6 +4,8 @@ Skin::~Skin()
 {
 }
 
-//void Skin::returnSkinObject()
-//{
-//}
+Qt3DCore::QEntity * Skin::returnSkinObject()
+{
+	return nullptr;
+}
+

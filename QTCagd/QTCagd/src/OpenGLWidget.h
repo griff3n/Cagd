@@ -9,6 +9,13 @@
 #include <QMouseEvent>
 #include "ObjectLoader.h"
 #include "HalfEdgeMesh.h"
+#include <Windows.h>
+
+#include <QtCore/QObject>
+#include <Qt3DCore/qentity.h>
+#include <Qt3DCore/qtransform.h>
+#include <Qt3DExtras/QSphereMesh>
+#include <Qt3DExtras/QPhongMaterial>
 
 class OpenGLWidget : public QOpenGLWidget
 {
