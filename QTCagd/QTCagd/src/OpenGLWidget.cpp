@@ -53,7 +53,9 @@ void OpenGLWidget::initializeGL()
 	glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 	glEnable(GL_COLOR_MATERIAL);
 	glDepthFunc(GL_LEQUAL);
-	glLineWidth(2.0f);
+	glLineWidth(1.0f);
+
+	glEnable(GL_PROGRAM_POINT_SIZE);
 
 	QVector3D center, up;
 	eye = QVector3D(0, 0, 5);
@@ -118,12 +120,70 @@ void OpenGLWidget::paintGL()
 		modelView = view * arcballRotationMatrix * mesh->model;
 		pmvMatrix = projection * modelView;
 
+		std::vector<GLfloat> vertices;
 		std::vector<GLfloat> halfEdges;
 		std::vector<GLfloat> faces;
 
+		QColor blue(0, 0, 255, 255);
 		QColor green(0, 255, 0, 255);
 		QColor red(255, 0, 0, 255);
+
+		//Rendern der Faces
+
+		for (graphicFace* face : mesh->faces) {
+			if (face->valence == 3) {
+				halfEdge* start = face->edge;
+				halfEdge* current = face->edge;
+				for (int i = 0; i < 3; i++) {
+					faces.push_back(current->vert->location.x);
+					faces.push_back(current->vert->location.y);
+					faces.push_back(current->vert->location.z);
+					current = current->next;
+				}
+			}
+			else if (face->valence == 4) {
+				//TODO Change ObjectLoader to only create triangles
+				/*
+				halfEdge* start = face->edge;
+				halfEdge* current = face->edge;
+				glBegin(GL_QUADS);
+				for (int i = 0; i < 4; i++) {
+				float x, y, z;
+				x = current->vert->location.x;
+				y = current->vert->location.y;
+				z = current->vert->location.z;
+
+				QVector4D location = QVector4D(x, y, z, 1);
+				location = modelView *location;
+				x = location.x();
+				y = location.y();
+				z = location.z();
+
+				glColor3f(0.0, 0.0, 1.0);
+				glVertex3f(x, y, z);
+				current = current->next;
+				}
+				glEnd();
+				*/
+			}
+		}
+		glEnable(GL_POLYGON_OFFSET_FILL);
+		glPolygonOffset(0.8, 0.8);
+
+		program->enableAttributeArray(vertexLocation);
+		program->setAttributeArray(vertexLocation, faces.data(), 3);
+		program->setUniformValue(matrixLocation, pmvMatrix);
+		program->setUniformValue(colorLocation, red);
+
+		int numberOfFaceVertices = mesh->faces.size() * 3;
+		glDrawArrays(GL_TRIANGLES, 0, numberOfFaceVertices);
+
+		program->disableAttributeArray(vertexLocation);
 		
+		glDisable(GL_POLYGON_OFFSET_FILL);
+
+		//Rendern der Edges
+
 		for (halfEdge* edge : mesh->halfEdges) {
 			halfEdges.push_back(edge->vert->location.x);
 			halfEdges.push_back(edge->vert->location.y);
@@ -143,50 +203,21 @@ void OpenGLWidget::paintGL()
 
 		program->disableAttributeArray(vertexLocation);
 		
-		for (graphicFace* face : mesh->faces) {
-			if (face->valence == 3) {
-				halfEdge* start = face->edge;
-				halfEdge* current = face->edge;
-				for (int i = 0; i < 3; i++) {
-					faces.push_back(current->vert->location.x);
-					faces.push_back(current->vert->location.y);
-					faces.push_back(current->vert->location.z);
-					current = current->next;
-				}
-			}
-			else if (face->valence == 4) {
-				//TODO Change ObjectLoader to only create triangles
-				/*
-				halfEdge* start = face->edge;
-				halfEdge* current = face->edge;
-				glBegin(GL_QUADS);
-				for (int i = 0; i < 4; i++) {
-					float x, y, z;
-					x = current->vert->location.x;
-					y = current->vert->location.y;
-					z = current->vert->location.z;
+		//Rendern der Vertices
 
-					QVector4D location = QVector4D(x, y, z, 1);
-					location = modelView *location;
-					x = location.x();
-					y = location.y();
-					z = location.z();
-
-					glColor3f(0.0, 0.0, 1.0);
-					glVertex3f(x, y, z);
-					current = current->next;
-				}
-				glEnd();
-				*/
-			}
+		for (graphicVertex* vertex : mesh->vertices) {
+			vertices.push_back(vertex->location.x);
+			vertices.push_back(vertex->location.y);
+			vertices.push_back(vertex->location.z);
 		}
-		program->enableAttributeArray(vertexLocation);
-		program->setAttributeArray(vertexLocation, faces.data(), 3);
-		program->setUniformValue(matrixLocation, pmvMatrix);
-		program->setUniformValue(colorLocation, red);
 
-		int numberOfFaceVertices = mesh->faces.size() * 3;
-		glDrawArrays(GL_TRIANGLES, 0, numberOfFaceVertices);
+		program->enableAttributeArray(vertexLocation);
+		program->setAttributeArray(vertexLocation, vertices.data(), 3);
+		program->setUniformValue(matrixLocation, pmvMatrix);
+		program->setUniformValue(colorLocation, blue);
+
+		int numberOfVertices = mesh->vertices.size();
+		glDrawArrays(GL_POINTS, 0, numberOfVertices);
 
 		program->disableAttributeArray(vertexLocation);
 	}
