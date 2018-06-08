@@ -45,7 +45,7 @@ void OpenGLWidget::setHalfEdgeMesh(HalfEdgeMesh* mesh)
 
 void OpenGLWidget::initializeGL()
 {
-	
+
 	glClearColor(0.2, 0.2, 0.2, 1);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHT0);
@@ -62,11 +62,11 @@ void OpenGLWidget::initializeGL()
 	center = QVector3D(0, 0, 0);
 	up = QVector3D(0, 1, 0);
 	view.setToIdentity();
-    view.lookAt(eye, center, up);
+	view.lookAt(eye, center, up);
 
 	setFocusPolicy(Qt::ClickFocus);
 	arcballRotationMatrix.setToIdentity();
-	
+
 	//Shader Setup
 	program->addShaderFromSourceFile(QOpenGLShader::Vertex, "shader/simple.vert");
 	program->addShaderFromSourceFile(QOpenGLShader::Fragment, "shader/simple.frag");
@@ -83,7 +83,7 @@ void OpenGLWidget::paintGL()
 		int matrixLocation = program->uniformLocation("matrix");
 		int colorLocation = program->uniformLocation("color");
 
-		std:vector<GLfloat> triangleVertices;
+	std:vector<GLfloat> triangleVertices;
 		triangleVertices.push_back(-0.5f);
 		triangleVertices.push_back(-0.5f);
 		triangleVertices.push_back(0.0f);
@@ -120,16 +120,17 @@ void OpenGLWidget::paintGL()
 		modelView = view * arcballRotationMatrix * mesh->model;
 		pmvMatrix = projection * modelView;
 
-		std::vector<GLfloat> vertices;
 		std::vector<GLfloat> halfEdges;
 		std::vector<GLfloat> faces;
 
 		QColor blue(0, 0, 255, 255);
 		QColor green(0, 255, 0, 255);
 		QColor red(255, 0, 0, 255);
+		QColor orange(239, 122, 0);
+		QColor yellow(255, 255, 0, 255);
+
 
 		//Rendern der Faces
-
 		for (graphicFace* face : mesh->faces) {
 			if (face->valence == 3) {
 				halfEdge* start = face->edge;
@@ -179,11 +180,11 @@ void OpenGLWidget::paintGL()
 		glDrawArrays(GL_TRIANGLES, 0, numberOfFaceVertices);
 
 		program->disableAttributeArray(vertexLocation);
-		
+
 		glDisable(GL_POLYGON_OFFSET_FILL);
 
-		//Rendern der Edges
 
+		//Rendern der Edges
 		for (halfEdge* edge : mesh->halfEdges) {
 			halfEdges.push_back(edge->vert->location.x);
 			halfEdges.push_back(edge->vert->location.y);
@@ -202,24 +203,66 @@ void OpenGLWidget::paintGL()
 		glDrawArrays(GL_LINES, 0, numberOfEdgeVertices);
 
 		program->disableAttributeArray(vertexLocation);
-		
-		//Rendern der Vertices
 
-		for (graphicVertex* vertex : mesh->vertices) {
+
+		//Rendern der Vertices
+		for (graphicVertex* vertex : mesh->vertices) {/*
 			vertices.push_back(vertex->location.x);
 			vertices.push_back(vertex->location.y);
-			vertices.push_back(vertex->location.z);
+			vertices.push_back(vertex->location.z);*/
+
+			std::vector<GLfloat> designFaces;
+
+			float x = vertex->location.x;
+			float y = vertex->location.y;
+			float z = vertex->location.z;
+
+			HalfEdgeMesh *skinModel = vertexSkin->returnSkinObject();
+			bool selected = vertex->selected;
+			for (graphicFace* face : skinModel->faces) {
+				if (face->valence == 3) {
+					halfEdge* start = face->edge;
+					halfEdge* current = face->edge;
+					for (int i = 0; i < 3; i++) {
+						QVector4D vec4 = QVector4D(current->vert->location.x, current->vert->location.y, current->vert->location.z, 1);
+						QMatrix4x4 identScale = QMatrix4x4();
+						identScale.setToIdentity();						
+						identScale.scale(1 /((eye.z()*10) * mesh->scale * mesh->scale));
+						vec4 = identScale * skinModel->model * vec4;
+
+						float finalX =  x + vec4.x();
+						float finalY =  y + vec4.y();
+						float finalZ =  z + vec4.z();
+
+						designFaces.push_back(finalX);
+						designFaces.push_back(finalY);
+						designFaces.push_back(finalZ);
+						current = current->next;
+					}
+				}
+			}
+
+			glEnable(GL_POLYGON_OFFSET_FILL);
+			glPolygonOffset(0.8, 0.8);
+
+			program->enableAttributeArray(vertexLocation);
+			program->setAttributeArray(vertexLocation, designFaces.data(), 3);
+			program->setUniformValue(matrixLocation, pmvMatrix);
+			if (selected) {
+				program->setUniformValue(colorLocation, orange);
+			}
+			else {
+				program->setUniformValue(colorLocation, blue);
+			}
+
+			int numberOfFaceVertices = designFaces.size() / 3;
+			glDrawArrays(GL_TRIANGLES, 0, numberOfFaceVertices);
+
+			program->disableAttributeArray(vertexLocation);
+
+			glDisable(GL_POLYGON_OFFSET_FILL);
+
 		}
-
-		program->enableAttributeArray(vertexLocation);
-		program->setAttributeArray(vertexLocation, vertices.data(), 3);
-		program->setUniformValue(matrixLocation, pmvMatrix);
-		program->setUniformValue(colorLocation, blue);
-
-		int numberOfVertices = mesh->vertices.size();
-		glDrawArrays(GL_POINTS, 0, numberOfVertices);
-
-		program->disableAttributeArray(vertexLocation);
 	}
 }
 
@@ -227,7 +270,7 @@ void OpenGLWidget::resizeGL(int w, int h)
 {
 	wdth = w;
 	hght = h;
-	
+
 	glViewport(0, 0, w, h);
 	viewport = QVector4D(0, 0, w, h);
 
@@ -245,7 +288,7 @@ void OpenGLWidget::resizeGL(int w, int h)
 void OpenGLWidget::mousePressEvent(QMouseEvent *e)
 {
 	setFocus();
-	lastMousePosition = currentMousePosition = e->pos();	
+	lastMousePosition = currentMousePosition = e->pos();
 
 	switch (e->button())
 	{
@@ -258,7 +301,7 @@ void OpenGLWidget::mousePressEvent(QMouseEvent *e)
 		drag = true;
 		if (mesh)
 		{
-			if (!multSelection) { 
+			if (!multSelection) {
 				for (graphicVertex* v : selections) {
 					v->selected = false;
 				}
@@ -283,7 +326,7 @@ void OpenGLWidget::keyPressEvent(QKeyEvent *e) {
 		break;
 	case Qt::Key_X:
 		//check if any other axis is currently hold and ignore in that case
-		if (!(axisYModified||axisZModified)) {
+		if (!(axisYModified || axisZModified)) {
 			//modify axisvector to only have x value
 			axisModifierVector = xAxisModifier;
 			//indicate x-axis is currently active
@@ -297,7 +340,7 @@ void OpenGLWidget::keyPressEvent(QKeyEvent *e) {
 			axisYModified = true;
 		}
 		break;
-	case Qt::Key_Z  :
+	case Qt::Key_Z:
 		if (!(axisYModified || axisXModified)) {
 			axisModifierVector = zAxisModifier;
 			axisZModified = true;
@@ -354,7 +397,7 @@ void OpenGLWidget::mouseMoveEvent(QMouseEvent *e)
 {
 	currentMousePosition = e->pos();
 
-	if (drag && selections.size()!=0)
+	if (drag && selections.size() != 0)
 	{
 		//TODO Clean up messy Code
 		graphicVertex* lastSelected = selections.at(selections.size() - 1);
@@ -373,7 +416,7 @@ void OpenGLWidget::mouseMoveEvent(QMouseEvent *e)
 		QVector3D difference = selectedPos - beginOld;
 		float distance = difference.length();
 
-		QVector3D move = axisModifierVector *(distance * (end - begin).normalized() - distance * (endOld - beginOld).normalized());
+		QVector3D move = axisModifierVector * (distance * (end - begin).normalized() - distance * (endOld - beginOld).normalized());
 		for (graphicVertex* v : selections) {
 			QVector3D position = QVector3D(v->location.x, v->location.y, v->location.z);
 			QVector3D newPosition = position + move;
@@ -384,7 +427,7 @@ void OpenGLWidget::mouseMoveEvent(QMouseEvent *e)
 		emit repaint();
 
 		//Update SpinBoxes
-		if(selections.size() == 1) emit vertexSelected(selections.at(0));
+		if (selections.size() == 1) emit vertexSelected(selections.at(0));
 
 		lastMousePosition = currentMousePosition;
 	}
@@ -480,7 +523,7 @@ void OpenGLWidget::intersect(const QVector3D &origin, const QVector3D &direction
 			closest = v;
 		}
 	}
-	
+
 	if (closest) {
 		if (closest->selected && multSelection) {
 			closest->selected = false;

@@ -12,12 +12,9 @@
 #include "ObjectLoader.h"
 #include "HalfEdgeMesh.h"
 #include <Windows.h>
+#include "Design.h"
+#include "SkinSphereVertex.h"
 
-#include <QtCore/QObject>
-#include <Qt3DCore/qentity.h>
-#include <Qt3DCore/qtransform.h>
-#include <Qt3DExtras/QSphereMesh>
-#include <Qt3DExtras/QPhongMaterial>
 
 class OpenGLWidget : public QOpenGLWidget
 {
@@ -26,7 +23,7 @@ class OpenGLWidget : public QOpenGLWidget
 public:
 	OpenGLWidget(QWidget *parent = 0);
 	~OpenGLWidget();
-	
+
 
 public slots:
 	void setHalfEdgeMesh(HalfEdgeMesh*);
@@ -64,9 +61,9 @@ private:
 	QOpenGLShaderProgram * program = new QOpenGLShaderProgram(this);;
 	//Booleans to save currently hold axis and reset only in the correct case
 	//maybe there is an easier solution to this
-	bool axisXModified=false;
-	bool axisYModified=false;
-	bool axisZModified=false;
+	bool axisXModified = false;
+	bool axisYModified = false;
+	bool axisZModified = false;
 	//Modification vectors to only operate on an specific axis
 	QVector3D xAxisModifier = QVector3D(1, 0, 0);
 	QVector3D yAxisModifier = QVector3D(0, 1, 0);
@@ -78,4 +75,5 @@ private:
 	void intersect(const QVector3D& origin, const QVector3D& direction);
 	QVector3D projectOntoSphere(const QPoint & pos);
 	void pick(const QVector2D &pos);
+	SkinSphereVertex *vertexSkin = new SkinSphereVertex();
 };
