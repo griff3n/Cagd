@@ -1,9 +1,12 @@
 #pragma once
+
+#include "HalfEdgeMesh.h"
 //TODO
-class Skin
-{
+class Skin{
 public:
-	Skin();
 	virtual ~Skin();
+	virtual HalfEdgeMesh* returnSkinObject();
+protected:
+	HalfEdgeMesh* skinMesh;
 };
 

@@ -1,12 +1,11 @@
 #include "Skin.h"
 
-
-
-Skin::Skin()
-{
-}
-
-
 Skin::~Skin()
 {
 }
+
+HalfEdgeMesh * Skin::returnSkinObject()
+{
+	return nullptr;
+}
+
