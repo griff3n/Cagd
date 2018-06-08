@@ -4,7 +4,7 @@ Skin::~Skin()
 {
 }
 
-Qt3DCore::QEntity * Skin::returnSkinObject()
+HalfEdgeMesh * Skin::returnSkinObject()
 {
 	return nullptr;
 }

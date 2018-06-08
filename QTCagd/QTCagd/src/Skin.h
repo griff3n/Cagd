@@ -1,10 +1,12 @@
 #pragma once
-#include <Qt3DCore>
-#include <Qt3DExtras>
+
+#include "HalfEdgeMesh.h"
 //TODO
 class Skin{
 public:
 	virtual ~Skin();
-	virtual Qt3DCore::QEntity* returnSkinObject();
+	virtual HalfEdgeMesh* returnSkinObject();
+protected:
+	HalfEdgeMesh* skinMesh;
 };
 
