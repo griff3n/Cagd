@@ -9,7 +9,7 @@ struct graphicVertex :
 	public GraphicObject
 {
 public:
-	graphicVertex(glm::vec4 location, graphicVertex* lastLOD = nullptr, Design* design = nullptr, ObjectMemory* sMem = nullptr);
+	graphicVertex(glm::vec4 location, graphicVertex* lastLOD = nullptr, ObjectMemory* sMem = nullptr);
 	~graphicVertex();
 	float weight = 0.0f;
 	glm::vec4 location;

@@ -2,7 +2,6 @@
 
 GraphicObject::~GraphicObject()
 {
-		delete design;
 		delete sMem;
 }
 
@@ -23,10 +22,6 @@ bool GraphicObject::getIsSelected()
 	return isSelected;
 }
 
-Design* GraphicObject::getDesign()
-{
-	return design;
-}
 
 ObjectMemory* GraphicObject::getSMem()
 {

@@ -1,9 +1,8 @@
 #include "graphicFace.h"
 
 
-graphicFace::graphicFace(Design * design, ObjectMemory * sMem)
+graphicFace::graphicFace( ObjectMemory * sMem)
 {
-	this->design = design;
 	this->sMem = sMem;
 }
 

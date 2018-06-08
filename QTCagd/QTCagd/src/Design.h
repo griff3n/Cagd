@@ -1,7 +1,8 @@
+#pragma once
+
 #include "ISelectableDesign.h"
 #include "Skin.h"
 
-#pragma once
 class Design: public ISelectableDesign
 {
 public:
