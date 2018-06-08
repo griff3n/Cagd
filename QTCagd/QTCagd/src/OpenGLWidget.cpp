@@ -228,7 +228,8 @@ void OpenGLWidget::paintGL()
 			scale.setToIdentity();
 			QVector3D point = mesh->model * QVector3D(vertex->location.x, vertex->location.y, vertex->location.z);
 			float distance = (eye - point).length();
-			scale.scale(0.01 * distance / mesh->scale);
+			float zoomCorrection = eye.z() > 0.5 ? eye.z() : 0.5;
+			scale.scale(0.01 * distance / (mesh->scale * zoomCorrection));
 			QMatrix4x4 translation = QMatrix4x4();
 			translation.setToIdentity();
 			translation.translate(vertex->location.x, vertex->location.y, vertex->location.z);
