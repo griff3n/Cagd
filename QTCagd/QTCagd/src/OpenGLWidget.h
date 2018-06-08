@@ -7,6 +7,8 @@
 #include <gl/GLU.h>
 #include <gl/GL.h>
 #include <QMouseEvent>
+#include <QOpenGLShaderProgram>
+//#include <QOpenGLShader>
 #include "ObjectLoader.h"
 #include "HalfEdgeMesh.h"
 #include <Windows.h>
@@ -59,6 +61,7 @@ private:
 	QMatrix4x4 projection;
 	QMatrix4x4 modelView;
 	QVector4D viewport;
+	QOpenGLShaderProgram * program = new QOpenGLShaderProgram(this);;
 	//Booleans to save currently hold axis and reset only in the correct case
 	//maybe there is an easier solution to this
 	bool axisXModified=false;

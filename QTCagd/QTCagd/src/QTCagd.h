@@ -18,9 +18,14 @@ class QTCagd : public QMainWindow
 public:
 	QTCagd(QWidget *parent = Q_NULLPTR);
 
+private:
+	void saveFile(QString filename);
+
 public slots:
 	void closeApplication();
 	void openFile();
+	void save();
+	void saveAs();
 	void parsingDone();
 	void showSelectedVertexProperties(graphicVertex*);
 	void xCoordChanged(double);
@@ -35,6 +40,8 @@ private:
 	Ui::QTCagdClass ui;
 	QFutureWatcher<HalfEdgeMesh*> parseWatcher;
 	graphicVertex* selectedVertex = nullptr;
+	HalfEdgeMesh* mesh = nullptr;
+	QString openedFile;
 };
 
 #endif // QTCAGD_H
