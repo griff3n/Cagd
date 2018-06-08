@@ -226,7 +226,9 @@ void OpenGLWidget::paintGL()
 			HalfEdgeMesh *skinMesh = vertexSkin->returnSkinObject();
 			QMatrix4x4 scale = QMatrix4x4();
 			scale.setToIdentity();
-			scale.scale(1 / ((eye.z() * 10) * mesh->scale * mesh->scale));
+			QVector3D point = mesh->model * QVector3D(vertex->location.x, vertex->location.y, vertex->location.z);
+			float distance = (eye - point).length();
+			scale.scale(0.01 * distance / mesh->scale);
 			QMatrix4x4 translation = QMatrix4x4();
 			translation.setToIdentity();
 			translation.translate(vertex->location.x, vertex->location.y, vertex->location.z);
