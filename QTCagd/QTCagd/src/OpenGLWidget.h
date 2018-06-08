@@ -76,4 +76,5 @@ private:
 	QVector3D projectOntoSphere(const QPoint & pos);
 	void pick(const QVector2D &pos);
 	SkinSphereVertex *vertexSkin = new SkinSphereVertex();
+	std::vector<GLfloat> skinFaces;
 };

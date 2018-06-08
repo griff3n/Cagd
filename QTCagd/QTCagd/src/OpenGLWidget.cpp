@@ -72,6 +72,21 @@ void OpenGLWidget::initializeGL()
 	program->addShaderFromSourceFile(QOpenGLShader::Fragment, "shader/simple.frag");
 	program->link();
 	program->bind();
+
+	//build skinFaces Vector
+	HalfEdgeMesh *skinMesh = vertexSkin->returnSkinObject();
+	for (graphicFace* face : skinMesh->faces) {
+		if (face->valence == 3) {
+			halfEdge* start = face->edge;
+			halfEdge* current = face->edge;
+			for (int i = 0; i < 3; i++) {
+				skinFaces.push_back(current->vert->location.x);
+				skinFaces.push_back(current->vert->location.y);
+				skinFaces.push_back(current->vert->location.z);
+				current = current->next;
+			}
+		}
+	}
 }
 
 void OpenGLWidget::paintGL()
@@ -206,62 +221,36 @@ void OpenGLWidget::paintGL()
 
 
 		//Rendern der Vertices
-		for (graphicVertex* vertex : mesh->vertices) {/*
-			vertices.push_back(vertex->location.x);
-			vertices.push_back(vertex->location.y);
-			vertices.push_back(vertex->location.z);*/
+		for (graphicVertex* vertex : mesh->vertices) {
 
-			std::vector<GLfloat> designFaces;
-
-			float x = vertex->location.x;
-			float y = vertex->location.y;
-			float z = vertex->location.z;
-
-			HalfEdgeMesh *skinModel = vertexSkin->returnSkinObject();
-			bool selected = vertex->selected;
-			for (graphicFace* face : skinModel->faces) {
-				if (face->valence == 3) {
-					halfEdge* start = face->edge;
-					halfEdge* current = face->edge;
-					for (int i = 0; i < 3; i++) {
-						QVector4D vec4 = QVector4D(current->vert->location.x, current->vert->location.y, current->vert->location.z, 1);
-						QMatrix4x4 identScale = QMatrix4x4();
-						identScale.setToIdentity();						
-						identScale.scale(1 /((eye.z()*10) * mesh->scale * mesh->scale));
-						vec4 = identScale * skinModel->model * vec4;
-
-						float finalX =  x + vec4.x();
-						float finalY =  y + vec4.y();
-						float finalZ =  z + vec4.z();
-
-						designFaces.push_back(finalX);
-						designFaces.push_back(finalY);
-						designFaces.push_back(finalZ);
-						current = current->next;
-					}
-				}
-			}
+			HalfEdgeMesh *skinMesh = vertexSkin->returnSkinObject();
+			QMatrix4x4 scale = QMatrix4x4();
+			scale.setToIdentity();
+			scale.scale(1 / ((eye.z() * 10) * mesh->scale * mesh->scale));
+			QMatrix4x4 translation = QMatrix4x4();
+			translation.setToIdentity();
+			translation.translate(vertex->location.x, vertex->location.y, vertex->location.z);
+			QMatrix4x4 pvm = pmvMatrix * translation * scale * skinMesh->model;
 
 			glEnable(GL_POLYGON_OFFSET_FILL);
 			glPolygonOffset(0.8, 0.8);
 
 			program->enableAttributeArray(vertexLocation);
-			program->setAttributeArray(vertexLocation, designFaces.data(), 3);
-			program->setUniformValue(matrixLocation, pmvMatrix);
-			if (selected) {
+			program->setAttributeArray(vertexLocation, skinFaces.data(), 3);
+			program->setUniformValue(matrixLocation, pvm);
+			if (vertex->selected) {
 				program->setUniformValue(colorLocation, orange);
 			}
 			else {
 				program->setUniformValue(colorLocation, blue);
 			}
 
-			int numberOfFaceVertices = designFaces.size() / 3;
+			int numberOfFaceVertices = skinFaces.size() / 3;
 			glDrawArrays(GL_TRIANGLES, 0, numberOfFaceVertices);
 
 			program->disableAttributeArray(vertexLocation);
 
 			glDisable(GL_POLYGON_OFFSET_FILL);
-
 		}
 	}
 }
