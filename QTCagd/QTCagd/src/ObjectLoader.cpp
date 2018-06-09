@@ -106,11 +106,11 @@ HalfEdgeMesh* loadOBJreg(std::string path) {
 					graphicVertex *end = first->next->vert;
 					int index = indices[(k + 1) % indices.size()] - 1;
 					for (int n = 0; n < acceleration[index].size(); n++) {
-						if (acceleration[index][n]->next != nullptr) {
-							if (acceleration[index][n]->next->vert == start) {
-								first->pair = acceleration[index][n];
-								acceleration[index][n]->pair = first;
-							}
+						halfEdge* pairCheck = acceleration[index][n];
+						if (pairCheck->next != nullptr && pairCheck->next->vert == start) {							
+								first->pair = pairCheck;
+								pairCheck->pair = first;
+								break;
 						}
 					}
 					first = first->next;
