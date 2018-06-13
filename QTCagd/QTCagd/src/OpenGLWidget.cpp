@@ -593,3 +593,91 @@ void OpenGLWidget::intersectEdges(const QVector3D& origin, const QVector3D& dire
 void OpenGLWidget::intersectFaces(const QVector3D& origin, const QVector3D& direction) {
 
 }
+
+//todo fix outgoing halfedge of each vert
+void OpenGLWidget::deleteVertex(){
+	if (!selections.empty()) {
+		//v is the Vertex that is going to be deleted, e is one outgoing halfedge of v
+		graphicVertex * v = selections.at(0);
+		halfEdge * e = v->edge;
+		graphicFace * hole = nullptr;
+
+		//first step of iteration
+		if (e->face->isHole) {
+			hole = e->face;
+		}
+		halfEdge * current = e->pair->next;
+		while (current != e) {
+			if (current->face->isHole) {
+				hole = current->face;
+				break;
+			}
+			current = current->pair->next;
+		}
+		if (!hole) {
+			hole = new graphicFace();
+			hole->isHole = true;
+			hole->edge = e;
+		}
+		std::vector<halfEdge *> del;
+		//first step of iteration
+
+		std::vector<halfEdge*> toConnect;
+		//helper halfedges to connect the halfedges along the hole
+		halfEdge* firstEndPoly = nullptr;
+
+		if (!(e->face == hole)) {
+			mesh->faces.erase(std::remove(mesh->faces.begin(), mesh->faces.end(), e->face), mesh->faces.end());
+			delete e->face;
+		}
+		halfEdge * temp = e->next;
+		toConnect.push_back(temp);
+		while (temp != e) {
+			temp->face = hole;
+			if (temp->next->next == e) firstEndPoly = temp;
+			temp = temp->next;
+		}
+		del.push_back(e);
+		del.push_back(e->pair);
+
+		current = e->pair->next;
+		
+
+		while (current != e) {
+			if (!(current->face == hole)) {
+				mesh->faces.erase(std::remove(mesh->faces.begin(), mesh->faces.end(), current->face),mesh->faces.end());
+				delete current->face;
+			}
+			halfEdge * temp = current->next;
+			while (temp != current) {
+				temp->face = hole;
+				if (temp->next->next == current) toConnect.push_back(temp);
+				temp = temp->next;
+			}
+			toConnect.push_back(current->next);
+			del.push_back(current);
+			del.push_back(current->pair);
+			current = current->pair->next;
+		}
+		toConnect.push_back(firstEndPoly);
+
+		for (int i = 0; i < toConnect.size(); i = i+2) {
+			halfEdge * start = toConnect.at(i);
+			halfEdge * end = toConnect.at(i+1);
+			end->next = start;
+		}
+
+		for (halfEdge * he : del) {
+			mesh->halfEdges.erase(std::remove(mesh->halfEdges.begin(), mesh->halfEdges.end(), he),mesh->halfEdges.end());
+			delete he;
+		}
+		hole->valence = 2;
+		mesh->vertices.erase(std::remove(mesh->vertices.begin(), mesh->vertices.end(), v),mesh->vertices.end());
+		delete v;
+		selections.clear();
+		emit vertexSelected(nullptr);
+		emit repaint();
+	}
+	
+
+}

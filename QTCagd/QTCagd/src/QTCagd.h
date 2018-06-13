@@ -34,7 +34,6 @@ public slots:
 	void vertexMode(bool toggled);
 	void edgeMode(bool toggled);
 	void faceMode(bool toggled);
-	void deleteVertex();
 
 private:
 	Ui::QTCagdClass ui;

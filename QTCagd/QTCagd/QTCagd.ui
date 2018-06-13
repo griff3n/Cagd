@@ -361,6 +361,7 @@
     <signal>vertexSelected(graphicVertex*)</signal>
     <slot>setHalfEdgeMesh(HalfEdgeMesh*)</slot>
     <slot>triggerRepaint()</slot>
+    <slot>deleteVertex()</slot>
    </slots>
   </customwidget>
  </customwidgets>
@@ -547,16 +548,16 @@
   <connection>
    <sender>deleteVertexButton</sender>
    <signal>released()</signal>
-   <receiver>QTCagdClass</receiver>
+   <receiver>openGLWidget</receiver>
    <slot>deleteVertex()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>527</x>
-     <y>217</y>
+     <y>224</y>
     </hint>
     <hint type="destinationlabel">
-     <x>6</x>
-     <y>364</y>
+     <x>329</x>
+     <y>229</y>
     </hint>
    </hints>
   </connection>

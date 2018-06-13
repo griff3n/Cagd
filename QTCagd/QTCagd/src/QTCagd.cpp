@@ -196,8 +196,3 @@ void QTCagd::faceMode(bool toggled)
 	if (ui.actionVertexMode->isChecked()) ui.actionVertexMode->toggle();
 	if (ui.actionEdge_Mode->isChecked()) ui.actionEdge_Mode->toggle();
 }
-
-void QTCagd::deleteVertex()
-{
-
-}

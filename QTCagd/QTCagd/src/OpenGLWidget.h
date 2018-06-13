@@ -32,6 +32,7 @@ public:
 	void setMode(OpenGLWidgetMode mode);
 	void setHalfEdgeMesh(HalfEdgeMesh*);
 public slots:
+	void deleteVertex();
 	
 signals:
 	void vertexSelected(graphicVertex*);
