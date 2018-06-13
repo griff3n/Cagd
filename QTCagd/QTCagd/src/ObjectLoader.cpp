@@ -147,6 +147,49 @@ HalfEdgeMesh* loadOBJreg(std::string path) {
 		mesh->model.scale(scale);
 
 		mesh->scale = scale;
+
+		int i = 1;
+		int j = 1;
+		for (halfEdge * he : mesh->halfEdges) {
+			if (he->pair == nullptr) {
+				graphicFace * hole = new graphicFace;
+				hole->isHole = true;
+				halfEdge *holeEdge = new halfEdge;
+				he->pair = holeEdge;
+				holeEdge->pair = he;
+				holeEdge->vert = he->next->vert;
+				holeEdge->face = hole;
+				hole->edge = holeEdge;
+				mesh->faces.push_back(hole);
+				halfEdge * current = he;
+				halfEdge *lastHoleEdge = holeEdge;
+				while (current -> next != he) {
+					current = current->next;
+					if (current->pair == nullptr) {
+						halfEdge *newHoleEdge = new halfEdge;
+						current->pair = newHoleEdge;
+						newHoleEdge->pair = current;
+						newHoleEdge->vert = current->next->vert;
+						newHoleEdge->face = hole;
+						newHoleEdge->next = lastHoleEdge;
+						lastHoleEdge = newHoleEdge;
+						mesh->halfEdges.push_back(newHoleEdge);
+					}
+					else current = current->pair;
+				}
+				holeEdge->next = lastHoleEdge;
+				mesh->halfEdges.push_back(holeEdge);
+				//Hole Valence
+				int v = 1;
+				current = holeEdge;
+				while (current->next != holeEdge) {
+					v++;
+					current = current->next;
+				}
+				hole->valence = v;
+			}
+		}
+
 		return mesh;
 	}
 	else std::cout << "Unable to open file";

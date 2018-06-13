@@ -205,7 +205,7 @@ void OpenGLWidget::renderFaces()
 
 	//Rendern der Faces
 	for (graphicFace* face : mesh->faces) {
-		if (face->valence == 3) {
+		if (face->valence == 3 && !face->isHole) {
 			halfEdge* start = face->edge;
 			halfEdge* current = face->edge;
 			for (int i = 0; i < 3; i++) {
@@ -215,7 +215,7 @@ void OpenGLWidget::renderFaces()
 				current = current->next;
 			}
 		}
-		else if (face->valence > 3) {
+		else if (face->valence > 3 && !face->isHole) {
 			//TODO Change Render to only create triangles
 			// Create a Triangle Fan out of every face with valence higher than 3
 			// Only works if all faces are convex
@@ -495,11 +495,30 @@ void OpenGLWidget::pick(const QVector2D &pos)
 void OpenGLWidget::setMode(OpenGLWidgetMode mode)
 {
 	this->mode = mode;
+	for (graphicVertex* v : selections) {
+		v->selected = false;
+	}
+	selections.clear();
+	emit vertexSelected(nullptr);
 }
 
 void OpenGLWidget::intersect(const QVector3D &origin, const QVector3D &direction)
 {
-	//float minimum = std::numeric_limits<float>::max();
+	switch (mode)
+	{
+	case VERTEX_MODE:
+		intersectVertices(origin, direction);
+		break;
+	case EDGE_MODE:
+		intersectEdges(origin, direction);
+		break;
+	case FACE_MODE:
+		intersectFaces(origin, direction);
+		break;
+	}
+}
+
+void OpenGLWidget::intersectVertices(const QVector3D& origin, const QVector3D& direction) {
 	float minimum = 0.5 / mesh->scale;
 	graphicVertex *closest = nullptr;
 	for (graphicVertex *v : mesh->vertices) {
@@ -531,4 +550,46 @@ void OpenGLWidget::intersect(const QVector3D &origin, const QVector3D &direction
 		}
 	}
 	qInfo() << "Minimum: " << minimum << "\n";
+}
+void OpenGLWidget::intersectEdges(const QVector3D& origin, const QVector3D& direction) {
+	/*
+	viscas::topology_toolbox toolbox(halfEdgeMesh);
+
+	auto index = viscas::topology_toolbox::invalid_edge();
+	auto minimum = std::numeric_limits<float>::max();
+
+	for (auto edge : toolbox.edges())
+	{
+		auto v0 = toolbox.limitPointOrPoint(edge, true);
+		auto v1 = toolbox.limitPointOrPoint(edge, false);
+
+		// #todo Big n will lead to performance issues. Optimize!
+		const int n = 32;
+
+		for (int i = 0; i < n + 1; i++)
+		{
+			float t = (float)i / n;
+
+			auto mid = (1.0f - t) * v0 + t * v1;
+			auto distance = mid.distanceToLine(origin, direction);
+
+			if (minimum > distance)
+			{
+				minimum = distance;
+				index = edge;
+			}
+		}
+	}
+
+	if (invalid(index))
+		return;
+
+	if (append)
+		selectionModel->addEdgeConditional(index);
+	else
+		selectionModel->setEdge(index);
+    */
+}
+void OpenGLWidget::intersectFaces(const QVector3D& origin, const QVector3D& direction) {
+
 }

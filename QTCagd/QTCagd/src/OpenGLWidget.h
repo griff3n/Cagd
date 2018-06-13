@@ -31,7 +31,6 @@ public:
 	~OpenGLWidget();
 	void setMode(OpenGLWidgetMode mode);
 	void setHalfEdgeMesh(HalfEdgeMesh*);
-	void triggerRepaint();
 public slots:
 	
 signals:
@@ -52,6 +51,9 @@ private:
 	void pick(const QVector2D &pos);
 	QVector3D projectOntoSphere(const QPoint & pos);
 	void intersect(const QVector3D& origin, const QVector3D& direction);
+	void intersectVertices(const QVector3D& origin, const QVector3D& direction);
+	void intersectEdges(const QVector3D& origin, const QVector3D& direction);
+	void intersectFaces(const QVector3D& origin, const QVector3D& direction);
 	void renderVertices();
 	void renderEdges();
 	void renderFaces();
