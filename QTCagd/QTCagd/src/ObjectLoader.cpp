@@ -148,9 +148,8 @@ HalfEdgeMesh* loadOBJreg(std::string path) {
 
 		mesh->scale = scale;
 
-		int i = 1;
-		int j = 1;
-		for (halfEdge * he : mesh->halfEdges) {
+		for (int i = 0; i < mesh->halfEdges.size(); i++) {
+			halfEdge * he = mesh->halfEdges.at(i);
 			if (he->pair == nullptr) {
 				graphicFace * hole = new graphicFace;
 				hole->isHole = true;
