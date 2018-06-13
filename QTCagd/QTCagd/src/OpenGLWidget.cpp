@@ -594,7 +594,7 @@ void OpenGLWidget::intersectFaces(const QVector3D& origin, const QVector3D& dire
 
 }
 
-//todo fix outgoing halfedge of each vert
+//todo: delete vertex connected to only hole faces
 void OpenGLWidget::deleteVertex(){
 	if (!selections.empty()) {
 		//v is the Vertex that is going to be deleted, e is one outgoing halfedge of v
@@ -634,6 +634,7 @@ void OpenGLWidget::deleteVertex(){
 		toConnect.push_back(temp);
 		while (temp != e) {
 			temp->face = hole;
+			//temp->vert->edge = temp;
 			if (temp->next->next == e) firstEndPoly = temp;
 			temp = temp->next;
 		}
@@ -651,6 +652,7 @@ void OpenGLWidget::deleteVertex(){
 			halfEdge * temp = current->next;
 			while (temp != current) {
 				temp->face = hole;
+				//temp->vert->edge = temp;
 				if (temp->next->next == current) toConnect.push_back(temp);
 				temp = temp->next;
 			}
@@ -666,6 +668,12 @@ void OpenGLWidget::deleteVertex(){
 			halfEdge * end = toConnect.at(i+1);
 			end->next = start;
 		}
+		current = e->next;
+		do {
+			current->vert->edge = current;
+			current = current->next;
+			qInfo() << "HI \n";
+		} while (current != e->next);
 
 		for (halfEdge * he : del) {
 			mesh->halfEdges.erase(std::remove(mesh->halfEdges.begin(), mesh->halfEdges.end(), he),mesh->halfEdges.end());
