@@ -2,7 +2,6 @@
 
 GraphicObject::~GraphicObject()
 {
-		delete sMem;
 }
 
 void GraphicObject::select()
@@ -20,10 +19,4 @@ void GraphicObject::onClick()
 bool GraphicObject::getIsSelected()
 {
 	return isSelected;
-}
-
-
-ObjectMemory* GraphicObject::getSMem()
-{
-	return sMem;
 }

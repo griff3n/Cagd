@@ -71,7 +71,7 @@ void QTCagd::saveAs()
 
 void QTCagd::saveFile(QString filename) {
 
-	ofstream file;
+	std::ofstream file;
 	file.open(filename.toStdString());
 
 	if (mesh) {

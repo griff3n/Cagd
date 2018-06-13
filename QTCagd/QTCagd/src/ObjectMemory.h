@@ -1,12 +1,11 @@
 #pragma once
-using namespace std;
-
 #include "GraphicObject.h"
 #include "graphicFace.h"
 #include "graphicVertex.h"
 #include "halfEdge.h"
 #include "HalfEdgeMesh.h"
-#include <vector>
+
+using namespace std;
 
 class ObjectMemory
 {

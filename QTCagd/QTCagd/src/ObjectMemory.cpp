@@ -12,7 +12,7 @@ ObjectMemory::~ObjectMemory()
 
 void ObjectMemory::subscribeSelected(GraphicObject* selected)
 {
-	bool found = (std::find(selectionList.begin(), selectionList.end(), selected) != selectionList.end());
+	bool found = (find(selectionList.begin(), selectionList.end(), selected) != selectionList.end());
 	if (!found) { selectionList.push_back(selected); }
 }
 
@@ -62,7 +62,7 @@ void ObjectMemory::undo()
 	redoStackObjects.push_back(undoObjects);
 	redoStackMatrix.push_back(undoChange);
 
-	undoChange = undoChange->inverted;
+	//undoChange = undoChange->inverted;
 	//undo changes here
 }
 

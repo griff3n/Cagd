@@ -2,9 +2,8 @@
 
 
 
-halfEdge::halfEdge( ObjectMemory * sMem)
+halfEdge::halfEdge()
 {
-	this->sMem = sMem;
 }
 
 halfEdge::~halfEdge() {}
