@@ -8,7 +8,7 @@ struct graphicFace :
 	public GraphicObject
 {
 public:
-	graphicFace(ObjectMemory* sMem = nullptr);
+	graphicFace();
 	~graphicFace();
 	bool isHole = false;
 	int valence = 0;

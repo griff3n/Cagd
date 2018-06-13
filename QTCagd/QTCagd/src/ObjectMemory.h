@@ -1,25 +1,35 @@
+#pragma once
+#include "GraphicObject.h"
+#include "graphicFace.h"
+#include "graphicVertex.h"
+#include "halfEdge.h"
+#include "HalfEdgeMesh.h"
+
 using namespace std;
 
-#pragma once
 class ObjectMemory
 {
 public:
 	ObjectMemory();
 	~ObjectMemory();
-	void subscribeSelected();
-	void unsubscribeSelected();
-	void registerNew();
+	void subscribeSelected(GraphicObject* selected);
+	void unsubscribeSelected(GraphicObject* selected);
+	void registerNew(GraphicObject* newObject, string type);
 	void deleteOld();
+	void addToUndo(GraphicObject[], QMatrix4x4*);
 	void undo();
 	void redo();
 
 protected:
-	//TODO hier slectionliste einbauen
-	//TODO Vertex,HE&Face List einbauen
-
-	//TODO undo-Stack
-	//TODO redo-stack (die pops vom undo stack)
-
+	vector<graphicVertex*> vertexList;
+	vector<halfEdge*> edgeList;
+	vector<graphicFace*> faceList;
+	vector<HalfEdgeMesh*> meshList;
+	list<GraphicObject*> selectionList;
+	vector<GraphicObject*> undoStackObjects;
+	vector<QMatrix4x4*> undoStackMatrix;
+	vector<GraphicObject*> redoStackObjects;
+	vector<QMatrix4x4*> redoStackMatrix;
 };
 
 
