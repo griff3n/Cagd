@@ -266,7 +266,16 @@
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
+   <widget class="QMenu" name="menuAnsicht">
+    <property name="title">
+     <string>Ansicht</string>
+    </property>
+    <addaction name="actionVertexMode"/>
+    <addaction name="actionEdge_Mode"/>
+    <addaction name="actionFace_Mode"/>
+   </widget>
    <addaction name="menuDatei"/>
+   <addaction name="menuAnsicht"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -304,6 +313,36 @@
     <string>Speichern unter...</string>
    </property>
   </action>
+  <action name="actionVertexMode">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Vertex Mode</string>
+   </property>
+  </action>
+  <action name="actionEdge_Mode">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Edge Mode</string>
+   </property>
+  </action>
+  <action name="actionFace_Mode">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Face Mode</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
@@ -314,7 +353,7 @@
    <slots>
     <signal>vertexSelected(graphicVertex*)</signal>
     <slot>setHalfEdgeMesh(HalfEdgeMesh*)</slot>
-    <slot>vertexMovementRepaint()</slot>
+    <slot>triggerRepaint()</slot>
    </slots>
   </customwidget>
  </customwidgets>
@@ -436,17 +475,17 @@
   </connection>
   <connection>
    <sender>QTCagdClass</sender>
-   <signal>vertexMoved()</signal>
+   <signal>triggerRepaint()</signal>
    <receiver>openGLWidget</receiver>
-   <slot>vertexMovementRepaint()</slot>
+   <slot>triggerRepaint()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>4</x>
      <y>241</y>
     </hint>
     <hint type="destinationlabel">
-     <x>30</x>
-     <y>250</y>
+     <x>31</x>
+     <y>261</y>
     </hint>
    </hints>
   </connection>
@@ -482,10 +521,58 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionVertexMode</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>QTCagdClass</receiver>
+   <slot>vertexMode(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>328</x>
+     <y>226</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionEdge_Mode</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>QTCagdClass</receiver>
+   <slot>edgeMode(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>328</x>
+     <y>226</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionFace_Mode</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>QTCagdClass</receiver>
+   <slot>faceMode(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>328</x>
+     <y>226</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <signal>meshChanged(HalfEdgeMesh*)</signal>
-  <signal>vertexMoved()</signal>
+  <signal>triggerRepaint()</signal>
   <slot>closeApplication()</slot>
   <slot>showBunny()</slot>
   <slot>openFile()</slot>
@@ -495,5 +582,8 @@
   <slot>zCoordChanged(double)</slot>
   <slot>save()</slot>
   <slot>saveAs()</slot>
+  <slot>vertexMode(bool)</slot>
+  <slot>edgeMode(bool)</slot>
+  <slot>faceMode(bool)</slot>
  </slots>
 </ui>

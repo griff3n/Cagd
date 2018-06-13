@@ -31,10 +31,9 @@ public slots:
 	void xCoordChanged(double);
 	void yCoordChanged(double);
 	void zCoordChanged(double);
-
-signals:
-	void meshChanged(HalfEdgeMesh*);
-	void vertexMoved();
+	void vertexMode(bool toggled);
+	void edgeMode(bool toggled);
+	void faceMode(bool toggled);
 
 private:
 	Ui::QTCagdClass ui;

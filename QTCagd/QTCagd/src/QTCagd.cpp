@@ -1,5 +1,11 @@
 #include "QTCagd.h"
 
+/*enum OpenGLWidgetMode
+{
+	VERTEX_MODE,
+	EDGE_MODE,
+	FACE_MODE
+};*/
 
 QTCagd::QTCagd(QWidget *parent)
 	: QMainWindow(parent)
@@ -109,7 +115,7 @@ void QTCagd::parsingDone()
 
 	if (newHalfEdgeMesh)
 	{
-		emit meshChanged(newHalfEdgeMesh);
+		ui.openGLWidget->setHalfEdgeMesh(newHalfEdgeMesh);
 		emit ui.statusBar->showMessage(QLatin1String("Datei erfolgreich geöffnet!"), 5000);
 	}
 	else 
@@ -139,7 +145,7 @@ void QTCagd::xCoordChanged(double newX)
 	if (selectedVertex) {
 		glm::vec4 oldLocation = selectedVertex->location;
 		selectedVertex->location = glm::vec4(newX, oldLocation.y, oldLocation.z, oldLocation.w);
-		emit vertexMoved();
+		emit ui.openGLWidget->repaint();
 	}
 }
 
@@ -148,7 +154,7 @@ void QTCagd::yCoordChanged(double newY)
 	if (selectedVertex) {
 		glm::vec4 oldLocation = selectedVertex->location;
 		selectedVertex->location = glm::vec4(oldLocation.x, newY, oldLocation.z, oldLocation.w);
-		emit vertexMoved();
+		emit ui.openGLWidget->repaint();
 	}
 }
 
@@ -157,6 +163,36 @@ void QTCagd::zCoordChanged(double newZ)
 	if (selectedVertex) {
 		glm::vec4 oldLocation = selectedVertex->location;
 		selectedVertex->location = glm::vec4(oldLocation.x, oldLocation.y, newZ, oldLocation.w);
-		emit vertexMoved();
+		emit ui.openGLWidget->repaint();
 	}
+}
+
+void QTCagd::vertexMode(bool toggled)
+{
+	if (!toggled) return;
+
+	ui.openGLWidget->setMode(VERTEX_MODE);
+	ui.stackedWidget->setCurrentIndex(0);
+	if(ui.actionEdge_Mode->isChecked()) ui.actionEdge_Mode->toggle();
+	if (ui.actionFace_Mode->isChecked()) ui.actionFace_Mode->toggle();
+}
+
+void QTCagd::edgeMode(bool toggled)
+{
+	if (!toggled) return;
+
+	ui.openGLWidget->setMode(EDGE_MODE);
+	ui.stackedWidget->setCurrentIndex(0);
+	if (ui.actionVertexMode->isChecked()) ui.actionVertexMode->toggle();
+	if (ui.actionFace_Mode->isChecked()) ui.actionFace_Mode->toggle();
+}
+
+void QTCagd::faceMode(bool toggled)
+{
+	if (!toggled) return;
+
+	ui.openGLWidget->setMode(FACE_MODE);
+	ui.stackedWidget->setCurrentIndex(0);
+	if (ui.actionVertexMode->isChecked()) ui.actionVertexMode->toggle();
+	if (ui.actionEdge_Mode->isChecked()) ui.actionEdge_Mode->toggle();
 }

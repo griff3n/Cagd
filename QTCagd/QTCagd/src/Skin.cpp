@@ -2,6 +2,7 @@
 
 Skin::~Skin()
 {
+	delete skinMesh;
 }
 
 HalfEdgeMesh * Skin::returnSkinObject()

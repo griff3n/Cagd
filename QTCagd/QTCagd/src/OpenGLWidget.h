@@ -15,6 +15,12 @@
 #include "Design.h"
 #include "SkinSphereVertex.h"
 
+enum OpenGLWidgetMode
+{
+	VERTEX_MODE,
+	EDGE_MODE,
+	FACE_MODE
+};
 
 class OpenGLWidget : public QOpenGLWidget
 {
@@ -23,11 +29,11 @@ class OpenGLWidget : public QOpenGLWidget
 public:
 	OpenGLWidget(QWidget *parent = 0);
 	~OpenGLWidget();
-
-
-public slots:
+	void setMode(OpenGLWidgetMode mode);
 	void setHalfEdgeMesh(HalfEdgeMesh*);
-	void vertexMovementRepaint();
+	void triggerRepaint();
+public slots:
+	
 signals:
 	void vertexSelected(graphicVertex*);
 
@@ -43,6 +49,14 @@ protected:
 	void keyReleaseEvent(QKeyEvent * e) Q_DECL_OVERRIDE;
 
 private:
+	void pick(const QVector2D &pos);
+	QVector3D projectOntoSphere(const QPoint & pos);
+	void intersect(const QVector3D& origin, const QVector3D& direction);
+	void renderVertices();
+	void renderEdges();
+	void renderFaces();
+
+private:
 	HalfEdgeMesh * mesh = nullptr;
 	bool arcball = false;
 	bool drag = false;
@@ -51,14 +65,14 @@ private:
 	QMatrix4x4 arcballRotationMatrix;
 	int wdth;
 	int hght;
-	QPoint lastMousePosition;
-	QPoint currentMousePosition;
 	QVector3D eye;
 	QMatrix4x4 view;
 	QMatrix4x4 projection;
 	QMatrix4x4 modelView;
 	QVector4D viewport;
-	QOpenGLShaderProgram * program = new QOpenGLShaderProgram(this);;
+	QPoint lastMousePosition;
+	QPoint currentMousePosition;
+	QOpenGLShaderProgram * program = new QOpenGLShaderProgram(this);
 	//Booleans to save currently hold axis and reset only in the correct case
 	//maybe there is an easier solution to this
 	bool axisXModified = false;
@@ -72,9 +86,9 @@ private:
 	QVector3D standardAxisModifier = QVector3D(1, 1, 1);
 	//The current modify vector to work with.
 	QVector3D axisModifierVector = standardAxisModifier;
-	void intersect(const QVector3D& origin, const QVector3D& direction);
-	QVector3D projectOntoSphere(const QPoint & pos);
-	void pick(const QVector2D &pos);
+	//Skin of the Vertices
 	SkinSphereVertex *vertexSkin = new SkinSphereVertex();
 	std::vector<GLfloat> skinFaces;
+	//Render Mode
+	OpenGLWidgetMode mode = VERTEX_MODE;
 };
