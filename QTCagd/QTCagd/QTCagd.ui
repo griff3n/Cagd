@@ -139,7 +139,7 @@
                 <x>10</x>
                 <y>10</y>
                 <width>160</width>
-                <height>151</height>
+                <height>160</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -218,6 +218,13 @@
                  </property>
                  <property name="singleStep">
                   <double>0.010000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="deleteVertexButton">
+                 <property name="text">
+                  <string>Entfernen</string>
                  </property>
                 </widget>
                </item>
@@ -394,22 +401,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>QTCagdClass</sender>
-   <signal>meshChanged(HalfEdgeMesh*)</signal>
-   <receiver>openGLWidget</receiver>
-   <slot>setHalfEdgeMesh(HalfEdgeMesh*)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>341</x>
-     <y>58</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>321</x>
-     <y>259</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>openGLWidget</sender>
    <signal>vertexSelected(graphicVertex*)</signal>
    <receiver>QTCagdClass</receiver>
@@ -432,8 +423,8 @@
    <slot>xCoordChanged(double)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>609</x>
-     <y>119</y>
+     <x>612</x>
+     <y>112</y>
     </hint>
     <hint type="destinationlabel">
      <x>660</x>
@@ -448,8 +439,8 @@
    <slot>yCoordChanged(double)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>609</x>
-     <y>170</y>
+     <x>612</x>
+     <y>157</y>
     </hint>
     <hint type="destinationlabel">
      <x>661</x>
@@ -464,28 +455,12 @@
    <slot>zCoordChanged(double)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>609</x>
-     <y>222</y>
+     <x>612</x>
+     <y>202</y>
     </hint>
     <hint type="destinationlabel">
      <x>661</x>
      <y>389</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>QTCagdClass</sender>
-   <signal>triggerRepaint()</signal>
-   <receiver>openGLWidget</receiver>
-   <slot>triggerRepaint()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>4</x>
-     <y>241</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>31</x>
-     <y>261</y>
     </hint>
    </hints>
   </connection>
@@ -569,6 +544,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>deleteVertexButton</sender>
+   <signal>released()</signal>
+   <receiver>QTCagdClass</receiver>
+   <slot>deleteVertex()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>527</x>
+     <y>217</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>6</x>
+     <y>364</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <signal>meshChanged(HalfEdgeMesh*)</signal>
@@ -585,5 +576,6 @@
   <slot>vertexMode(bool)</slot>
   <slot>edgeMode(bool)</slot>
   <slot>faceMode(bool)</slot>
+  <slot>deleteVertex()</slot>
  </slots>
 </ui>
