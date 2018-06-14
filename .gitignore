@@ -9,3 +9,9 @@
 /QTCagd/QTCagd/QTCagd.vcxproj.filters
 /QTCagd/QTCagd/.vs/
 /QTCagd/TestQTCagd/x64/
+*.aux
+*.log
+*.out
+*Template.pdf
+*.synctex.gz
+*.toc
