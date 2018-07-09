@@ -50,7 +50,7 @@ namespace TestQTCagd
 
 		TEST_METHOD(testSetVals) {
 			halfEdge * edge = new halfEdge();
-			glm::vec4 pos0 = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
+			QVector4D pos0 = QVector4D(0.0f, 0.0f, 0.0f, 0.0f);
 			graphicVertex * nextLOD = new graphicVertex(pos0);
 			graphicFace * testGF = new graphicFace();
 			testGF->isHole = true;

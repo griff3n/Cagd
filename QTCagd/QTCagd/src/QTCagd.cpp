@@ -21,7 +21,7 @@ void QTCagd::closeApplication()
 
 void QTCagd::openFile()
 {
-	QString filename = QFileDialog::getOpenFileName(this, tr("Open file"), ".", tr("Wavefront OBJ (*.obj)"));
+	QString filename = QFileDialog::getOpenFileName(this, tr("Open file"), "./ObjectFiles", tr("Wavefront OBJ (*.obj)"));
 
 	if (filename.isEmpty())
 		return;
@@ -76,7 +76,7 @@ void QTCagd::saveFile(QString filename) {
 
 	if (mesh) {
 		for (graphicVertex* v : mesh->vertices) {
-			file << "v " << v->location.x << " " << v->location.y << " " << v->location.z << std::endl;
+			file << "v " << v->location.x() << " " << v->location.y() << " " << v->location.z() << std::endl;
 		}
 		for (graphicFace* f : mesh->faces) {
 			file << "f";
@@ -131,9 +131,9 @@ void QTCagd::showSelectedVertexProperties(graphicVertex * v)
 	if (selectedVertex) {
 		//TODO Enum for Modes
 		ui.stackedWidget->setCurrentIndex(1);
-		ui.xSpinBox->setValue(selectedVertex->location.x);
-		ui.ySpinBox->setValue(selectedVertex->location.y);
-		ui.zSpinBox->setValue(selectedVertex->location.z);
+		ui.xSpinBox->setValue(selectedVertex->location.x());
+		ui.ySpinBox->setValue(selectedVertex->location.y());
+		ui.zSpinBox->setValue(selectedVertex->location.z());
 	}
 	else {
 		ui.stackedWidget->setCurrentIndex(0);
@@ -143,8 +143,8 @@ void QTCagd::showSelectedVertexProperties(graphicVertex * v)
 void QTCagd::xCoordChanged(double newX)
 {
 	if (selectedVertex) {
-		glm::vec4 oldLocation = selectedVertex->location;
-		selectedVertex->location = glm::vec4(newX, oldLocation.y, oldLocation.z, oldLocation.w);
+		QVector4D oldLocation = selectedVertex->location;
+		selectedVertex->location = QVector4D(float(newX), oldLocation.y(), oldLocation.z(), oldLocation.w());
 		emit ui.openGLWidget->repaint();
 	}
 }
@@ -152,8 +152,8 @@ void QTCagd::xCoordChanged(double newX)
 void QTCagd::yCoordChanged(double newY)
 {
 	if (selectedVertex) {
-		glm::vec4 oldLocation = selectedVertex->location;
-		selectedVertex->location = glm::vec4(oldLocation.x, newY, oldLocation.z, oldLocation.w);
+		QVector4D oldLocation = selectedVertex->location;
+		selectedVertex->location = QVector4D(oldLocation.x(), float(newY), oldLocation.z(), oldLocation.w());
 		emit ui.openGLWidget->repaint();
 	}
 }
@@ -161,8 +161,8 @@ void QTCagd::yCoordChanged(double newY)
 void QTCagd::zCoordChanged(double newZ)
 {
 	if (selectedVertex) {
-		glm::vec4 oldLocation = selectedVertex->location;
-		selectedVertex->location = glm::vec4(oldLocation.x, oldLocation.y, newZ, oldLocation.w);
+		QVector4D oldLocation = selectedVertex->location;
+		selectedVertex->location = QVector4D(oldLocation.x(), oldLocation.y(), float(newZ), oldLocation.w());
 		emit ui.openGLWidget->repaint();
 	}
 }

@@ -1,18 +1,18 @@
 #pragma once
 
-#include <glm/vec4.hpp>
 #include "GraphicObject.h"
 struct halfEdge;
 #include "halfEdge.h"
+#include <QVector4D>
 
 struct graphicVertex :
 	public GraphicObject
 {
 public:
-	graphicVertex(glm::vec4 location, graphicVertex* lastLOD = nullptr);
+	graphicVertex(QVector4D location, graphicVertex* lastLOD = nullptr);
 	~graphicVertex();
 	float weight = 0.0f;
-	glm::vec4 location;
+	QVector4D location;
 	bool hasFlag = false;
 	bool selected = false;
 	int valence = 0;

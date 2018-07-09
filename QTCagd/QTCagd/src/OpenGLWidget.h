@@ -14,6 +14,7 @@
 #include <Windows.h>
 #include "Design.h"
 #include "SkinSphereVertex.h"
+#include <QtMath>
 
 enum OpenGLWidgetMode
 {

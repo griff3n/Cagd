@@ -76,9 +76,9 @@ void OpenGLWidget::initializeGL()
 			halfEdge* start = face->edge;
 			halfEdge* current = face->edge;
 			for (int i = 0; i < 3; i++) {
-				skinFaces.push_back(current->vert->location.x);
-				skinFaces.push_back(current->vert->location.y);
-				skinFaces.push_back(current->vert->location.z);
+				skinFaces.push_back(current->vert->location.x());
+				skinFaces.push_back(current->vert->location.y());
+				skinFaces.push_back(current->vert->location.z());
 				current = current->next;
 			}
 		}
@@ -128,13 +128,13 @@ void OpenGLWidget::renderVertices()
 		HalfEdgeMesh *skinMesh = vertexSkin->returnSkinObject();
 		QMatrix4x4 scale = QMatrix4x4();
 		scale.setToIdentity();
-		QVector3D point = mesh->model * QVector3D(vertex->location.x, vertex->location.y, vertex->location.z);
+		QVector3D point = mesh->model * QVector3D(vertex->location.x(), vertex->location.y(), vertex->location.z());
 		float distance = (eye * arcballRotationMatrix - point).length();
 		//float zoomCorrection = eye.z() > 0.5 ? eye.z() : 0.5;
 		scale.scale(0.005 * distance / (mesh->scale));// (mesh->scale*zoomCorrection));
 		QMatrix4x4 translation = QMatrix4x4();
 		translation.setToIdentity();
-		translation.translate(vertex->location.x, vertex->location.y, vertex->location.z);
+		translation.translate(vertex->location.x(), vertex->location.y(), vertex->location.z());
 		QMatrix4x4 pvm = pmvMatrix * translation * scale * skinMesh->model;
 
 		program->enableAttributeArray(vertexLocation);
@@ -169,12 +169,12 @@ void OpenGLWidget::renderEdges()
 
 	//Rendern der Edges
 	for (halfEdge* edge : mesh->halfEdges) {
-		halfEdges.push_back(edge->vert->location.x);
-		halfEdges.push_back(edge->vert->location.y);
-		halfEdges.push_back(edge->vert->location.z);
-		halfEdges.push_back(edge->next->vert->location.x);
-		halfEdges.push_back(edge->next->vert->location.y);
-		halfEdges.push_back(edge->next->vert->location.z);
+		halfEdges.push_back(edge->vert->location.x());
+		halfEdges.push_back(edge->vert->location.y());
+		halfEdges.push_back(edge->vert->location.z());
+		halfEdges.push_back(edge->next->vert->location.x());
+		halfEdges.push_back(edge->next->vert->location.y());
+		halfEdges.push_back(edge->next->vert->location.z());
 	}
 
 	program->enableAttributeArray(vertexLocation);
@@ -209,9 +209,9 @@ void OpenGLWidget::renderFaces()
 			halfEdge* start = face->edge;
 			halfEdge* current = face->edge;
 			for (int i = 0; i < 3; i++) {
-				triangles.push_back(current->vert->location.x);
-				triangles.push_back(current->vert->location.y);
-				triangles.push_back(current->vert->location.z);
+				triangles.push_back(current->vert->location.x());
+				triangles.push_back(current->vert->location.y());
+				triangles.push_back(current->vert->location.z());
 				current = current->next;
 			}
 		}
@@ -224,15 +224,15 @@ void OpenGLWidget::renderFaces()
 			graphicVertex * triangleFanTip = start->vert;
 			// Loop starts with the second Vertex and ends with the last but one to create (valence-2) triangles
 			for (int i = 0; i < face->valence - 2; i++) {
-				triangles.push_back(triangleFanTip->location.x);
-				triangles.push_back(triangleFanTip->location.y);
-				triangles.push_back(triangleFanTip->location.z);
-				triangles.push_back(current->vert->location.x);
-				triangles.push_back(current->vert->location.y);
-				triangles.push_back(current->vert->location.z);
-				triangles.push_back(current->next->vert->location.x);
-				triangles.push_back(current->next->vert->location.y);
-				triangles.push_back(current->next->vert->location.z);
+				triangles.push_back(triangleFanTip->location.x());
+				triangles.push_back(triangleFanTip->location.y());
+				triangles.push_back(triangleFanTip->location.z());
+				triangles.push_back(current->vert->location.x());
+				triangles.push_back(current->vert->location.y());
+				triangles.push_back(current->vert->location.z());
+				triangles.push_back(current->next->vert->location.x());
+				triangles.push_back(current->next->vert->location.y());
+				triangles.push_back(current->next->vert->location.z());
 				current = current->next;
 			}
 		}
@@ -405,17 +405,17 @@ void OpenGLWidget::mouseMoveEvent(QMouseEvent *e)
 		QVector3D begin = QVector3D(pos, 0.0f).unproject(modelView, projection, viewp);
 		QVector3D end = QVector3D(pos, 1.0f).unproject(modelView, projection, viewp);
 
-		QVector3D selectedPos = QVector3D(lastSelected->location.x, lastSelected->location.y, lastSelected->location.z);
+		QVector3D selectedPos = QVector3D(lastSelected->location.x(), lastSelected->location.y(), lastSelected->location.z());
 		QVector3D difference = selectedPos - beginOld;
 		float distance = difference.length();
 
 		QVector3D move = axisModifierVector * (distance * (end - begin).normalized() - distance * (endOld - beginOld).normalized());
 		for (graphicVertex* v : selections) {
-			QVector3D position = QVector3D(v->location.x, v->location.y, v->location.z);
+			QVector3D position = QVector3D(v->location.x(), v->location.y(), v->location.z());
 			QVector3D newPosition = position + move;
-			v->location.x = newPosition.x();
-			v->location.y = newPosition.y();
-			v->location.z = newPosition.z();
+			v->location[0] = newPosition.x();
+			v->location[1] = newPosition.y();
+			v->location[2] = newPosition.z();
 		}
 		emit repaint();
 
@@ -461,7 +461,7 @@ QVector3D OpenGLWidget::projectOntoSphere(const QPoint& pos)
 
 	float d = std::min(1.0f, p.lengthSquared());
 
-	p.setZ(std::cosf(glm::pi<float>() * 0.5f * d));
+	p.setZ(std::cosf(M_PI * 0.5f * d));
 	p.normalize();
 
 	return p;
@@ -528,7 +528,7 @@ void OpenGLWidget::intersectVertices(const QVector3D& origin, const QVector3D& d
 	float minimum = 0.5 / mesh->scale;
 	graphicVertex *closest = nullptr;
 	for (graphicVertex *v : mesh->vertices) {
-		QVector3D p = QVector3D(v->location.x, v->location.y, v->location.z);
+		QVector3D p = QVector3D(v->location.x(), v->location.y(), v->location.z());
 		QVector3D op = p - origin;
 		QVector3D cross = QVector3D::crossProduct(direction, op);
 
@@ -642,7 +642,7 @@ void OpenGLWidget::deleteVertex(){
 		}
 		//first step of iteration
 		if (e->face != nullptr && e->face->isHole) {
-			hole = e->face;
+	hole = e->face;
 		}
 		halfEdge * current = e->pair->next;
 		while (current != e) {

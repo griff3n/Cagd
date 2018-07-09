@@ -3,7 +3,7 @@
 
 SkinSphereVertex::SkinSphereVertex()
 {
-	this->skinMesh = loadOBJreg("vertexSphere.obj");
+	this->skinMesh = loadOBJreg("ObjectFiles/vertexSphere.obj");
 }
 
 

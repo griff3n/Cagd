@@ -31,7 +31,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)libs\glm-0.9.8.5;$(ProjectDir)libs\glew-2.1.0\include</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)libs\glew-2.1.0\include</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64;$(ProjectDir)libs\glew-2.1.0\lib\Release\x64</LibraryPath>
     <LinkIncremental>
     </LinkIncremental>
@@ -129,21 +129,11 @@
     <ClCompile Include="src\ObjectMemory.cpp" />
     <ClCompile Include="src\Skin.cpp" />
     <ClCompile Include="src\graphicVertex.cpp" />
-    <ClCompile Include="src\Axis.cpp" />
-    <ClCompile Include="src\BBox.cpp" />
-    <ClCompile Include="src\BCurve.cpp" />
-    <ClCompile Include="src\CasteljauSteps.cpp" />
-    <ClCompile Include="src\Cone.cpp" />
-    <ClCompile Include="src\GLSLProgram.cpp" />
-    <ClCompile Include="src\HNormals.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\Normals.cpp" />
     <ClCompile Include="src\ObjectLoader.cpp" />
     <ClCompile Include="src\OpenGLWidget.cpp" />
-    <ClCompile Include="src\Orbit.cpp" />
     <ClCompile Include="src\QTCagd.cpp" />
     <ClCompile Include="src\SkinSphereVertex.cpp" />
-    <ClCompile Include="src\Sphere.cpp" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="src\QTCagd.h" />
@@ -167,15 +157,6 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="src\ObjectMemory.h" />
     <ClInclude Include="src\Skin.h" />
-    <ClInclude Include="src\Axis.h" />
-    <ClInclude Include="src\BBox.h" />
-    <ClInclude Include="src\BCurve.h" />
-    <ClInclude Include="src\CasteljauSteps.h" />
-    <ClInclude Include="src\Cone.h" />
-    <ClInclude Include="src\GLSLProgram.h" />
-    <ClInclude Include="src\HNormals.h" />
-    <ClInclude Include="src\Normals.h" />
-    <ClInclude Include="src\Object.h" />
     <ClInclude Include="src\ObjectLoader.h" />
     <QtMoc Include="src\OpenGLWidget.h">
       <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName)\.;$(QTDIR)\include\Qt3DCore;$(QTDIR)\include\Qt3DAnimation;$(QTDIR)\include\Qt3DExtras;$(QTDIR)\include\Qt3DInput;$(QTDIR)\include\Qt3DLogic;$(QTDIR)\include\Qt3DRender;$(QTDIR)\include\Qt3DQuick;$(QTDIR)\include\Qt3DQuickAnimation;$(QTDIR)\include\Qt3DQuickExtras;$(QTDIR)\include\Qt3DQuickInput;$(QTDIR)\include\Qt3DQuickRender;$(QTDIR)\include\Qt3DQuickScene2D;$(QTDIR)\include\QtConcurrent;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtHelp;$(QTDIR)\include\QtLocation;$(QTDIR)\include\QtOpenGL;$(QTDIR)\include\QtOpenGLExtensions;$(QTDIR)\include\QtPositioning;$(QTDIR)\include\QtQuick;$(QTDIR)\include\QtQuickWidgets;$(QTDIR)\include\QtQuickControls2;$(QTDIR)\include\QtTest;$(QTDIR)\include\QtUiTools;$(QTDIR)\include\QtWidgets</IncludePath>
@@ -183,9 +164,7 @@
       <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName)\.;$(QTDIR)\include\Qt3DCore;$(QTDIR)\include\Qt3DAnimation;$(QTDIR)\include\Qt3DExtras;$(QTDIR)\include\Qt3DInput;$(QTDIR)\include\Qt3DLogic;$(QTDIR)\include\Qt3DRender;$(QTDIR)\include\Qt3DQuick;$(QTDIR)\include\Qt3DQuickAnimation;$(QTDIR)\include\Qt3DQuickExtras;$(QTDIR)\include\Qt3DQuickInput;$(QTDIR)\include\Qt3DQuickRender;$(QTDIR)\include\Qt3DQuickScene2D;$(QTDIR)\include\QtConcurrent;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtHelp;$(QTDIR)\include\QtLocation;$(QTDIR)\include\QtOpenGL;$(QTDIR)\include\QtOpenGLExtensions;$(QTDIR)\include\QtPositioning;$(QTDIR)\include\QtQuick;$(QTDIR)\include\QtQuickWidgets;$(QTDIR)\include\QtQuickControls2;$(QTDIR)\include\QtTest;$(QTDIR)\include\QtUiTools;$(QTDIR)\include\QtWidgets</IncludePath>
       <Define Condition="'$(Configuration)|$(Platform)'=='Release|x64'">UNICODE;_UNICODE;WIN32;WIN64;QT_NO_DEBUG;NDEBUG;QT_3DCORE_LIB;QT_3DANIMATION_LIB;QT_3DEXTRAS_LIB;QT_3DINPUT_LIB;QT_3DLOGIC_LIB;QT_3DRENDER_LIB;QT_3DQUICK_LIB;QT_3DQUICKANIMATION_LIB;QT_3DQUICKEXTRAS_LIB;QT_3DQUICKINPUT_LIB;QT_3DQUICKRENDER_LIB;QT_3DQUICKSCENE2D_LIB;QT_CONCURRENT_LIB;QT_CORE_LIB;QT_GUI_LIB;QT_HELP_LIB;QT_LOCATION_LIB;QT_OPENGL_LIB;QT_OPENGLEXTENSIONS_LIB;QT_POSITIONING_LIB;QT_QUICK_LIB;QT_QUICKWIDGETS_LIB;QT_QUICKCONTROLS2_LIB;QT_TESTLIB_LIB;QT_UITOOLS_LIB;QT_WIDGETS_LIB</Define>
     </QtMoc>
-    <ClInclude Include="src\Orbit.h" />
     <ClInclude Include="src\SkinSphereVertex.h" />
-    <ClInclude Include="src\Sphere.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="QTCagd.rc" />

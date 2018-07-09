@@ -65,7 +65,7 @@ namespace TestQTCagd
 			Design * testDesign = new Design(testSkin, testSkin2);
 			ObjectMemory * testOMemory = new ObjectMemory();
 			halfEdge * testHE = new halfEdge(testDesign, testOMemory);
-			graphicVertex * vert = new graphicVertex(glm::vec4(0.0f, 0.0f, 0.0f, 0.0f), nullptr, nullptr);
+			graphicVertex * vert = new graphicVertex(QVector4D(0.0f, 0.0f, 0.0f, 0.0f), nullptr, nullptr);
 			halfEdge * pair = new halfEdge();
 			graphicFace * face = new graphicFace();
 			halfEdge * next = new halfEdge();
@@ -82,7 +82,7 @@ namespace TestQTCagd
 
 		TEST_METHOD(testSetVals) {
 			halfEdge * testHE = new halfEdge();
-			graphicVertex * vert = new graphicVertex(glm::vec4(0.0f, 0.0f, 0.0f, 0.0f), nullptr, nullptr);
+			graphicVertex * vert = new graphicVertex(QVector4D(0.0f, 0.0f, 0.0f, 0.0f), nullptr, nullptr);
 			halfEdge * pair = new halfEdge();
 			graphicFace * face = new graphicFace();
 			halfEdge * next = new halfEdge();

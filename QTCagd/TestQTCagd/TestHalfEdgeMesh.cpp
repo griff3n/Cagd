@@ -41,10 +41,10 @@ namespace TestQTCagd
 		}
 				
 		TEST_METHOD(testDestruktor) {
-			glm::vec4 posA = glm::vec4(2, 2, 1, 1);
-			glm::vec4 posB = glm::vec4(8, 2, 2, 1);
-			glm::vec4 posC = glm::vec4(8, 8, -1, 1);
-			glm::vec4 posD = glm::vec4(2, 8, -2, 1);
+			QVector4D posA = QVector4D(2, 2, 1, 1);
+			QVector4D posB = QVector4D(8, 2, 2, 1);
+			QVector4D posC = QVector4D(8, 8, -1, 1);
+			QVector4D posD = QVector4D(2, 8, -2, 1);
 			graphicVertex * a = new graphicVertex(posA);
 			graphicVertex * b = new graphicVertex(posB);
 			graphicVertex * c = new graphicVertex(posC);

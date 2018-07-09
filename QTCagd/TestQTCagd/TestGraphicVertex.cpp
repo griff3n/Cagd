@@ -9,7 +9,7 @@ namespace TestQTCagd
 {
 	TEST_CLASS(TestGraphicVertex) {
 		TEST_METHOD(testKonstruktor) {
-			glm::vec4 pos = glm::vec4(4.0f, 3.0f, 2.0f, 1.0f);
+			QVector4D pos = QVector4D(4.0f, 3.0f, 2.0f, 1.0f);
 			graphicVertex * testGV = new graphicVertex(pos);
 			Assert::IsNotNull(testGV);
 			Assert::IsFalse(testGV->getIsSelected());
@@ -26,8 +26,8 @@ namespace TestQTCagd
 		}
 
 		TEST_METHOD(testKonstruktor2) {
-			glm::vec4 pos0 = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
-			glm::vec4 pos = glm::vec4(4.0f, 3.0f, 2.0f, 1.0f);
+			QVector4D pos0 = QVector4D(0.0f, 0.0f, 0.0f, 0.0f);
+			QVector4D pos = QVector4D(4.0f, 3.0f, 2.0f, 1.0f);
 			graphicVertex * lastLOD = new graphicVertex(pos0);
 			Skin * testSkin = new Skin();
 			Design * design = new Design(testSkin, testSkin);
@@ -52,8 +52,8 @@ namespace TestQTCagd
 		}
 
 		TEST_METHOD(testDestruktor) {
-			glm::vec4 pos0 = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
-			glm::vec4 pos = glm::vec4(4.0f, 3.0f, 2.0f, 1.0f);
+			QVector4D pos0 = QVector4D(0.0f, 0.0f, 0.0f, 0.0f);
+			QVector4D pos = QVector4D(4.0f, 3.0f, 2.0f, 1.0f);
 			graphicVertex * lastLOD = new graphicVertex(pos0);
 			Skin * testSkin = new Skin();
 			Design * design = new Design(testSkin, testSkin);
@@ -63,9 +63,9 @@ namespace TestQTCagd
 		}
 
 		TEST_METHOD(testSetVals) {
-			glm::vec4 pos0 = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
-			glm::vec4 pos1 = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-			glm::vec4 pos = glm::vec4(4.0f, 3.0f, 2.0f, 1.0f);
+			QVector4D pos0 = QVector4D(0.0f, 0.0f, 0.0f, 0.0f);
+			QVector4D pos1 = QVector4D(1.0f, 1.0f, 1.0f, 1.0f);
+			QVector4D pos = QVector4D(4.0f, 3.0f, 2.0f, 1.0f);
 			graphicVertex * lastLOD = new graphicVertex(pos0);
 			graphicVertex * nextLOD = new graphicVertex(pos0);
 			halfEdge * edge = new halfEdge();
