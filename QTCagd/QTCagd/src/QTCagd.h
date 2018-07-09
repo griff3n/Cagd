@@ -3,7 +3,6 @@
 #ifndef QTCAGD_H
 #define QTCAGD_H
 
-#include <GL/glew.h>
 #include <QtWidgets/QMainWindow>
 #include <QFileDialog>
 #include <QtConcurrent/QtConcurrent>

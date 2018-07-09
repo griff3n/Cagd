@@ -1,5 +1,4 @@
 #include "OpenGLWidget.h"
-#include <Windows.h>
 
 OpenGLWidget::OpenGLWidget(QWidget *parent)
 	: QOpenGLWidget(parent)

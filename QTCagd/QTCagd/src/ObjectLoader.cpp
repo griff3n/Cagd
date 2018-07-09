@@ -1,6 +1,4 @@
-#include <regex>
 #include "ObjectLoader.h"
-
 
  
 HalfEdgeMesh* loadOBJreg(std::string path) {
@@ -57,7 +55,7 @@ HalfEdgeMesh* loadOBJreg(std::string path) {
 					if (newVert->location.z() > bbox[5]) bbox[5] = newVert->location.z();
 				}
 				catch(const std::invalid_argument& ia){
-					std::cerr << "Invalid argument: " << ia.what() << '\n';
+					qInfo() << "Invalid argument: " << ia.what() << '\n';
 				}
 			}
 			else if (results[0].str() == "f")
@@ -71,7 +69,7 @@ HalfEdgeMesh* loadOBJreg(std::string path) {
 					}
 				}
 				catch (const std::invalid_argument& ia) {
-					std::cerr << "Invalid argument: " << ia.what() << '\n';
+					qInfo() << "Invalid argument: " << ia.what() << '\n';
 				}
 				graphicFace * face = new graphicFace;
 				halfEdge *previous = nullptr;
@@ -189,6 +187,6 @@ HalfEdgeMesh* loadOBJreg(std::string path) {
 
 		return mesh;
 	}
-	else std::cout << "Unable to open file";
+	else qInfo() << "Unable to open file\n";
 	return nullptr;
 }

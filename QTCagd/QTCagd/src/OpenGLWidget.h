@@ -1,6 +1,5 @@
 #pragma once
 
-#include <GL/glew.h>
 #include <QWidget>
 #include <QOpenGLWidget>
 #include <QMatrix4x4>
@@ -15,6 +14,7 @@
 #include "Design.h"
 #include "SkinSphereVertex.h"
 #include <QtMath>
+#include <Windows.h>
 
 enum OpenGLWidgetMode
 {
