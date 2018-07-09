@@ -58,6 +58,7 @@ private:
 	void renderVertices();
 	void renderEdges();
 	void renderFaces();
+	void testMesh();
 
 private:
 	HalfEdgeMesh * mesh = nullptr;
