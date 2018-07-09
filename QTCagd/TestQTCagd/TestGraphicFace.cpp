@@ -12,27 +12,6 @@ namespace TestQTCagd
 			graphicFace * testGF = new graphicFace();
 			Assert::IsNotNull(testGF);
 			Assert::IsFalse(testGF->getIsSelected());
-			Assert::IsNull(testGF->getDesign());
-			Assert::IsNull(testGF->getSMem());
-			Assert::IsFalse(testGF->isHole);
-			Assert::AreEqual(0, testGF->valence);
-			Assert::IsNull(testGF->edge);
-			Assert::IsNull(testGF->nextLOD);
-			delete testGF;
-		}
-
-		TEST_METHOD(testKonstruktor2) {
-			Skin * testSkin = new Skin();
-			Design * design = new Design(testSkin, testSkin);
-			ObjectMemory * sMem = new ObjectMemory();
-			graphicFace * testGF = new graphicFace(design, sMem);
-			
-			Assert::IsNotNull(testGF);
-			Assert::IsFalse(testGF->getIsSelected());
-			Assert::IsNotNull(testGF->getDesign());
-			Assert::IsTrue(design == testGF->getDesign());
-			Assert::IsNotNull(testGF->getSMem());
-			Assert::IsTrue(sMem == testGF->getSMem());
 			Assert::IsFalse(testGF->isHole);
 			Assert::AreEqual(0, testGF->valence);
 			Assert::IsNull(testGF->edge);
@@ -41,10 +20,7 @@ namespace TestQTCagd
 		}
 
 		TEST_METHOD(testDestruktor) {
-			Skin * testSkin = new Skin();
-			Design * design = new Design(testSkin, testSkin);
-			ObjectMemory * sMem = new ObjectMemory();
-			graphicFace * testGF = new graphicFace(design, sMem);
+			graphicFace * testGF = new graphicFace();
 			delete testGF;
 		}
 

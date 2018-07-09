@@ -13,11 +13,10 @@ namespace TestQTCagd
 			graphicVertex * testGV = new graphicVertex(pos);
 			Assert::IsNotNull(testGV);
 			Assert::IsFalse(testGV->getIsSelected());
-			Assert::IsNull(testGV->getDesign());
-			Assert::IsNull(testGV->getSMem());
 			Assert::AreEqual(0.0f, testGV->weight);
 			Assert::IsTrue(pos == testGV->location);
 			Assert::IsFalse(testGV->hasFlag);
+			Assert::IsFalse(testGV->selected);
 			Assert::AreEqual(0, testGV->valence);
 			Assert::IsNull(testGV->edge);
 			Assert::IsNull(testGV->lastLOD);
@@ -29,20 +28,14 @@ namespace TestQTCagd
 			QVector4D pos0 = QVector4D(0.0f, 0.0f, 0.0f, 0.0f);
 			QVector4D pos = QVector4D(4.0f, 3.0f, 2.0f, 1.0f);
 			graphicVertex * lastLOD = new graphicVertex(pos0);
-			Skin * testSkin = new Skin();
-			Design * design = new Design(testSkin, testSkin);
-			ObjectMemory * sMem = new ObjectMemory();
-			graphicVertex * testGV = new graphicVertex(pos, lastLOD, design, sMem);
+			graphicVertex * testGV = new graphicVertex(pos, lastLOD);
 			Assert::IsNotNull(testGV);
 			Assert::IsFalse(testGV->getIsSelected());
-			Assert::IsNotNull(testGV->getDesign());
-			Assert::IsTrue(design == testGV->getDesign());
-			Assert::IsNotNull(testGV->getSMem());
-			Assert::IsTrue(sMem == testGV->getSMem());
 			Assert::AreEqual(0.0f, testGV->weight);
 			Assert::IsTrue(pos == testGV->location);
 			Assert::IsFalse(pos0 == testGV->location);
 			Assert::IsFalse(testGV->hasFlag);
+			Assert::IsFalse(testGV->selected);
 			Assert::AreEqual(0, testGV->valence);
 			Assert::IsNull(testGV->edge);
 			Assert::IsNotNull(testGV->lastLOD);
@@ -55,10 +48,7 @@ namespace TestQTCagd
 			QVector4D pos0 = QVector4D(0.0f, 0.0f, 0.0f, 0.0f);
 			QVector4D pos = QVector4D(4.0f, 3.0f, 2.0f, 1.0f);
 			graphicVertex * lastLOD = new graphicVertex(pos0);
-			Skin * testSkin = new Skin();
-			Design * design = new Design(testSkin, testSkin);
-			ObjectMemory * sMem = new ObjectMemory();
-			graphicVertex * testGV = new graphicVertex(pos, lastLOD, design, sMem);
+			graphicVertex * testGV = new graphicVertex(pos, lastLOD);
 			delete testGV;
 		}
 
@@ -67,17 +57,19 @@ namespace TestQTCagd
 			QVector4D pos1 = QVector4D(1.0f, 1.0f, 1.0f, 1.0f);
 			QVector4D pos = QVector4D(4.0f, 3.0f, 2.0f, 1.0f);
 			graphicVertex * lastLOD = new graphicVertex(pos0);
-			graphicVertex * nextLOD = new graphicVertex(pos0);
+			graphicVertex * nextLOD = new graphicVertex(pos1);
 			halfEdge * edge = new halfEdge();
 			graphicVertex * testGV = new graphicVertex(pos);
 			testGV->weight = 1.0f;
 			testGV->hasFlag = true;
+			testGV->selected = true;
 			testGV->valence = 1;
 			testGV->edge = edge;
 			testGV->nextLOD = nextLOD;
 			testGV->lastLOD = lastLOD;
 			Assert::AreEqual(1.0f, testGV->weight);
 			Assert::IsTrue(testGV->hasFlag);
+			Assert::IsTrue(testGV->selected);
 			Assert::AreEqual(1, testGV->valence);
 			Assert::IsNotNull(testGV->edge);
 			Assert::IsTrue(edge == testGV->edge);
