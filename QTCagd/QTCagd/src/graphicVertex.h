@@ -9,7 +9,7 @@ struct graphicVertex :
 	public GraphicObject
 {
 public:
-	graphicVertex(QVector4D location, graphicVertex* lastLOD = nullptr);
+	graphicVertex(QVector4D location);
 	~graphicVertex();
 	float weight = 0.0f;
 	QVector4D location;
@@ -17,6 +17,6 @@ public:
 	bool selected = false;
 	int valence = 0;
 	halfEdge* edge = nullptr;
-	graphicVertex* nextLOD = nullptr;
-	graphicVertex* lastLOD = nullptr;
+	graphicVertex * nextLOD = nullptr;
+	GraphicObject * lastLOD = nullptr;
 };

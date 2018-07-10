@@ -13,5 +13,5 @@ public:
 	bool isHole = false;
 	int valence = 0;
 	halfEdge* edge = nullptr;
-	graphicVertex* nextLOD = nullptr;
+	graphicVertex * nextLOD = nullptr;
 };

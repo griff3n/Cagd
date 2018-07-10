@@ -17,4 +17,7 @@ public:
 	std::vector<graphicFace*> faces;
 	QMatrix4x4 model;
 	float scale = 1.0f;
+	HalfEdgeMesh * nextLOD = nullptr;
+	HalfEdgeMesh * lastLOD = nullptr;
+	int LOD = 0;
 };

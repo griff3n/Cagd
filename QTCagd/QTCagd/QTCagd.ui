@@ -129,7 +129,7 @@
              </size>
             </property>
             <property name="currentIndex">
-             <number>3</number>
+             <number>1</number>
             </property>
             <widget class="QWidget" name="Empty"/>
             <widget class="QWidget" name="Vertex">
@@ -237,9 +237,21 @@
           </item>
           <item>
            <widget class="QStackedWidget" name="stackedWidget_2">
+            <property name="minimumSize">
+             <size>
+              <width>160</width>
+              <height>120</height>
+             </size>
+            </property>
             <widget class="QWidget" name="Empty_2"/>
             <widget class="QWidget" name="CatmullClark">
-             <widget class="QWidget" name="verticalLayoutWidget_2">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <widget class="QWidget" name="horizontalLayoutWidget_2">
               <property name="geometry">
                <rect>
                 <x>0</x>
@@ -248,56 +260,60 @@
                 <height>171</height>
                </rect>
               </property>
-              <layout class="QVBoxLayout" name="verticalLayout_4">
+              <layout class="QHBoxLayout" name="horizontalLayout">
                <item>
-                <widget class="Line" name="line_6">
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLabel" name="catmullLabel">
-                 <property name="minimumSize">
-                  <size>
-                   <width>0</width>
-                   <height>30</height>
-                  </size>
-                 </property>
-                 <property name="text">
-                  <string>Catmull-Clark Subdivision</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="Line" name="line_5">
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <spacer name="verticalSpacer">
-                 <property name="orientation">
-                  <enum>Qt::Vertical</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>20</width>
-                   <height>40</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-               <item>
-                <widget class="QPushButton" name="catmullButton">
-                 <property name="text">
-                  <string>Anwenden</string>
-                 </property>
-                </widget>
+                <layout class="QVBoxLayout" name="verticalLayout_4">
+                 <item>
+                  <widget class="Line" name="line_5">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="catmullLabel">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>30</height>
+                    </size>
+                   </property>
+                   <property name="text">
+                    <string>Catmull-Clark Subdivision</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="Line" name="line_6">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="verticalSpacer">
+                   <property name="orientation">
+                    <enum>Qt::Vertical</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>20</width>
+                     <height>40</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="catmullButton">
+                   <property name="text">
+                    <string>Anwenden</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
                </item>
               </layout>
              </widget>
@@ -644,22 +660,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>catmullButton</sender>
-   <signal>clicked()</signal>
-   <receiver>openGLWidget</receiver>
-   <slot>catmullClark()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>533</x>
-     <y>397</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>364</x>
-     <y>348</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>actionCatmull_Clark</sender>
    <signal>triggered()</signal>
    <receiver>QTCagdClass</receiver>
@@ -672,6 +672,22 @@
     <hint type="destinationlabel">
      <x>328</x>
      <y>226</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>catmullButton</sender>
+   <signal>clicked()</signal>
+   <receiver>openGLWidget</receiver>
+   <slot>catmullClark()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>533</x>
+     <y>397</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>364</x>
+     <y>348</y>
     </hint>
    </hints>
   </connection>

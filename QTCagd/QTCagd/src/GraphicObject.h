@@ -11,6 +11,7 @@ public:
 	void deselect();
 	void onClick();
 	bool getIsSelected();
+	int LOD = 0;
 
 protected:
 

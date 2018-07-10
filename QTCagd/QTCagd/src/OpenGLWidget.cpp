@@ -8,6 +8,9 @@ OpenGLWidget::OpenGLWidget(QWidget *parent)
 
 OpenGLWidget::~OpenGLWidget()
 {
+	while (this->mesh->lastLOD != nullptr) {
+		this->mesh = this->mesh->lastLOD;
+	}
 	delete this->mesh;
 	delete vertexSkin;
 }
@@ -757,11 +760,15 @@ void OpenGLWidget::deleteVertex(){
 }
 
 void OpenGLWidget::catmullClark() {
+	HalfEdgeMesh * newMesh = new HalfEdgeMesh();
+	newMesh->lastLOD = mesh;
+	mesh->nextLOD = newMesh;
+	newMesh->LOD = mesh->LOD + 1;
 	for (graphicVertex * v : mesh->vertices) {
 		graphicVertex * newV = new graphicVertex(v->location);
 		v->nextLOD = newV;
 		newV->lastLOD = v;
-		mesh->vertices.push_back(newV);
+		newMesh->vertices.push_back(newV);
 	}
 	for (graphicFace * f : mesh->faces) {
 		halfEdge * current = f->edge;
@@ -772,8 +779,12 @@ void OpenGLWidget::catmullClark() {
 		}
 		loc = loc / f->valence;
 		graphicVertex * newFaceV = new graphicVertex(loc);
-		mesh->vertices.push_back(newFaceV);
+		newMesh->vertices.push_back(newFaceV);
 	}
+	for (halfEdge * h : mesh->halfEdges) {
+
+	}
+	//TODO aktuelles mesh wechseln
 }
 
 

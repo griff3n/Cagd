@@ -16,4 +16,5 @@ public:
 	halfEdge* pair = nullptr;		// oppositely oriented adjacent half-edge 
 	graphicFace* face = nullptr;	// face the half-edge borders
 	halfEdge* next = nullptr;		// next half-edge around the face
+	graphicVertex * nextLOD = nullptr;
 };
