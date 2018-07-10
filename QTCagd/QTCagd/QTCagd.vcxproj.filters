@@ -28,14 +28,17 @@
       <Extensions>moc;h;cpp</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
+    <Filter Include="Model">
+      <UniqueIdentifier>{52878d8c-f0a2-4ca0-a9f6-b3be2896e53e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Model\Interfaces">
+      <UniqueIdentifier>{123e23ab-d035-483a-8c69-b3a1b4f312e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Model\Skins">
+      <UniqueIdentifier>{7cf0c01e-8122-4bc6-bae1-61b523711026}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ObjectLoader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\OpenGLWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -43,75 +46,81 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Design.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Model</Filter>
     </ClCompile>
     <ClCompile Include="src\graphicFace.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Model</Filter>
     </ClCompile>
     <ClCompile Include="src\GraphicObject.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Model</Filter>
     </ClCompile>
     <ClCompile Include="src\graphicVertex.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Model</Filter>
     </ClCompile>
     <ClCompile Include="src\halfEdge.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ObjectLoader.cpp">
+      <Filter>Model</Filter>
     </ClCompile>
     <ClCompile Include="src\ObjectMemory.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Model</Filter>
     </ClCompile>
-    <ClCompile Include="src\Skin.cpp">
+    <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\HalfEdgeMesh.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Skin.cpp">
+      <Filter>Model\Skins</Filter>
     </ClCompile>
     <ClCompile Include="src\SkinSphereVertex.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Model\Skins</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\ObjectLoader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Design.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\GraphicObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\halfEdge.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\IClickableGraphic.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ISelectableDesign.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ISelectableGraphic.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ObjectMemory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\graphicVertex.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\graphicFace.h">
-      <Filter>Header Files</Filter>
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphicVertex.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="src\halfEdge.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ISelectableGraphic.h">
+      <Filter>Model\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ISelectableDesign.h">
+      <Filter>Model\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="src\IClickableGraphic.h">
+      <Filter>Model\Interfaces</Filter>
     </ClInclude>
     <ClInclude Include="src\HalfEdgeMesh.h">
-      <Filter>Header Files</Filter>
+      <Filter>Model</Filter>
     </ClInclude>
-    <ClInclude Include="src\Skin.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\GraphicObject.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Design.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ObjectMemory.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ObjectLoader.h">
+      <Filter>Model</Filter>
     </ClInclude>
     <ClInclude Include="src\SkinSphereVertex.h">
-      <Filter>Header Files</Filter>
+      <Filter>Model\Skins</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Skin.h">
+      <Filter>Model\Skins</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
