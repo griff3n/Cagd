@@ -18,7 +18,6 @@
 #include "ObjectMemory.h"
 #include "ObjectMemory.cpp"
 #include "skin.h"
-#include "skin.cpp"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 

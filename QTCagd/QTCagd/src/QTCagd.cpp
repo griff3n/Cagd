@@ -16,11 +16,6 @@ QTCagd::QTCagd(QWidget *parent)
 	ui.stackedWidget_2->setCurrentIndex(0);
 }
 
-void QTCagd::closeApplication()
-{
-	return;
-}
-
 void QTCagd::openFile()
 {
 	QString filename = QFileDialog::getOpenFileName(this, tr("Open file"), "./ObjectFiles", tr("Wavefront OBJ (*.obj)"));

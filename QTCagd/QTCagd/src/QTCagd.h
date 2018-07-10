@@ -21,7 +21,6 @@ private:
 	void saveFile(QString filename);
 
 public slots:
-	void closeApplication();
 	void openFile();
 	void save();
 	void saveAs();

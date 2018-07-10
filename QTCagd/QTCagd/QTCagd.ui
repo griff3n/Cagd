@@ -455,7 +455,7 @@
    <sender>actionQuit</sender>
    <signal>triggered()</signal>
    <receiver>QTCagdClass</receiver>
-   <slot>closeApplication()</slot>
+   <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
