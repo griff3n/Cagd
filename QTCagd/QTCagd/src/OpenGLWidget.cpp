@@ -764,27 +764,59 @@ void OpenGLWidget::catmullClark() {
 	newMesh->lastLOD = mesh;
 	mesh->nextLOD = newMesh;
 	newMesh->LOD = mesh->LOD + 1;
+	newMesh->model = mesh->model;
+	for (graphicFace * f : mesh->faces) {
+		halfEdge * current = f->edge;
+		QVector4D locF = QVector4D(0, 0, 0, 0);
+		for (int i = 0; i < f->valence; i++) {
+			locF += current->vert->location;
+			current = current->next;
+		}
+		locF /= (float)f->valence;
+		graphicVertex * newFaceV = new graphicVertex(locF);
+		f->nextLOD = newFaceV;
+		newFaceV->lastLOD = f;
+		newMesh->vertices.push_back(newFaceV);
+	}
+	for (halfEdge * h : mesh->halfEdges) {
+		if (h->pair->nextLOD == nullptr) {
+			QVector4D locE = QVector4D(0, 0, 0, 0);
+			locE += h->vert->location;
+			locE += h->pair->vert->location;
+			locE += h->face->nextLOD->location;
+			locE += h->pair->face->nextLOD->location;
+			locE /= 4.0f;
+			graphicVertex * newEdgeV = new graphicVertex(locE);
+			h->nextLOD = newEdgeV;
+			newEdgeV->lastLOD = h;
+			newMesh->vertices.push_back(newEdgeV);
+		}
+		else {
+			h->nextLOD = h->pair->nextLOD;
+		}
+	}
 	for (graphicVertex * v : mesh->vertices) {
-		graphicVertex * newV = new graphicVertex(v->location);
+		QVector4D locV = QVector4D(0, 0, 0, 0);
+		QVector4D q = QVector4D(0, 0, 0, 0);
+		QVector4D r = QVector4D(0, 0, 0, 0);
+		halfEdge * current = v->edge;
+		for (int i = 0; i < v->valence; i++) {
+			r += current->nextLOD->location;
+			q += current->face->nextLOD->location;
+			current = current->pair->next;
+		}
+		q /= (float)v->valence;
+		r /= (float)v->valence;
+		locV = (q + 2 * r + v->location * (v->valence - 3)) / (float)v->valence;
+
+
+		graphicVertex * newV = new graphicVertex(locV);
 		v->nextLOD = newV;
 		newV->lastLOD = v;
 		newMesh->vertices.push_back(newV);
 	}
-	for (graphicFace * f : mesh->faces) {
-		halfEdge * current = f->edge;
-		QVector4D loc = QVector4D(0, 0, 0, 0);
-		for (int i = 0; i < f->valence; i++) {
-			loc += current->vert->location;
-			current = current->next;
-		}
-		loc = loc / f->valence;
-		graphicVertex * newFaceV = new graphicVertex(loc);
-		newMesh->vertices.push_back(newFaceV);
-	}
-	for (halfEdge * h : mesh->halfEdges) {
-
-	}
-	//TODO aktuelles mesh wechseln
+	mesh = newMesh;
+	emit repaint();
 }
 
 
