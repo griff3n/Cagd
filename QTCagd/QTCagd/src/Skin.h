@@ -2,10 +2,9 @@
 
 #include "HalfEdgeMesh.h"
 //TODO
-class Skin{
+class Skin {
 public:
-	virtual ~Skin();
-	virtual HalfEdgeMesh* returnSkinObject();
+	virtual HalfEdgeMesh* returnSkinObject() = 0;
 protected:
 	HalfEdgeMesh* skinMesh;
 };

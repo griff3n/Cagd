@@ -1,17 +1,13 @@
 #include "SkinSphereVertex.h"
 
-
-SkinSphereVertex::SkinSphereVertex()
-{
+SkinSphereVertex::SkinSphereVertex() {
 	this->skinMesh = loadOBJreg("ObjectFiles/vertexSphere.obj");
 }
 
-
-SkinSphereVertex::~SkinSphereVertex()
-{
+SkinSphereVertex::~SkinSphereVertex() {
+	delete skinMesh;
 }
 
-HalfEdgeMesh* SkinSphereVertex::returnSkinObject()
-{
+HalfEdgeMesh* SkinSphereVertex::returnSkinObject() {
 	return skinMesh;
 }

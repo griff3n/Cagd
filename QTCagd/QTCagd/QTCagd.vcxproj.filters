@@ -72,9 +72,6 @@
     <ClCompile Include="src\HalfEdgeMesh.cpp">
       <Filter>Model</Filter>
     </ClCompile>
-    <ClCompile Include="src\Skin.cpp">
-      <Filter>Model\Skins</Filter>
-    </ClCompile>
     <ClCompile Include="src\SkinSphereVertex.cpp">
       <Filter>Model\Skins</Filter>
     </ClCompile>

@@ -128,7 +128,6 @@
     <ClCompile Include="src\halfEdge.cpp" />
     <ClCompile Include="src\HalfEdgeMesh.cpp" />
     <ClCompile Include="src\ObjectMemory.cpp" />
-    <ClCompile Include="src\Skin.cpp" />
     <ClCompile Include="src\graphicVertex.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ObjectLoader.cpp" />
