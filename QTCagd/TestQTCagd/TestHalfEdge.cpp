@@ -32,40 +32,16 @@ namespace TestQTCagd
 			halfEdge * testHE = new halfEdge();
 			Assert::IsNotNull(testHE);
 			Assert::IsFalse(testHE->getIsSelected());
-			Assert::IsNull(testHE->getDesign());
-			Assert::IsNull(testHE->getSMem());
 			Assert::IsNull(testHE->vert);
 			Assert::IsNull(testHE->pair);
 			Assert::IsNull(testHE->face);
 			Assert::IsNull(testHE->next);
 			delete testHE;
 		}
-
-		TEST_METHOD(testKonstruktor2) {
-			Skin * testSkin = new Skin();
-			Design * testDesign = new Design(testSkin, testSkin);
-			ObjectMemory * testOMemory = new ObjectMemory();
-			halfEdge * testHE = new halfEdge(testDesign, testOMemory);
-			Assert::IsNotNull(testHE);
-			Assert::IsFalse(testHE->getIsSelected());
-			Assert::IsNotNull(testHE->getDesign());
-			Assert::IsTrue(testDesign == testHE->getDesign());
-			Assert::IsNotNull(testHE->getSMem());
-			Assert::IsTrue(testOMemory == testHE->getSMem());
-			Assert::IsNull(testHE->vert);
-			Assert::IsNull(testHE->pair);
-			Assert::IsNull(testHE->face);
-			Assert::IsNull(testHE->next);
-			delete testHE;
-		}
-
+		
 		TEST_METHOD(testDestruktor) {
-			Skin * testSkin = new Skin();
-			Skin * testSkin2 = new Skin();
-			Design * testDesign = new Design(testSkin, testSkin2);
-			ObjectMemory * testOMemory = new ObjectMemory();
-			halfEdge * testHE = new halfEdge(testDesign, testOMemory);
-			graphicVertex * vert = new graphicVertex(QVector4D(0.0f, 0.0f, 0.0f, 0.0f), nullptr, nullptr);
+			halfEdge * testHE = new halfEdge();
+			graphicVertex * vert = new graphicVertex(QVector4D(0.0f, 0.0f, 0.0f, 0.0f));
 			halfEdge * pair = new halfEdge();
 			graphicFace * face = new graphicFace();
 			halfEdge * next = new halfEdge();
@@ -82,7 +58,7 @@ namespace TestQTCagd
 
 		TEST_METHOD(testSetVals) {
 			halfEdge * testHE = new halfEdge();
-			graphicVertex * vert = new graphicVertex(QVector4D(0.0f, 0.0f, 0.0f, 0.0f), nullptr, nullptr);
+			graphicVertex * vert = new graphicVertex(QVector4D(0.0f, 0.0f, 0.0f, 0.0f));
 			halfEdge * pair = new halfEdge();
 			graphicFace * face = new graphicFace();
 			halfEdge * next = new halfEdge();
