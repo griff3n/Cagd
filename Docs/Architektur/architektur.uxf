@@ -1,27 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <diagram program="umlet" version="14.2">
-  <zoom_level>10</zoom_level>
+  <zoom_level>9</zoom_level>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>810</x>
-      <y>560</y>
-      <w>140</w>
-      <h>80</h>
+      <x>936</x>
+      <y>504</y>
+      <w>180</w>
+      <h>90</h>
     </coordinates>
     <panel_attributes>/GraphicObject/
 &lt;&lt;Abstract&gt;&gt;
 --
-isSelected : boolean</panel_attributes>
+isSelected : boolean
+--
+~GrphicObject()
+getIsSelected() : boolean</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>990</x>
-      <y>560</y>
-      <w>130</w>
-      <h>80</h>
+      <x>1017</x>
+      <y>378</y>
+      <w>117</w>
+      <h>72</h>
     </coordinates>
     <panel_attributes>ISelectableGraphic
 &lt;&lt;Interface&gt;&gt;
@@ -33,21 +36,21 @@ deselect()</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>900</x>
-      <y>490</y>
-      <w>170</w>
-      <h>90</h>
+      <x>1062</x>
+      <y>441</y>
+      <w>27</w>
+      <h>81</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.</panel_attributes>
-    <additional_attributes>150.0;70.0;150.0;10.0;10.0;10.0;10.0;70.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1160</x>
-      <y>560</y>
-      <w>130</w>
-      <h>80</h>
+      <x>1161</x>
+      <y>378</y>
+      <w>117</w>
+      <h>72</h>
     </coordinates>
     <panel_attributes>IClickableGraphic
 &lt;&lt;Interface&gt;&gt;
@@ -58,69 +61,85 @@ onClick()</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>900</x>
-      <y>490</y>
-      <w>340</w>
-      <h>90</h>
+      <x>1062</x>
+      <y>441</y>
+      <w>162</w>
+      <h>81</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.</panel_attributes>
-    <additional_attributes>320.0;70.0;320.0;10.0;10.0;10.0;10.0;70.0</additional_attributes>
+    <additional_attributes>160.0;10.0;160.0;50.0;10.0;50.0;10.0;70.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>480</x>
-      <y>510</y>
-      <w>230</w>
-      <h>180</h>
+      <x>1647</x>
+      <y>558</y>
+      <w>297</w>
+      <h>315</h>
     </coordinates>
     <panel_attributes>ObjectMemory
 --
-selectedObjects : List
-lastActions: 
-Stack(List&lt;GraphicObject&gt;,Matrix)
+#vertexList : vector&lt;graphicVertex*&gt;
+#edgeList : vector&lt;halfEdge*&gt;
+#faceList : vector&lt;graphicFace*&gt;
+#meshList : vector&lt;HalfEdgeMesh*&gt;
+#selectionList : list&lt;GraphicObject*&gt;
+#undoStackObjects : vector&lt;GraphicObject*&gt;
+#undoStackMatrix : vector&lt;QMatrix4x4*&gt;
+#redoStackObjects : vector&lt;GraphicObject*&gt;
+#redoStackMatrix : vector&lt;QMatrix4x4*&gt;
 --
-subscribe()
-unsubscribe()
-registerNew()
+ObjectMemory()
+~ObjectMemory()
+subscribeSelected(GraphicObject*)
+unsubscribeSelected(GraphicObject*)
+registerNew(GraphicObject*, string)
 deleteOld()
+addToUndo(GraphicObject[], QMatrix4x4*)
 undo()
-*redo()</panel_attributes>
+redo()</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>700</x>
-      <y>580</y>
-      <w>130</w>
-      <h>50</h>
+      <x>1107</x>
+      <y>522</y>
+      <w>558</w>
+      <h>117</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=1
 m2=1..n
 &lt; subscribes to</panel_attributes>
-    <additional_attributes>10.0;20.0;110.0;20.0</additional_attributes>
+    <additional_attributes>600.0;100.0;130.0;100.0;130.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>350</x>
-      <y>560</y>
-      <w>100</w>
-      <h>30</h>
+      <x>531</x>
+      <y>495</y>
+      <w>153</w>
+      <h>126</h>
     </coordinates>
     <panel_attributes>Design
-</panel_attributes>
+--
+#normal : Skin*
+#selected : Skin*
+#active: Skin*
+--
+Design(Skin*, Skin*)
+~Design()
+getActiveSkin() : Skin*</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>50</x>
-      <y>560</y>
-      <w>160</w>
-      <h>80</h>
+      <x>540</x>
+      <y>396</y>
+      <w>144</w>
+      <h>72</h>
     </coordinates>
     <panel_attributes>ISelectableDesign
 &lt;&lt;Interface&gt;&gt;
@@ -132,73 +151,79 @@ applyStandardDesign()</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>200</x>
-      <y>570</y>
-      <w>170</w>
-      <h>30</h>
+      <x>594</x>
+      <y>459</y>
+      <w>27</w>
+      <h>54</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.</panel_attributes>
-    <additional_attributes>10.0;10.0;150.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;40.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>390</x>
-      <y>480</y>
-      <w>490</w>
-      <h>100</h>
+      <x>675</x>
+      <y>513</y>
+      <w>279</w>
+      <h>45</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=1
 m2=1..n
 &lt; is displayed as</panel_attributes>
-    <additional_attributes>10.0;80.0;10.0;20.0;450.0;20.0;450.0;80.0</additional_attributes>
+    <additional_attributes>10.0;20.0;290.0;20.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>350</x>
-      <y>700</y>
-      <w>100</w>
-      <h>40</h>
+      <x>432</x>
+      <y>693</y>
+      <w>216</w>
+      <h>72</h>
     </coordinates>
     <panel_attributes>/Skin/
 &lt;&lt;Abstract&gt;&gt;
-</panel_attributes>
+--
+#skinMesh : HalfEdgeMesh*
+--
+returnSkinObject() : HalfEdgeMesh*</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>390</x>
-      <y>580</y>
-      <w>100</w>
-      <h>140</h>
+      <x>558</x>
+      <y>612</y>
+      <w>90</w>
+      <h>99</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=1
 m2=2
 prepares v</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;120.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;90.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>100</x>
-      <y>700</y>
-      <w>100</w>
-      <h>30</h>
+      <x>180</x>
+      <y>693</y>
+      <w>135</w>
+      <h>63</h>
     </coordinates>
-    <panel_attributes>SkinVertex</panel_attributes>
+    <panel_attributes>SkinSphereVertex
+--
+SkinSphereVertex()
+~SkinSphereVertex()</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>100</x>
-      <y>740</y>
-      <w>100</w>
-      <h>30</h>
+      <x>225</x>
+      <y>765</y>
+      <w>90</w>
+      <h>27</h>
     </coordinates>
     <panel_attributes>SkinEdge</panel_attributes>
     <additional_attributes/>
@@ -206,10 +231,10 @@ prepares v</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>100</x>
-      <y>780</y>
-      <w>100</w>
-      <h>30</h>
+      <x>225</x>
+      <y>801</y>
+      <w>90</w>
+      <h>27</h>
     </coordinates>
     <panel_attributes>SkinFace</panel_attributes>
     <additional_attributes/>
@@ -217,43 +242,43 @@ prepares v</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>190</x>
-      <y>700</y>
-      <w>180</w>
-      <h>30</h>
+      <x>306</x>
+      <y>693</y>
+      <w>144</w>
+      <h>27</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>160.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>140.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>190</x>
-      <y>700</y>
-      <w>180</w>
-      <h>70</h>
+      <x>306</x>
+      <y>693</y>
+      <w>144</w>
+      <h>99</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>160.0;10.0;70.0;10.0;70.0;50.0;10.0;50.0</additional_attributes>
+    <additional_attributes>140.0;10.0;70.0;10.0;70.0;90.0;10.0;90.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>190</x>
-      <y>700</y>
-      <w>180</w>
-      <h>110</h>
+      <x>306</x>
+      <y>693</y>
+      <w>144</w>
+      <h>135</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>160.0;10.0;70.0;10.0;70.0;90.0;10.0;90.0</additional_attributes>
+    <additional_attributes>140.0;10.0;70.0;10.0;70.0;130.0;10.0;130.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>320</x>
-      <y>770</y>
-      <w>170</w>
-      <h>70</h>
+      <x>414</x>
+      <y>819</y>
+      <w>153</w>
+      <h>63</h>
     </coordinates>
     <panel_attributes>Skin class contains
 essential View-Attributes
@@ -264,21 +289,21 @@ TBD</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>390</x>
-      <y>730</y>
-      <w>30</w>
-      <h>60</h>
+      <x>477</x>
+      <y>756</y>
+      <w>27</w>
+      <h>81</h>
     </coordinates>
     <panel_attributes>lt=.&gt;&gt;</panel_attributes>
-    <additional_attributes>10.0;40.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;70.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>60</x>
-      <y>820</y>
-      <w>140</w>
-      <h>30</h>
+      <x>189</x>
+      <y>837</y>
+      <w>126</w>
+      <h>27</h>
     </coordinates>
     <panel_attributes>SkinVertexSelected</panel_attributes>
     <additional_attributes/>
@@ -286,21 +311,21 @@ TBD</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>190</x>
-      <y>700</y>
-      <w>180</w>
-      <h>150</h>
+      <x>306</x>
+      <y>693</y>
+      <w>144</w>
+      <h>171</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>160.0;10.0;70.0;10.0;70.0;130.0;10.0;130.0</additional_attributes>
+    <additional_attributes>140.0;10.0;70.0;10.0;70.0;170.0;10.0;170.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>60</x>
-      <y>880</y>
-      <w>150</w>
-      <h>70</h>
+      <x>180</x>
+      <y>882</y>
+      <w>135</w>
+      <h>63</h>
     </coordinates>
     <panel_attributes>Specific skins hold all
 information to display
@@ -311,10 +336,10 @@ specific state</panel_attributes>
   <element>
     <id>UMLPackage</id>
     <coordinates>
-      <x>50</x>
-      <y>670</y>
-      <w>450</w>
-      <h>290</h>
+      <x>162</x>
+      <y>666</y>
+      <w>522</w>
+      <h>297</h>
     </coordinates>
     <panel_attributes>Skins
 bg=orange</panel_attributes>
@@ -323,10 +348,10 @@ bg=orange</panel_attributes>
   <element>
     <id>UMLPackage</id>
     <coordinates>
-      <x>0</x>
-      <y>390</y>
-      <w>1380</w>
-      <h>630</h>
+      <x>135</x>
+      <y>351</y>
+      <w>1845</w>
+      <h>1008</h>
     </coordinates>
     <panel_attributes>Model
 layer=-4
@@ -336,37 +361,44 @@ bg=light_gray</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>510</x>
-      <y>810</y>
-      <w>140</w>
-      <h>80</h>
+      <x>729</x>
+      <y>729</y>
+      <w>279</w>
+      <h>180</h>
     </coordinates>
-    <panel_attributes>Vertex
+    <panel_attributes>graphicVertex
 --
 weight : float
-location : Vector4
-isFlagged: boolean
-</panel_attributes>
+location : QVector4D
+hasFlag : boolean
+selected : boolean
+valence : int
+edge : halfEdge*
+nextLOD : graphicVertex*
+lastLOD : graphicVertex*
+--
+graphicVertex(QVector4D, graphicVertex*)
+~graphicVertex</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>560</x>
-      <y>630</y>
-      <w>340</w>
-      <h>200</h>
+      <x>846</x>
+      <y>585</y>
+      <w>189</w>
+      <h>162</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>320.0;10.0;320.0;110.0;10.0;110.0;10.0;180.0</additional_attributes>
+    <additional_attributes>190.0;10.0;190.0;50.0;10.0;50.0;10.0;160.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>750</x>
-      <y>870</y>
-      <w>140</w>
-      <h>60</h>
+      <x>711</x>
+      <y>657</y>
+      <w>126</w>
+      <h>54</h>
     </coordinates>
     <panel_attributes>Axis
 --
@@ -378,10 +410,10 @@ location : Vector4
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>770</x>
-      <y>960</y>
-      <w>110</w>
-      <h>40</h>
+      <x>738</x>
+      <y>585</y>
+      <w>99</w>
+      <h>36</h>
     </coordinates>
     <panel_attributes>Axis are located
 at (0,0,0,1)</panel_attributes>
@@ -390,123 +422,136 @@ at (0,0,0,1)</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>810</x>
-      <y>920</y>
-      <w>30</w>
-      <h>60</h>
+      <x>756</x>
+      <y>612</y>
+      <w>27</w>
+      <h>63</h>
     </coordinates>
     <panel_attributes>lt=.&gt;&gt;</panel_attributes>
-    <additional_attributes>10.0;40.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>820</x>
-      <y>630</y>
-      <w>80</w>
-      <h>260</h>
+      <x>801</x>
+      <y>585</y>
+      <w>234</w>
+      <h>90</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-
 bg=red</panel_attributes>
-    <additional_attributes>60.0;10.0;60.0;110.0;10.0;110.0;10.0;240.0</additional_attributes>
+    <additional_attributes>240.0;10.0;240.0;50.0;10.0;50.0;10.0;80.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>850</x>
-      <y>810</y>
-      <w>140</w>
-      <h>30</h>
+      <x>1134</x>
+      <y>720</y>
+      <w>126</w>
+      <h>126</h>
     </coordinates>
-    <panel_attributes>HalfEdge
-</panel_attributes>
+    <panel_attributes>halfEdge
+--
+vert : graphicVertex*
+pair : halfEdge*
+face : graphicFace*
+next : halfEdge*
+--
+halfEdge()
+~halfEdge()</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>640</x>
-      <y>810</y>
-      <w>230</w>
-      <h>50</h>
+      <x>999</x>
+      <y>729</y>
+      <w>153</w>
+      <h>45</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=1
-m2=1..n
+m2=1
 &lt; knows</panel_attributes>
-    <additional_attributes>10.0;20.0;210.0;20.0</additional_attributes>
+    <additional_attributes>10.0;20.0;150.0;20.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>960</x>
-      <y>760</y>
-      <w>140</w>
-      <h>100</h>
+      <x>1053</x>
+      <y>774</y>
+      <w>99</w>
+      <h>81</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
 m1=2
 m2=1
 knows v</panel_attributes>
-    <additional_attributes>30.0;70.0;70.0;70.0;70.0;10.0;10.0;10.0;10.0;50.0</additional_attributes>
+    <additional_attributes>90.0;60.0;10.0;60.0;10.0;10.0;90.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>870</x>
-      <y>630</y>
-      <w>80</w>
-      <h>200</h>
+      <x>1008</x>
+      <y>585</y>
+      <w>216</w>
+      <h>153</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;40.0;60.0;40.0;60.0;180.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0;220.0;50.0;220.0;150.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1100</x>
-      <y>810</y>
-      <w>140</w>
-      <h>50</h>
+      <x>1404</x>
+      <y>729</y>
+      <w>162</w>
+      <h>180</h>
     </coordinates>
-    <panel_attributes>Face
+    <panel_attributes>graphicFace
 --
-isHole : boolean</panel_attributes>
+isHole : boolean
+valence : int
+edge : halfEdge*
+nextLOD : graphicVertex*
+--
+graphicFace()
+~graphicFace()</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>920</x>
-      <y>830</y>
-      <w>280</w>
-      <h>90</h>
+      <x>1251</x>
+      <y>756</y>
+      <w>171</w>
+      <h>45</h>
     </coordinates>
     <panel_attributes>
 &lt; knows
 lt=-
 m1=1
-m2=1..n</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;60.0;240.0;60.0;240.0;30.0</additional_attributes>
+m2=1</panel_attributes>
+    <additional_attributes>10.0;20.0;170.0;20.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>870</x>
-      <y>630</y>
-      <w>310</w>
-      <h>200</h>
+      <x>1008</x>
+      <y>585</y>
+      <w>468</w>
+      <h>162</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;40.0;290.0;40.0;290.0;180.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0;500.0;50.0;500.0;160.0</additional_attributes>
   </element>
   <element>
     <id>UMLPackage</id>
     <coordinates>
-      <x>190</x>
+      <x>378</x>
       <y>0</y>
-      <w>800</w>
-      <h>350</h>
+      <w>720</w>
+      <h>315</h>
     </coordinates>
     <panel_attributes>View/QT
 layer=-4
@@ -516,10 +561,10 @@ bg=gray</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>420</x>
-      <y>120</y>
-      <w>100</w>
-      <h>50</h>
+      <x>585</x>
+      <y>108</y>
+      <w>90</w>
+      <h>45</h>
     </coordinates>
     <panel_attributes>MainWindow
 --
@@ -529,10 +574,10 @@ launch()</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>420</x>
-      <y>240</y>
-      <w>100</w>
-      <h>40</h>
+      <x>585</x>
+      <y>216</y>
+      <w>90</w>
+      <h>36</h>
     </coordinates>
     <panel_attributes>Viewport
 &lt;&lt;OpenGL&gt;&gt;</panel_attributes>
@@ -541,10 +586,10 @@ launch()</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>460</x>
-      <y>160</y>
-      <w>30</w>
-      <h>100</h>
+      <x>621</x>
+      <y>144</y>
+      <w>27</w>
+      <h>90</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 m1=1
@@ -554,10 +599,10 @@ m2=1</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>460</x>
-      <y>270</y>
-      <w>460</w>
-      <h>310</h>
+      <x>621</x>
+      <y>243</y>
+      <w>414</w>
+      <h>279</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=1
@@ -568,10 +613,10 @@ displays &gt;</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>600</x>
-      <y>220</y>
-      <w>170</w>
-      <h>40</h>
+      <x>747</x>
+      <y>198</y>
+      <w>153</w>
+      <h>36</h>
     </coordinates>
     <panel_attributes>/ContentSensitiveEditView/
 &lt;&lt;Abstract&gt;&gt;</panel_attributes>
@@ -580,10 +625,10 @@ displays &gt;</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>510</x>
-      <y>130</y>
-      <w>110</w>
-      <h>140</h>
+      <x>666</x>
+      <y>117</y>
+      <w>99</w>
+      <h>126</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 m1=1
@@ -593,10 +638,10 @@ m2=1</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>800</x>
-      <y>150</y>
-      <w>100</w>
-      <h>30</h>
+      <x>927</x>
+      <y>135</y>
+      <w>90</w>
+      <h>27</h>
     </coordinates>
     <panel_attributes>VertexEditView</panel_attributes>
     <additional_attributes/>
@@ -604,10 +649,10 @@ m2=1</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>760</x>
-      <y>150</y>
-      <w>60</w>
-      <h>110</h>
+      <x>891</x>
+      <y>135</y>
+      <w>54</w>
+      <h>99</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
     <additional_attributes>10.0;90.0;30.0;90.0;30.0;10.0;40.0;10.0</additional_attributes>
@@ -615,10 +660,10 @@ m2=1</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>800</x>
-      <y>190</y>
-      <w>120</w>
-      <h>30</h>
+      <x>927</x>
+      <y>171</y>
+      <w>108</w>
+      <h>27</h>
     </coordinates>
     <panel_attributes>HalfEdgeEditView</panel_attributes>
     <additional_attributes/>
@@ -626,10 +671,10 @@ m2=1</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>760</x>
-      <y>190</y>
-      <w>60</w>
-      <h>70</h>
+      <x>891</x>
+      <y>171</y>
+      <w>54</w>
+      <h>63</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
     <additional_attributes>10.0;50.0;30.0;50.0;30.0;10.0;40.0;10.0</additional_attributes>
@@ -637,10 +682,10 @@ m2=1</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>800</x>
-      <y>230</y>
-      <w>120</w>
-      <h>30</h>
+      <x>927</x>
+      <y>207</y>
+      <w>108</w>
+      <h>27</h>
     </coordinates>
     <panel_attributes>FaceEditView</panel_attributes>
     <additional_attributes/>
@@ -648,10 +693,10 @@ m2=1</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>760</x>
-      <y>230</y>
-      <w>60</w>
-      <h>30</h>
+      <x>891</x>
+      <y>207</y>
+      <w>54</w>
+      <h>27</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
     <additional_attributes>10.0;10.0;40.0;10.0;20.0;10.0</additional_attributes>
@@ -659,10 +704,10 @@ m2=1</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>240</x>
-      <y>130</y>
-      <w>100</w>
-      <h>30</h>
+      <x>423</x>
+      <y>117</y>
+      <w>90</w>
+      <h>27</h>
     </coordinates>
     <panel_attributes>Toolbar</panel_attributes>
     <additional_attributes/>
@@ -670,10 +715,10 @@ m2=1</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>330</x>
-      <y>130</y>
-      <w>110</w>
-      <h>40</h>
+      <x>504</x>
+      <y>117</y>
+      <w>99</w>
+      <h>36</h>
     </coordinates>
     <panel_attributes>lt=-&gt;&gt;&gt;&gt;&gt;
 m1=1
@@ -683,10 +728,10 @@ m2=1</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>240</x>
-      <y>80</y>
-      <w>100</w>
-      <h>30</h>
+      <x>423</x>
+      <y>72</y>
+      <w>90</w>
+      <h>27</h>
     </coordinates>
     <panel_attributes>Menubar</panel_attributes>
     <additional_attributes/>
@@ -694,10 +739,10 @@ m2=1</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>330</x>
-      <y>80</y>
-      <w>130</w>
-      <h>60</h>
+      <x>504</x>
+      <y>72</y>
+      <w>117</w>
+      <h>54</h>
     </coordinates>
     <panel_attributes>lt=-&gt;&gt;&gt;&gt;&gt;
 m1=1
@@ -707,10 +752,10 @@ m2=1</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>420</x>
-      <y>30</y>
-      <w>110</w>
-      <h>30</h>
+      <x>585</x>
+      <y>27</y>
+      <w>99</w>
+      <h>27</h>
     </coordinates>
     <panel_attributes>MouseListener</panel_attributes>
     <additional_attributes/>
@@ -718,10 +763,10 @@ m2=1</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>460</x>
-      <y>50</y>
-      <w>30</w>
-      <h>90</h>
+      <x>621</x>
+      <y>45</y>
+      <w>27</w>
+      <h>81</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
@@ -729,10 +774,10 @@ m2=1</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>540</x>
-      <y>30</y>
-      <w>110</w>
-      <h>30</h>
+      <x>693</x>
+      <y>27</y>
+      <w>99</w>
+      <h>27</h>
     </coordinates>
     <panel_attributes>ModifierListener</panel_attributes>
     <additional_attributes/>
@@ -740,10 +785,10 @@ m2=1</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>490</x>
-      <y>50</y>
-      <w>120</w>
-      <h>90</h>
+      <x>648</x>
+      <y>45</y>
+      <w>108</w>
+      <h>81</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
     <additional_attributes>100.0;10.0;100.0;30.0;10.0;30.0;10.0;70.0</additional_attributes>
@@ -751,10 +796,10 @@ m2=1</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>700</x>
-      <y>30</y>
-      <w>130</w>
-      <h>30</h>
+      <x>837</x>
+      <y>27</y>
+      <w>117</w>
+      <h>27</h>
     </coordinates>
     <panel_attributes>GenericKeyListener</panel_attributes>
     <additional_attributes/>
@@ -762,10 +807,10 @@ m2=1</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>640</x>
-      <y>30</y>
-      <w>80</w>
-      <h>30</h>
+      <x>783</x>
+      <y>27</y>
+      <w>72</w>
+      <h>27</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
     <additional_attributes>60.0;10.0;10.0;10.0</additional_attributes>
@@ -773,10 +818,10 @@ m2=1</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>1020</x>
-      <y>80</y>
-      <w>220</w>
-      <h>90</h>
+      <x>1125</x>
+      <y>72</y>
+      <w>198</w>
+      <h>81</h>
     </coordinates>
     <panel_attributes>ModifierListener to check
 for CTRL, ALT, Shift
@@ -788,10 +833,10 @@ Could possibly be merged</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>610</x>
-      <y>50</y>
-      <w>430</w>
-      <h>70</h>
+      <x>756</x>
+      <y>45</y>
+      <w>387</w>
+      <h>63</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;50.0;410.0;50.0</additional_attributes>
@@ -799,10 +844,10 @@ Could possibly be merged</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>740</x>
-      <y>50</y>
-      <w>300</w>
-      <h>70</h>
+      <x>873</x>
+      <y>45</y>
+      <w>270</w>
+      <h>63</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;50.0;280.0;50.0</additional_attributes>
@@ -810,29 +855,177 @@ Could possibly be merged</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>580</x>
-      <y>740</y>
-      <w>80</w>
-      <h>90</h>
+      <x>891</x>
+      <y>675</y>
+      <w>99</w>
+      <h>72</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
 m1=2
 m2=1
 knows &gt;</panel_attributes>
-    <additional_attributes>50.0;70.0;50.0;20.0;10.0;20.0;10.0;70.0</additional_attributes>
+    <additional_attributes>80.0;60.0;80.0;20.0;10.0;20.0;10.0;60.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>520</x>
-      <y>830</y>
-      <w>840</w>
-      <h>190</h>
+      <x>999</x>
+      <y>864</y>
+      <w>423</w>
+      <h>45</h>
     </coordinates>
     <panel_attributes>&lt; knows 
 lt=-
 m1=1
 m2=1</panel_attributes>
-    <additional_attributes>720.0;10.0;770.0;10.0;770.0;170.0;10.0;170.0;10.0;60.0</additional_attributes>
+    <additional_attributes>450.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1026</x>
+      <y>1017</y>
+      <w>216</w>
+      <h>135</h>
+    </coordinates>
+    <panel_attributes>HalfEdgeMesh
+--
+vertices : std::vector&lt;graphicVertex*&gt;
+halfEdges : std::vector&lt;halfEdge*&gt;
+faces : std::vector&lt;graphicFace*&gt;
+model : QMatrix4x4
+scale : float
+--
+HalfEdgeMesh()
+~HalfEdgeMesh()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>882</x>
+      <y>900</y>
+      <w>162</w>
+      <h>189</h>
+    </coordinates>
+    <panel_attributes>&lt; knows 
+lt=-
+m1=1
+m2=1..n</panel_attributes>
+    <additional_attributes>160.0;180.0;10.0;180.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1143</x>
+      <y>837</y>
+      <w>72</w>
+      <h>198</h>
+    </coordinates>
+    <panel_attributes>&lt; knows 
+lt=-
+m1=1
+m2=1..n</panel_attributes>
+    <additional_attributes>10.0;200.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1233</x>
+      <y>900</y>
+      <w>288</w>
+      <h>189</h>
+    </coordinates>
+    <panel_attributes>&lt; knows 
+lt=-
+m1=1..n
+m2=1</panel_attributes>
+    <additional_attributes>250.0;10.0;250.0;180.0;10.0;180.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1557</x>
+      <y>675</y>
+      <w>108</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>&lt; knows 
+lt=-
+m1=1..n
+m2=1</panel_attributes>
+    <additional_attributes>10.0;130.0;30.0;130.0;30.0;10.0;100.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1233</x>
+      <y>864</y>
+      <w>450</w>
+      <h>270</h>
+    </coordinates>
+    <panel_attributes>&lt; knows 
+lt=-
+m1=1..n
+m2=1
+</panel_attributes>
+    <additional_attributes>10.0;270.0;480.0;270.0;480.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1251</x>
+      <y>639</y>
+      <w>414</w>
+      <h>126</h>
+    </coordinates>
+    <panel_attributes>&lt; knows 
+lt=-
+m1=1..n
+m2=1</panel_attributes>
+    <additional_attributes>10.0;110.0;100.0;110.0;100.0;10.0;440.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>819</x>
+      <y>864</y>
+      <w>891</w>
+      <h>342</h>
+    </coordinates>
+    <panel_attributes>&lt; knows 
+lt=-
+m1=1..n
+m2=1
+</panel_attributes>
+    <additional_attributes>10.0;50.0;10.0;350.0;970.0;350.0;970.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1206</x>
+      <y>954</y>
+      <w>216</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>ObjectLoader
+--
+--
+loadOBJreg(string) : HalfEdgeMesh*</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>639</x>
+      <y>729</y>
+      <w>405</w>
+      <h>414</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=1
+m2=1
+knows &gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;80.0;10.0;80.0;430.0;430.0;430.0</additional_attributes>
   </element>
 </diagram>
