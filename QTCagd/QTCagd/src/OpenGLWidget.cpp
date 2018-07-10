@@ -755,6 +755,31 @@ void OpenGLWidget::deleteVertex(){
 		emit repaint();
 	}
 }
+
+void OpenGLWidget::catmullClark() {
+	for (graphicVertex * v : mesh->vertices) {
+		graphicVertex * newV = new graphicVertex(v->location);
+		v->nextLOD = newV;
+		newV->lastLOD = v;
+		mesh->vertices.push_back(newV);
+	}
+	for (graphicFace * f : mesh->faces) {
+		halfEdge * current = f->edge;
+		QVector4D loc = QVector4D(0, 0, 0, 0);
+		for (int i = 0; i < f->valence; i++) {
+			loc += current->vert->location;
+			current = current->next;
+		}
+		loc = loc / f->valence;
+		graphicVertex * newFaceV = new graphicVertex(loc);
+		mesh->vertices.push_back(newFaceV);
+	}
+}
+
+
+
+
+
 void OpenGLWidget::testMesh() {
 	qInfo() << "Tests =============================================" << "\n";
 	//HALFEDGE TEST

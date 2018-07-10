@@ -12,6 +12,8 @@ QTCagd::QTCagd(QWidget *parent)
 {
 	ui.setupUi(this);
 	connect(&parseWatcher, SIGNAL(finished()), this, SLOT(parsingDone()));
+	ui.stackedWidget->setCurrentIndex(0);
+	ui.stackedWidget_2->setCurrentIndex(0);
 }
 
 void QTCagd::closeApplication()
@@ -195,4 +197,9 @@ void QTCagd::faceMode(bool toggled)
 	ui.stackedWidget->setCurrentIndex(0);
 	if (ui.actionVertexMode->isChecked()) ui.actionVertexMode->toggle();
 	if (ui.actionEdge_Mode->isChecked()) ui.actionEdge_Mode->toggle();
+}
+
+void QTCagd::catmullTool()
+{
+	ui.stackedWidget_2->setCurrentIndex(1);
 }
