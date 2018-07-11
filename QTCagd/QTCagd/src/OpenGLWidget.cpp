@@ -827,7 +827,7 @@ void OpenGLWidget::catmullClark() {
 		halfEdge * current = v->edge;
 		int incidentSharpEdges = 0;
 		for (int i = 0; i < v->valence; i++) {
-			if (v->edge->sharp) {
+			if (current->sharp) {
 				incidentSharpEdges++;
 			}
 			current = current->pair->next;
