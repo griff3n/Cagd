@@ -217,6 +217,7 @@ void OpenGLWidget::renderFaces()
 				current = current->next;
 			}
 		}
+		
 		else if (face->valence > 3 && !face->isHole) {
 			//TODO Change Render to only create triangles
 			// Create a Triangle Fan out of every face with valence higher than 3
@@ -765,6 +766,7 @@ void OpenGLWidget::catmullClark() {
 	mesh->nextLOD = newMesh;
 	newMesh->LOD = mesh->LOD + 1;
 	newMesh->model = mesh->model;
+	newMesh->scale = mesh->scale;
 	for (graphicFace * f : mesh->faces) {
 		halfEdge * current = f->edge;
 		QVector4D locF = QVector4D(0, 0, 0, 0);
@@ -847,25 +849,30 @@ void OpenGLWidget::catmullClark() {
 			newEdge4->face = newFace;
 			newFace->edge = newEdge1;
 			newFace->valence = 4;
+			if (newEdge1->vert->edge == nullptr) newEdge1->vert->edge = newEdge1;
+			if (newEdge2->vert->edge == nullptr) newEdge2->vert->edge = newEdge2;
+			if (newEdge3->vert->edge == nullptr) newEdge3->vert->edge = newEdge3;
+			if (newEdge4->vert->edge == nullptr) newEdge4->vert->edge = newEdge4;
 			//pairs setzen
-			if (i == 0) {
+			/*if (i == 0) {
 				endPair = newEdge3;
 			}
 			else {
 				newEdge3->pair = lastPair;
 				lastPair->pair = newEdge3;
 			}
-			if (i == f->valence - 1) {
+			if (i == f->valence) {
 				newEdge2->pair = endPair;
 				endPair->pair = newEdge2;
 			}
 			lastPair = newEdge2;
-
+			*/
 			newMesh->halfEdges.push_back(newEdge1);
 			newMesh->halfEdges.push_back(newEdge2);
 			newMesh->halfEdges.push_back(newEdge3);
 			newMesh->halfEdges.push_back(newEdge4);
 			newMesh->faces.push_back(newFace);
+			current = current->next;
 		}
 	}
 	mesh = newMesh;
@@ -874,6 +881,7 @@ void OpenGLWidget::catmullClark() {
 		if (h->pair == nullptr) {
 			for (halfEdge * h2 : mesh->halfEdges) {
 				if (h->next->vert == h2->vert && h2->next->vert == h->vert) {
+					qInfo() << "Hi " << h << " \n";
 					h->pair = h2;
 					h2->pair = h;
 				}

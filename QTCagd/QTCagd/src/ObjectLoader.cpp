@@ -25,7 +25,7 @@ HalfEdgeMesh* loadOBJreg(std::string path) {
 	{
 		while (getline(myfile, line))
 		{
-			if (std::regex_search(line, skip))
+			if (std::regex_search(line, skip) || line == "")
 			{// Skip unimportant lines and continue
 				continue;
 			}
