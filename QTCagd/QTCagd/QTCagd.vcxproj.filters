@@ -45,9 +45,6 @@
     <ClCompile Include="src\QTCagd.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Design.cpp">
-      <Filter>Model</Filter>
-    </ClCompile>
     <ClCompile Include="src\graphicFace.cpp">
       <Filter>Model</Filter>
     </ClCompile>
@@ -102,9 +99,6 @@
       <Filter>Model</Filter>
     </ClInclude>
     <ClInclude Include="src\GraphicObject.h">
-      <Filter>Model</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Design.h">
       <Filter>Model</Filter>
     </ClInclude>
     <ClInclude Include="src\ObjectMemory.h">

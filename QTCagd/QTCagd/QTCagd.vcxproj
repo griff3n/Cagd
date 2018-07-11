@@ -122,7 +122,6 @@
     </QtRcc>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\Design.cpp" />
     <ClCompile Include="src\graphicFace.cpp" />
     <ClCompile Include="src\GraphicObject.cpp" />
     <ClCompile Include="src\halfEdge.cpp" />
@@ -145,7 +144,6 @@
     <QtRcc Include="QTCagd.qrc" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Design.h" />
     <ClInclude Include="src\graphicFace.h" />
     <ClInclude Include="src\GraphicObject.h" />
     <ClInclude Include="src\graphicVertex.h" />
