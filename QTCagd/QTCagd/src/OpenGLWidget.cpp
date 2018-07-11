@@ -788,7 +788,7 @@ void OpenGLWidget::catmullClark() {
 		graphicVertex * newFaceV = new graphicVertex(locF);
 		f->nextLOD = newFaceV;
 		newFaceV->lastLOD = f;
-		newFaceV->valence = 4;
+		newFaceV->valence = f->valence;
 		newMesh->vertices.push_back(newFaceV);
 	}
 	for (halfEdge * h : mesh->halfEdges) {

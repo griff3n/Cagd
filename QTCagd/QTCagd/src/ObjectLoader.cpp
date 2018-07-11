@@ -54,14 +54,14 @@ HalfEdgeMesh* loadOBJreg(std::string path) {
 					if (newVert->location.z() < bbox[4]) bbox[4] = newVert->location.z();
 					if (newVert->location.z() > bbox[5]) bbox[5] = newVert->location.z();
 				}
-				catch(const std::invalid_argument& ia){
+				catch (const std::invalid_argument& ia) {
 					qInfo() << "Invalid argument: " << ia.what() << '\n';
 				}
 			}
 			else if (results[0].str() == "f")
 			{
 				if (acceleration.size() == 0) acceleration.resize(mesh->vertices.size()); //Only once after reading all vertices
-				
+
 				std::vector<int> indices; // Indices of Vertices of the current Face
 				try {
 					for (int i = 1; i < results.size(); i++) {
@@ -103,10 +103,10 @@ HalfEdgeMesh* loadOBJreg(std::string path) {
 					int index = indices[(k + 1) % indices.size()] - 1;
 					for (int n = 0; n < acceleration[index].size(); n++) {
 						halfEdge* pairCheck = acceleration[index][n];
-						if (pairCheck->next != nullptr && pairCheck->next->vert == start) {							
-								first->pair = pairCheck;
-								pairCheck->pair = first;
-								break;
+						if (pairCheck->next != nullptr && pairCheck->next->vert == start) {
+							first->pair = pairCheck;
+							pairCheck->pair = first;
+							break;
 						}
 					}
 					first = first->next;
@@ -118,9 +118,9 @@ HalfEdgeMesh* loadOBJreg(std::string path) {
 			}
 		}
 		//Vertice valences
-		for (int i = 0; i < mesh->vertices.size(); i++) {
-			mesh->vertices[i]->valence = acceleration[i].size();
-		}
+		//for (int i = 0; i < mesh->vertices.size(); i++) {
+		//	mesh->vertices[i]->valence = acceleration[i].size();
+		//}
 		myfile.close();
 
 		//Using bbox to scale and translate the model
@@ -161,7 +161,7 @@ HalfEdgeMesh* loadOBJreg(std::string path) {
 				mesh->faces.push_back(hole);
 				halfEdge * current = he;
 				halfEdge *lastHoleEdge = holeEdge;
-				while (current -> next != he) {
+				while (current->next != he) {
 					current = current->next;
 					if (current->pair == nullptr) {
 						halfEdge *newHoleEdge = new halfEdge;
@@ -189,7 +189,15 @@ HalfEdgeMesh* loadOBJreg(std::string path) {
 				hole->valence = v;
 			}
 		}
-
+		//Vertice valences
+		for (graphicVertex * v : mesh->vertices) {
+			halfEdge* start = v->edge;
+			halfEdge* current = v->edge;
+			do {
+				v->valence++;
+				current = current->pair->next;
+			} while (current != start);
+		}
 		return mesh;
 	}
 	else qInfo() << "Unable to open file\n";
