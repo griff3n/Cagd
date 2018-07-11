@@ -11,10 +11,8 @@
 #include "ObjectLoader.h"
 #include "HalfEdgeMesh.h"
 #include <Windows.h>
-#include "Design.h"
 #include "SkinSphereVertex.h"
 #include <QtMath>
-#include <Windows.h>
 
 enum OpenGLWidgetMode
 {
