@@ -17,4 +17,5 @@ public:
 	graphicFace* face = nullptr;	// face the half-edge borders
 	halfEdge* next = nullptr;		// next half-edge around the face
 	graphicVertex * nextLOD = nullptr;
+	bool sharp = false;
 };

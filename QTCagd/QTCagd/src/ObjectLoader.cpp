@@ -144,9 +144,11 @@ HalfEdgeMesh* loadOBJreg(std::string path) {
 
 		mesh->scale = scale;
 
+		//hole faces erstellen, sharp edges setzen
 		for (int i = 0; i < mesh->halfEdges.size(); i++) {
 			halfEdge * he = mesh->halfEdges.at(i);
 			if (he->pair == nullptr) {
+				he->sharp = true;
 				graphicFace * hole = new graphicFace;
 				hole->isHole = true;
 				halfEdge *holeEdge = new halfEdge;
@@ -154,6 +156,7 @@ HalfEdgeMesh* loadOBJreg(std::string path) {
 				holeEdge->pair = he;
 				holeEdge->vert = he->next->vert;
 				holeEdge->face = hole;
+				holeEdge->sharp = true;
 				hole->edge = holeEdge;
 				mesh->faces.push_back(hole);
 				halfEdge * current = he;
@@ -163,10 +166,12 @@ HalfEdgeMesh* loadOBJreg(std::string path) {
 					if (current->pair == nullptr) {
 						halfEdge *newHoleEdge = new halfEdge;
 						current->pair = newHoleEdge;
+						current->sharp = true;
 						newHoleEdge->pair = current;
 						newHoleEdge->vert = current->next->vert;
 						newHoleEdge->face = hole;
 						newHoleEdge->next = lastHoleEdge;
+						newHoleEdge->sharp = true;
 						lastHoleEdge = newHoleEdge;
 						mesh->halfEdges.push_back(newHoleEdge);
 					}

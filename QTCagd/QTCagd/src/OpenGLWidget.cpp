@@ -8,8 +8,10 @@ OpenGLWidget::OpenGLWidget(QWidget *parent)
 
 OpenGLWidget::~OpenGLWidget()
 {
-	while (this->mesh->lastLOD != nullptr) {
-		this->mesh = this->mesh->lastLOD;
+	if (this->mesh != nullptr) {
+		while (this->mesh->lastLOD != nullptr) {
+			this->mesh = this->mesh->lastLOD;
+		}
 	}
 	delete this->mesh;
 	delete vertexSkin;
@@ -18,6 +20,11 @@ OpenGLWidget::~OpenGLWidget()
 void OpenGLWidget::setHalfEdgeMesh(HalfEdgeMesh* mesh)
 {
 	//clean up existing mesh
+	if (this->mesh != nullptr) {
+		while (this->mesh->lastLOD != nullptr) {
+			this->mesh = this->mesh->lastLOD;
+		}
+	}
 	delete this->mesh;
 	selections.clear();
 	emit vertexSelected(nullptr);
@@ -768,6 +775,9 @@ void OpenGLWidget::catmullClark() {
 	newMesh->model = mesh->model;
 	newMesh->scale = mesh->scale;
 	for (graphicFace * f : mesh->faces) {
+		if (f->isHole) {
+			continue;
+		}
 		halfEdge * current = f->edge;
 		QVector4D locF = QVector4D(0, 0, 0, 0);
 		for (int i = 0; i < f->valence; i++) {
@@ -784,15 +794,27 @@ void OpenGLWidget::catmullClark() {
 	for (halfEdge * h : mesh->halfEdges) {
 		if (h->pair->nextLOD == nullptr) {
 			QVector4D locE = QVector4D(0, 0, 0, 0);
-			locE += h->vert->location;
-			locE += h->pair->vert->location;
-			locE += h->face->nextLOD->location;
-			locE += h->pair->face->nextLOD->location;
-			locE /= 4.0f;
+			if (!h->sharp) {
+				locE += h->vert->location;
+				locE += h->pair->vert->location;
+				locE += h->face->nextLOD->location;
+				locE += h->pair->face->nextLOD->location;
+				locE /= 4.0f;
+			}
+			else {
+				locE += h->vert->location;
+				locE += h->pair->vert->location;
+				locE /= 2.0f;
+			}
 			graphicVertex * newEdgeV = new graphicVertex(locE);
 			h->nextLOD = newEdgeV;
 			newEdgeV->lastLOD = h;
-			newEdgeV->valence = 4;
+			if (h->sharp) {
+				newEdgeV->valence = 3;
+			}
+			else {
+				newEdgeV->valence = 4;
+			}
 			newMesh->vertices.push_back(newEdgeV);
 		}
 		else {
@@ -800,19 +822,49 @@ void OpenGLWidget::catmullClark() {
 		}
 	}
 	for (graphicVertex * v : mesh->vertices) {
+		bool sharpEdgeRule = false;
+		bool cornerRule = false;
+		halfEdge * current = v->edge;
+		int incidentSharpEdges = 0;
+		for (int i = 0; i < v->valence; i++) {
+			if (v->edge->sharp) {
+				incidentSharpEdges++;
+			}
+			current = current->pair->next;
+		}
+		if (incidentSharpEdges == 2) {
+			sharpEdgeRule = true;
+		}
+		if (incidentSharpEdges > 2 || v->hasFlag) {
+			cornerRule = true;
+		}
 		QVector4D locV = QVector4D(0, 0, 0, 0);
 		QVector4D q = QVector4D(0, 0, 0, 0);
 		QVector4D r = QVector4D(0, 0, 0, 0);
-		halfEdge * current = v->edge;
-		for (int i = 0; i < v->valence; i++) {
-			r += current->nextLOD->location;
-			q += current->face->nextLOD->location;
-			current = current->pair->next;
+		current = v->edge;
+		if (sharpEdgeRule) {
+			for (int i = 0; i < v->valence; i++) {
+				if (v->edge->sharp) {
+					r += current->nextLOD->location;
+				}
+				current = current->pair->next;
+			}
+			r /= 2.0f;
+			locV = (r + 3 * v->location)/4.0f;
 		}
-		q /= (float)v->valence;
-		r /= (float)v->valence;
-		locV = (q + 2 * r + v->location * (v->valence - 3)) / (float)v->valence;
-
+		else if (cornerRule) {
+			locV = v->location;
+		}
+		else {
+			for (int i = 0; i < v->valence; i++) {
+				r += current->nextLOD->location;
+				q += current->face->nextLOD->location;
+				current = current->pair->next;
+			}
+			q /= (float)v->valence;
+			r /= (float)v->valence;
+			locV = (q + 2 * r + v->location * (v->valence - 3)) / (float)v->valence;
+		}
 		graphicVertex * newV = new graphicVertex(locV);
 		v->nextLOD = newV;
 		newV->lastLOD = v;
@@ -822,6 +874,9 @@ void OpenGLWidget::catmullClark() {
 	//Verbinden der neuen Vertices
 	
 	for (graphicFace * f : mesh->faces) {
+		if (f->isHole) {
+			continue;
+		}
 		halfEdge * current = f->edge;
 		halfEdge * lastPair;
 		halfEdge * endPair;
@@ -854,7 +909,7 @@ void OpenGLWidget::catmullClark() {
 			if (newEdge3->vert->edge == nullptr) newEdge3->vert->edge = newEdge3;
 			if (newEdge4->vert->edge == nullptr) newEdge4->vert->edge = newEdge4;
 			//pairs setzen
-			/*if (i == 0) {
+			if (i == 0) {
 				endPair = newEdge3;
 			}
 			else {
@@ -866,7 +921,7 @@ void OpenGLWidget::catmullClark() {
 				endPair->pair = newEdge2;
 			}
 			lastPair = newEdge2;
-			*/
+
 			newMesh->halfEdges.push_back(newEdge1);
 			newMesh->halfEdges.push_back(newEdge2);
 			newMesh->halfEdges.push_back(newEdge3);
@@ -881,13 +936,59 @@ void OpenGLWidget::catmullClark() {
 		if (h->pair == nullptr) {
 			for (halfEdge * h2 : mesh->halfEdges) {
 				if (h->next->vert == h2->vert && h2->next->vert == h->vert) {
-					qInfo() << "Hi " << h << " \n";
 					h->pair = h2;
 					h2->pair = h;
 				}
 			}
 		}
 	}
+
+	//hole faces erstellen, sharp edges setzen
+	for (int i = 0; i < mesh->halfEdges.size(); i++) {
+		halfEdge * he = mesh->halfEdges.at(i);
+		if (he->pair == nullptr) {
+			he->sharp = true;
+			graphicFace * hole = new graphicFace;
+			hole->isHole = true;
+			halfEdge *holeEdge = new halfEdge;
+			he->pair = holeEdge;
+			holeEdge->pair = he;
+			holeEdge->vert = he->next->vert;
+			holeEdge->face = hole;
+			holeEdge->sharp = true;
+			hole->edge = holeEdge;
+			mesh->faces.push_back(hole);
+			halfEdge * current = he;
+			halfEdge *lastHoleEdge = holeEdge;
+			while (current->next != he) {
+				current = current->next;
+				if (current->pair == nullptr) {
+					halfEdge *newHoleEdge = new halfEdge;
+					current->pair = newHoleEdge;
+					current->sharp = true;
+					newHoleEdge->pair = current;
+					newHoleEdge->vert = current->next->vert;
+					newHoleEdge->face = hole;
+					newHoleEdge->next = lastHoleEdge;
+					newHoleEdge->sharp = true;
+					lastHoleEdge = newHoleEdge;
+					mesh->halfEdges.push_back(newHoleEdge);
+				}
+				else current = current->pair;
+			}
+			holeEdge->next = lastHoleEdge;
+			mesh->halfEdges.push_back(holeEdge);
+			//Hole Valence
+			int v = 1;
+			current = holeEdge;
+			while (current->next != holeEdge) {
+				v++;
+				current = current->next;
+			}
+			hole->valence = v;
+		}
+	}
+
 	emit repaint();
 }
 
