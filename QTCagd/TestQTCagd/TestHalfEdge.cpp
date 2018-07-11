@@ -5,8 +5,6 @@
 #include <stdlib.h>
 #include <crtdbg.h>
 
-#include "Design.h"
-#include "Design.cpp"
 #include "graphicFace.h"
 #include "graphicFace.cpp"
 #include "GraphicObject.h"
