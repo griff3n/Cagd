@@ -776,6 +776,7 @@ void OpenGLWidget::catmullClark() {
 		graphicVertex * newFaceV = new graphicVertex(locF);
 		f->nextLOD = newFaceV;
 		newFaceV->lastLOD = f;
+		newFaceV->valence = 4;
 		newMesh->vertices.push_back(newFaceV);
 	}
 	for (halfEdge * h : mesh->halfEdges) {
@@ -789,6 +790,7 @@ void OpenGLWidget::catmullClark() {
 			graphicVertex * newEdgeV = new graphicVertex(locE);
 			h->nextLOD = newEdgeV;
 			newEdgeV->lastLOD = h;
+			newEdgeV->valence = 4;
 			newMesh->vertices.push_back(newEdgeV);
 		}
 		else {
@@ -809,13 +811,75 @@ void OpenGLWidget::catmullClark() {
 		r /= (float)v->valence;
 		locV = (q + 2 * r + v->location * (v->valence - 3)) / (float)v->valence;
 
-
 		graphicVertex * newV = new graphicVertex(locV);
 		v->nextLOD = newV;
 		newV->lastLOD = v;
+		newV->valence = v->valence;
 		newMesh->vertices.push_back(newV);
 	}
+	//Verbinden der neuen Vertices
+	
+	for (graphicFace * f : mesh->faces) {
+		halfEdge * current = f->edge;
+		halfEdge * lastPair;
+		halfEdge * endPair;
+		for (int i = 0; i < f->valence; i++) {
+			graphicFace * newFace = new graphicFace();
+			halfEdge * newEdge1 = new halfEdge();
+			halfEdge * newEdge2 = new halfEdge();
+			halfEdge * newEdge3 = new halfEdge();
+			halfEdge * newEdge4 = new halfEdge();
+			newEdge1->next = newEdge2;
+			newEdge2->next = newEdge3;
+			newEdge3->next = newEdge4;
+			newEdge4->next = newEdge1;
+			newEdge1->vert = current->vert->nextLOD;
+			newEdge2->vert = current->nextLOD;
+			newEdge3->vert = current->face->nextLOD;
+			halfEdge * cur = current;
+			for (int j = 0; j < f->valence - 1; j++) {
+				cur = cur->next;
+			}
+			newEdge4->vert = cur->nextLOD;
+			newEdge1->face = newFace;
+			newEdge2->face = newFace;
+			newEdge3->face = newFace;
+			newEdge4->face = newFace;
+			newFace->edge = newEdge1;
+			newFace->valence = 4;
+			//pairs setzen
+			if (i == 0) {
+				endPair = newEdge3;
+			}
+			else {
+				newEdge3->pair = lastPair;
+				lastPair->pair = newEdge3;
+			}
+			if (i == f->valence - 1) {
+				newEdge2->pair = endPair;
+				endPair->pair = newEdge2;
+			}
+			lastPair = newEdge2;
+
+			newMesh->halfEdges.push_back(newEdge1);
+			newMesh->halfEdges.push_back(newEdge2);
+			newMesh->halfEdges.push_back(newEdge3);
+			newMesh->halfEdges.push_back(newEdge4);
+			newMesh->faces.push_back(newFace);
+		}
+	}
 	mesh = newMesh;
+	//restliche pairs setzen
+	for (halfEdge * h : mesh->halfEdges) {
+		if (h->pair == nullptr) {
+			for (halfEdge * h2 : mesh->halfEdges) {
+				if (h->next->vert == h2->vert && h2->next->vert == h->vert) {
+					h->pair = h2;
+					h2->pair = h;
+				}
+			}
+		}
+	}
 	emit repaint();
 }
 
