@@ -30,6 +30,7 @@ public:
 	~OpenGLWidget();
 	void setMode(OpenGLWidgetMode mode);
 	void setHalfEdgeMesh(HalfEdgeMesh*);
+	HalfEdgeMesh * getHalfEdgeMesh();
 public slots:
 	void catmullClark();
 	void deleteVertex();

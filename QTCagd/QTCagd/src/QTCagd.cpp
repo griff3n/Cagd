@@ -72,6 +72,7 @@ void QTCagd::saveFile(QString filename) {
 	file.open(filename.toStdString());
 
 	if (mesh) {
+		mesh = ui.openGLWidget->getHalfEdgeMesh();
 		for (graphicVertex* v : mesh->vertices) {
 			file << "v " << v->location.x() << " " << v->location.y() << " " << v->location.z() << std::endl;
 		}

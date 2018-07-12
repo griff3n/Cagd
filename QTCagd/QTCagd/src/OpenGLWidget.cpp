@@ -48,6 +48,11 @@ void OpenGLWidget::setHalfEdgeMesh(HalfEdgeMesh* mesh)
 	setFocus();
 }
 
+HalfEdgeMesh * OpenGLWidget::getHalfEdgeMesh()
+{
+	return this->mesh;
+}
+
 void OpenGLWidget::initializeGL()
 {
 
@@ -802,12 +807,12 @@ void OpenGLWidget::catmullClark() {
 				locE += h->pair->vert->location;
 				locE += h->face->nextLOD->location;
 				locE += h->pair->face->nextLOD->location;
-				locE /= 4.0f;
+				locE /= 4.0;
 			}
 			else {
 				locE += h->vert->location;
 				locE += h->pair->vert->location;
-				locE /= 2.0f;
+				locE /= 2.0;
 			}
 			graphicVertex * newEdgeV = new graphicVertex(locE);
 			h->nextLOD = newEdgeV;
@@ -847,20 +852,22 @@ void OpenGLWidget::catmullClark() {
 		current = v->edge;
 		if (sharpEdgeRule) {
 			for (int i = 0; i < v->valence; i++) {
-				if (v->edge->sharp) {
-					r += current->nextLOD->location;
+				//if (v->edge->sharp) {
+				if (current->sharp) {
+					r += current->pair->vert->location;
 				}
 				current = current->pair->next;
 			}
-			r /= 2.0f;
-			locV = (r + 3 * v->location)/4.0f;
+			r /= 2.0;
+			locV = (r + 3 * v->location)/4.0;
 		}
 		else if (cornerRule) {
 			locV = v->location;
 		}
 		else {
 			for (int i = 0; i < v->valence; i++) {
-				r += current->nextLOD->location;
+				//r += current->nextLOD->location;
+				r += current->pair->vert->location;
 				q += current->face->nextLOD->location;
 				current = current->pair->next;
 			}
@@ -991,7 +998,7 @@ void OpenGLWidget::catmullClark() {
 			hole->valence = v;
 		}
 	}
-
+	testMesh();
 	emit repaint();
 }
 
@@ -1125,18 +1132,40 @@ void OpenGLWidget::testMesh() {
 			qInfo() << "Vertex-Valenz " << i << ": " << vertexValences[i] << "\n";
 		}
 	}
-	qInfo() << "Faces: " << mesh->faces.size() << "\n";
+	int holeFaces = 0;
+	for (graphicFace* f : mesh->faces) {
+		if (f->isHole) holeFaces++;
+	}
+	qInfo() << "Faces: " << mesh->faces.size() - holeFaces << "\n";
+	qInfo() << "Holes: " << holeFaces << "\n";
 	std::vector<int> faceValences;
+	std::vector<int> holeValences;
 	for (int i = 0; i < mesh->faces.size(); i++) {
-		if (mesh->faces[i]->valence + 1 > faceValences.size()) faceValences.resize(mesh->faces[i]->valence + 1);
-		faceValences[mesh->faces[i]->valence] ++;
+		if (mesh->faces[i]->isHole) {
+			if (mesh->faces[i]->valence + 1 > holeValences.size()) holeValences.resize(mesh->faces[i]->valence + 1);
+			holeValences[mesh->faces[i]->valence] ++;
+		}
+		else {
+			if (mesh->faces[i]->valence + 1 > faceValences.size()) faceValences.resize(mesh->faces[i]->valence + 1);
+			faceValences[mesh->faces[i]->valence] ++;
+		}
 	}
 	for (int i = 0; i < faceValences.size(); i++) {
 		if (faceValences[i] > 0) {
 			qInfo() << "Face-Valenz " << i << ": " << faceValences[i] << "\n";
 		}
 	}
+	for (int i = 0; i < holeValences.size(); i++) {
+		if (holeValences[i] > 0) {
+			qInfo() << "Hole-Valenz " << i << ": " << holeValences[i] << "\n";
+		}
+	}
+	int sharpEdges = 0;
+	for (halfEdge* h : mesh->halfEdges) {
+		if (h->sharp) sharpEdges++;
+	}
 	qInfo() << "Halfedges: " << mesh->halfEdges.size() << "\n";
+	qInfo() << "Sharp Edges: " << sharpEdges << "\n";
 	qInfo() << "===================================================" << "\n";
 	qInfo() << "\n";
 }
