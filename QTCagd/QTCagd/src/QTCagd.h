@@ -33,6 +33,7 @@ public slots:
 	void edgeMode(bool toggled);
 	void faceMode(bool toggled);
 	void catmullTool();
+	void sharpVertex(bool sharp);
 
 private:
 	Ui::QTCagdClass ui;

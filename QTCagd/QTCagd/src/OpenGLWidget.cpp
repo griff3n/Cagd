@@ -843,7 +843,7 @@ void OpenGLWidget::catmullClark() {
 		if (incidentSharpEdges == 2) {
 			sharpEdgeRule = true;
 		}
-		if (incidentSharpEdges > 2 || v->hasFlag) {
+		if (incidentSharpEdges > 2 || v->sharp) {
 			cornerRule = true;
 		}
 		QVector4D locV = QVector4D(0, 0, 0, 0);
@@ -877,6 +877,7 @@ void OpenGLWidget::catmullClark() {
 		}
 		graphicVertex * newV = new graphicVertex(locV);
 		v->nextLOD = newV;
+		if (v->sharp) newV->sharp = true;
 		newV->lastLOD = v;
 		newV->valence = v->valence;
 		newMesh->vertices.push_back(newV);

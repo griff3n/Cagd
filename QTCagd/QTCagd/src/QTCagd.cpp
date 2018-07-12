@@ -132,6 +132,7 @@ void QTCagd::showSelectedVertexProperties(graphicVertex * v)
 		ui.xSpinBox->setValue(selectedVertex->location.x());
 		ui.ySpinBox->setValue(selectedVertex->location.y());
 		ui.zSpinBox->setValue(selectedVertex->location.z());
+		ui.sharpCheckBox->setChecked(selectedVertex->sharp);
 	}
 	else {
 		ui.stackedWidget->setCurrentIndex(0);
@@ -198,4 +199,12 @@ void QTCagd::faceMode(bool toggled)
 void QTCagd::catmullTool()
 {
 	ui.stackedWidget_2->setCurrentIndex(1);
+}
+
+void QTCagd::sharpVertex(bool sharp) {
+	if (selectedVertex) {
+		QVector4D oldLocation = selectedVertex->location;
+		selectedVertex->sharp = sharp;
+		emit ui.openGLWidget->repaint();
+	}
 }

@@ -15,7 +15,7 @@ namespace TestQTCagd
 			Assert::IsFalse(testGV->getIsSelected());
 			Assert::AreEqual(0.0f, testGV->weight);
 			Assert::IsTrue(pos == testGV->location);
-			Assert::IsFalse(testGV->hasFlag);
+			Assert::IsFalse(testGV->sharp);
 			Assert::IsFalse(testGV->selected);
 			Assert::AreEqual(0, testGV->valence);
 			Assert::IsNull(testGV->edge);
@@ -34,7 +34,7 @@ namespace TestQTCagd
 			Assert::AreEqual(0.0f, testGV->weight);
 			Assert::IsTrue(pos == testGV->location);
 			Assert::IsFalse(pos0 == testGV->location);
-			Assert::IsFalse(testGV->hasFlag);
+			Assert::IsFalse(testGV->sharp);
 			Assert::IsFalse(testGV->selected);
 			Assert::AreEqual(0, testGV->valence);
 			Assert::IsNull(testGV->edge);
@@ -61,14 +61,14 @@ namespace TestQTCagd
 			halfEdge * edge = new halfEdge();
 			graphicVertex * testGV = new graphicVertex(pos);
 			testGV->weight = 1.0f;
-			testGV->hasFlag = true;
+			testGV->sharp = true;
 			testGV->selected = true;
 			testGV->valence = 1;
 			testGV->edge = edge;
 			testGV->nextLOD = nextLOD;
 			testGV->lastLOD = lastLOD;
 			Assert::AreEqual(1.0f, testGV->weight);
-			Assert::IsTrue(testGV->hasFlag);
+			Assert::IsTrue(testGV->sharp);
 			Assert::IsTrue(testGV->selected);
 			Assert::AreEqual(1, testGV->valence);
 			Assert::IsNotNull(testGV->edge);

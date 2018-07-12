@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>657</width>
-    <height>453</height>
+    <width>653</width>
+    <height>503</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -139,7 +139,7 @@
                 <x>10</x>
                 <y>10</y>
                 <width>160</width>
-                <height>160</height>
+                <height>183</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -218,6 +218,13 @@
                  </property>
                  <property name="singleStep">
                   <double>0.010000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="sharpCheckBox">
+                 <property name="text">
+                  <string>spitz</string>
                  </property>
                 </widget>
                </item>
@@ -340,7 +347,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>657</width>
+     <width>653</width>
      <height>21</height>
     </rect>
    </property>
@@ -538,8 +545,8 @@
    <slot>yCoordChanged(double)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>553</x>
-     <y>102</y>
+     <x>612</x>
+     <y>157</y>
     </hint>
     <hint type="destinationlabel">
      <x>661</x>
@@ -554,8 +561,8 @@
    <slot>zCoordChanged(double)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>553</x>
-     <y>102</y>
+     <x>612</x>
+     <y>202</y>
     </hint>
     <hint type="destinationlabel">
      <x>661</x>
@@ -650,8 +657,8 @@
    <slot>deleteVertex()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>553</x>
-     <y>102</y>
+     <x>612</x>
+     <y>254</y>
     </hint>
     <hint type="destinationlabel">
      <x>329</x>
@@ -682,12 +689,28 @@
    <slot>catmullClark()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>533</x>
-     <y>397</y>
+     <x>543</x>
+     <y>270</y>
     </hint>
     <hint type="destinationlabel">
      <x>364</x>
      <y>348</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>sharpCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>QTCagdClass</receiver>
+   <slot>sharpVertex(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>457</x>
+     <y>216</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>528</x>
+     <y>425</y>
     </hint>
    </hints>
   </connection>
@@ -709,5 +732,6 @@
   <slot>faceMode(bool)</slot>
   <slot>deleteVertex()</slot>
   <slot>catmullTool()</slot>
+  <slot>sharpVertex(bool)</slot>
  </slots>
 </ui>
