@@ -123,6 +123,7 @@ void OpenGLWidget::renderVertices()
 {
 	QColor blue(0, 0, 255, 255);
 	QColor orange(239, 122, 0);
+	QColor darkgrey(80, 80, 80, 255);
 
 	int vertexLocation = program->attributeLocation("vertex");
 	int matrixLocation = program->uniformLocation("matrix");
@@ -153,7 +154,7 @@ void OpenGLWidget::renderVertices()
 			program->setUniformValue(colorLocation, orange);
 		}
 		else {
-			program->setUniformValue(colorLocation, blue);
+			program->setUniformValue(colorLocation, darkgrey);
 		}
 
 		int numberOfFaceVertices = skinFaces.size() / 3;
@@ -164,6 +165,7 @@ void OpenGLWidget::renderVertices()
 }
 void OpenGLWidget::renderEdges()
 {
+	QColor grey(140, 140, 140, 255);
 	QColor green(0, 255, 0, 255);
 
 	std::vector<GLfloat> halfEdges;
@@ -189,7 +191,7 @@ void OpenGLWidget::renderEdges()
 	program->enableAttributeArray(vertexLocation);
 	program->setAttributeArray(vertexLocation, halfEdges.data(), 3);
 	program->setUniformValue(matrixLocation, pmvMatrix);
-	program->setUniformValue(colorLocation, green);
+	program->setUniformValue(colorLocation, grey);
 
 	int numberOfEdgeVertices = mesh->halfEdges.size() * 2;
 	glDrawArrays(GL_LINES, 0, numberOfEdgeVertices);
@@ -208,6 +210,7 @@ void OpenGLWidget::renderFaces()
 
 	std::vector<GLfloat> triangles;
 
+	QColor lightgrey(220, 220, 220, 255);
 	QColor red(255, 0, 0, 255);
 	//QColor yellow(255, 255, 0, 255);
 
@@ -253,7 +256,7 @@ void OpenGLWidget::renderFaces()
 	program->enableAttributeArray(vertexLocation);
 	program->setAttributeArray(vertexLocation, triangles.data(), 3);
 	program->setUniformValue(matrixLocation, pmvMatrix);
-	program->setUniformValue(colorLocation, red);
+	program->setUniformValue(colorLocation, lightgrey);
 
 	int numberOfFaceVertices = triangles.size() / 3;
 	glDrawArrays(GL_TRIANGLES, 0, numberOfFaceVertices);
@@ -863,7 +866,7 @@ void OpenGLWidget::catmullClark() {
 			}
 			q /= (float)v->valence;
 			r /= (float)v->valence;
-			locV = (q + 2 * r + v->location * (v->valence - 3)) / (float)v->valence;
+			locV = (q + r)/ (float)v->valence + v->location * (1 - 2 / (float)v->valence);
 		}
 		graphicVertex * newV = new graphicVertex(locV);
 		v->nextLOD = newV;
