@@ -13,6 +13,7 @@
 #include <Windows.h>
 #include "SkinSphereVertex.h"
 #include <QtMath>
+#include "MeshTester.h"
 
 enum OpenGLWidgetMode
 {

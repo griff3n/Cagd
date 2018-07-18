@@ -122,6 +122,7 @@
     </QtRcc>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\MeshTester.cpp" />
     <ClCompile Include="src\graphicFace.cpp" />
     <ClCompile Include="src\GraphicObject.cpp" />
     <ClCompile Include="src\halfEdge.cpp" />
@@ -144,6 +145,7 @@
     <QtRcc Include="QTCagd.qrc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\MeshTester.h" />
     <ClInclude Include="src\graphicFace.h" />
     <ClInclude Include="src\GraphicObject.h" />
     <ClInclude Include="src\graphicVertex.h" />

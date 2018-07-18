@@ -1008,120 +1008,12 @@ void OpenGLWidget::catmullClark() {
 
 
 void OpenGLWidget::testMesh() {
-	qInfo() << "Tests =============================================" << "\n";
-	//HALFEDGE TEST
-	bool error = false;
-	for (int i = 0; i < mesh->halfEdges.size(); i++) {
-		if (mesh->halfEdges[i]->pair == nullptr) {
-			error = true;
-			qInfo() << "ERROR - Halfedges - Eine Halfedge hat kein pair!" << "\n";
-			break;
-		}
-		else if (mesh->halfEdges[i]->pair->pair == nullptr) {
-			error = true;
-			qInfo() << "ERROR - Halfedges - Eine Halfedge hat kein pair!" << "\n";
-			break;
-		}
-		else if (mesh->halfEdges[i]->pair->pair != mesh->halfEdges[i]) {
-			error = true;
-			qInfo() << "ERROR - Halfedges - Ein Pair ist falsch gesetzt!" << "\n";
-			break;
-		}
-	}
-	if (!error) qInfo() << "OK - Halfedges - Alle pairs wurden konsistent gesetzt!" << "\n";
-	//FACES TEST
-	error = false;
-	for (int i = 0; i < mesh->faces.size(); i++) {
-		if (mesh->faces[i]->edge == nullptr) {
-			error = true;
-			qInfo() << "ERROR - Faces - Ein Face hat keine edge!" << "\n";
-			break;
-		}
-		else {
-			halfEdge *tempEdge = mesh->faces[i]->edge;
-			for (int j = 0; j < mesh->faces[i]->valence; j++) {
-				if (tempEdge->next == nullptr) {
-					error = true;
-					qInfo() << "ERROR - Faces - Eine Halfedge des Faces hat kein next!" << "\n";
-					break;
-				}
-				tempEdge = tempEdge->next;
-			}
-			if (error) break;
-			if (tempEdge != mesh->faces[i]->edge) {
-				error = true;
-				qInfo() << "ERROR - Faces - Die Halfedges des Faces sind nicht richtig verknüpft!" << "\n";
-				break;
-			}
-			for (int j = 0; j < mesh->faces[i]->valence; j++) {
-				if (tempEdge->face != mesh->faces[i]) {
-					error = true;
-					qInfo() << "ERROR - Faces - Eine Halfedge des Faces ist nicht mit dem Face verbunden!" << "\n";
-					break;
-				}
-				if (tempEdge->pair == nullptr) {
-					error = true;
-					qInfo() << "ERROR - Faces - Eine Halfedge des Faces hat kein pair!" << "\n";
-					break;
-				}
-				else if (tempEdge->pair->vert == nullptr) {
-					error = true;
-					qInfo() << "ERROR - Faces - Eine Halfedge hat keinen vert!" << "\n";
-					break;
-				}
-				else if (tempEdge->next->vert == nullptr) {
-					error = true;
-					qInfo() << "ERROR - Faces - Eine Halfedge des Faces hat keinen vert!" << "\n";
-					break;
-				}
-				else if (tempEdge->pair->vert != tempEdge->next->vert) {
-					error = true;
-					qInfo() << "ERROR - Faces - Ein Vertex des Faces ist nicht konsistent mit seinen Halfedges verbunden!" << "\n";
-					break;
-				}
-				tempEdge = tempEdge->next;
-			}
-			if (error) break;
-		}
-	}
-	if (!error) qInfo() << "OK - Faces - Alle Vertices sind konsistent mit ihren Halfedges verbunden und alle Halfedges sind konsistent mit ihrem Face verbunden!" << "\n";
-	//TEST VERTICES
-	error = false;
-	for (int i = 0; i < mesh->vertices.size(); i++) {
-		if (mesh->vertices[i]->edge == nullptr) {
-			error = true;
-			qInfo() << "ERROR - Vertices - Ein Vertex hat kein edge!" << "\n";
-			break;
-		}
-		else {
-			halfEdge *tempEdge = mesh->vertices[i]->edge;
-			for (int j = 0; j < mesh->vertices[i]->valence; j++) {
-				if (tempEdge->pair == nullptr) {
-					error = true;
-					qInfo() << "ERROR - Vertices - Eine angrenzende Halfedge hat kein pair!" << "\n";
-					break;
-				}
-				tempEdge = tempEdge->pair;
-				if (tempEdge->next == nullptr) {
-					error = true;
-					qInfo() << "ERROR - Vertices - Eine angrenzende Halfedge hat kein next!" << "\n";
-					break;
-				}
-				tempEdge = tempEdge->next;
-			}
-			if (error) break;
-			if (tempEdge != mesh->vertices[i]->edge) {
-				error = true;
-				qInfo() << "ERROR - Vertices - Die angrenzenden Halfedges des Vertices sind nicht richtig verknüpft!" << "\n";
-				break;
-			}
-		}
-	}
-	if (!error) qInfo() << "OK - Vertices - Alle angrenzenden Halfedges sind erreichbar!" << "\n";
-	qInfo() << "===================================================" << "\n";
-	qInfo() << "\n";
-
-	qInfo() << "Statistik =========================================" << "\n";
+	MeshTester * m = new MeshTester();
+	m->testMesh(mesh);
+	delete m;
+	m = nullptr;
+	
+	qInfo() << "Statistik =========================================\n";
 	qInfo() << "Vertices: " << mesh->vertices.size() << "\n";
 	std::vector<int> vertexValences;
 	for (int i = 0; i < mesh->vertices.size(); i++) {
@@ -1167,6 +1059,6 @@ void OpenGLWidget::testMesh() {
 	}
 	qInfo() << "Halfedges: " << mesh->halfEdges.size() << "\n";
 	qInfo() << "Sharp Edges: " << sharpEdges << "\n";
-	qInfo() << "===================================================" << "\n";
+	qInfo() << "===================================================\n";
 	qInfo() << "\n";
 }

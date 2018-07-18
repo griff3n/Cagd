@@ -72,6 +72,9 @@
     <ClCompile Include="src\SkinSphereVertex.cpp">
       <Filter>Model\Skins</Filter>
     </ClCompile>
+    <ClCompile Include="src\MeshTester.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -109,6 +112,9 @@
     </ClInclude>
     <ClInclude Include="src\Skin.h">
       <Filter>Model\Skins</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MeshTester.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
