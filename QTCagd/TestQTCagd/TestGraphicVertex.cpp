@@ -8,6 +8,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 namespace TestQTCagd
 {
 	TEST_CLASS(TestGraphicVertex) {
+
 		TEST_METHOD(testKonstruktor) {
 			QVector4D pos = QVector4D(4.0f, 3.0f, 2.0f, 1.0f);
 			graphicVertex * testGV = new graphicVertex(pos);
@@ -24,31 +25,9 @@ namespace TestQTCagd
 			delete testGV;
 		}
 
-		TEST_METHOD(testKonstruktor2) {
-			QVector4D pos0 = QVector4D(0.0f, 0.0f, 0.0f, 0.0f);
-			QVector4D pos = QVector4D(4.0f, 3.0f, 2.0f, 1.0f);
-			graphicVertex * lastLOD = new graphicVertex(pos0);
-			graphicVertex * testGV = new graphicVertex(pos, lastLOD);
-			Assert::IsNotNull(testGV);
-			Assert::IsFalse(testGV->getIsSelected());
-			Assert::AreEqual(0.0f, testGV->weight);
-			Assert::IsTrue(pos == testGV->location);
-			Assert::IsFalse(pos0 == testGV->location);
-			Assert::IsFalse(testGV->sharp);
-			Assert::IsFalse(testGV->selected);
-			Assert::AreEqual(0, testGV->valence);
-			Assert::IsNull(testGV->edge);
-			Assert::IsNotNull(testGV->lastLOD);
-			Assert::IsTrue(lastLOD == testGV->lastLOD);
-			Assert::IsNull(testGV->nextLOD);
-			delete testGV;
-		}
-
 		TEST_METHOD(testDestruktor) {
-			QVector4D pos0 = QVector4D(0.0f, 0.0f, 0.0f, 0.0f);
 			QVector4D pos = QVector4D(4.0f, 3.0f, 2.0f, 1.0f);
-			graphicVertex * lastLOD = new graphicVertex(pos0);
-			graphicVertex * testGV = new graphicVertex(pos, lastLOD);
+			graphicVertex * testGV = new graphicVertex(pos);
 			delete testGV;
 		}
 

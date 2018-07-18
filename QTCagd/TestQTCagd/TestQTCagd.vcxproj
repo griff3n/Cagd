@@ -23,7 +23,7 @@
     <ProjectGuid>{72DF46F6-CC5F-40BC-BFB8-D6ED135CBDF4}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>TestQTCagd</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
     <ProjectSubType>NativeUnitTestProject</ProjectSubType>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -94,19 +94,19 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\QTCagd\GeneratedFiles;..\QTCagd\.;C:\Qt\5.11.0\msvc2017_64\include;..\QTCagd\GeneratedFiles\$(ConfigurationName);C:\Qt\5.11.0\msvc2017_64\include\Qt3DCore;C:\Qt\5.11.0\msvc2017_64\include\Qt3DAnimation;C:\Qt\5.11.0\msvc2017_64\include\Qt3DExtras;C:\Qt\5.11.0\msvc2017_64\include\Qt3DInput;C:\Qt\5.11.0\msvc2017_64\include\Qt3DLogic;C:\Qt\5.11.0\msvc2017_64\include\Qt3DRender;C:\Qt\5.11.0\msvc2017_64\include\Qt3DQuick;C:\Qt\5.11.0\msvc2017_64\include\Qt3DQuickAnimation;C:\Qt\5.11.0\msvc2017_64\include\Qt3DQuickExtras;C:\Qt\5.11.0\msvc2017_64\include\Qt3DQuickInput;C:\Qt\5.11.0\msvc2017_64\include\Qt3DQuickRender;C:\Qt\5.11.0\msvc2017_64\include\Qt3DQuickScene2D;C:\Qt\5.11.0\msvc2017_64\include\QtConcurrent;C:\Qt\5.11.0\msvc2017_64\include\QtCore;C:\Qt\5.11.0\msvc2017_64\include\QtGui;C:\Qt\5.11.0\msvc2017_64\include\QtANGLE;C:\Qt\5.11.0\msvc2017_64\include\QtHelp;C:\Qt\5.11.0\msvc2017_64\include\QtLocation;C:\Qt\5.11.0\msvc2017_64\include\QtOpenGL;C:\Qt\5.11.0\msvc2017_64\include\QtOpenGLExtensions;C:\Qt\5.11.0\msvc2017_64\include\QtPositioning;C:\Qt\5.11.0\msvc2017_64\include\QtQuick;C:\Qt\5.11.0\msvc2017_64\include\QtQuickWidgets;C:\Qt\5.11.0\msvc2017_64\include\QtQuickControls2;C:\Qt\5.11.0\msvc2017_64\include\QtTest;C:\Qt\5.11.0\msvc2017_64\include\QtUiTools;C:\Qt\5.11.0\msvc2017_64\include\QtWidgets;$(VCInstallDir)UnitTest\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\QTCagd\GeneratedFiles;..\QTCagd\.;C:\Qt\5.11.1\msvc2017_64\include;..\QTCagd\GeneratedFiles\$(ConfigurationName);C:\Qt\5.11.1\msvc2017_64\include\Qt3DCore;C:\Qt\5.11.1\msvc2017_64\include\Qt3DAnimation;C:\Qt\5.11.1\msvc2017_64\include\Qt3DExtras;C:\Qt\5.11.1\msvc2017_64\include\Qt3DInput;C:\Qt\5.11.1\msvc2017_64\include\Qt3DLogic;C:\Qt\5.11.1\msvc2017_64\include\Qt3DRender;C:\Qt\5.11.1\msvc2017_64\include\Qt3DQuick;C:\Qt\5.11.1\msvc2017_64\include\Qt3DQuickAnimation;C:\Qt\5.11.1\msvc2017_64\include\Qt3DQuickExtras;C:\Qt\5.11.1\msvc2017_64\include\Qt3DQuickInput;C:\Qt\5.11.1\msvc2017_64\include\Qt3DQuickRender;C:\Qt\5.11.1\msvc2017_64\include\Qt3DQuickScene2D;C:\Qt\5.11.1\msvc2017_64\include\QtConcurrent;C:\Qt\5.11.1\msvc2017_64\include\QtCore;C:\Qt\5.11.1\msvc2017_64\include\QtGui;C:\Qt\5.11.1\msvc2017_64\include\QtANGLE;C:\Qt\5.11.1\msvc2017_64\include\QtHelp;C:\Qt\5.11.1\msvc2017_64\include\QtLocation;C:\Qt\5.11.1\msvc2017_64\include\QtOpenGL;C:\Qt\5.11.1\msvc2017_64\include\QtOpenGLExtensions;C:\Qt\5.11.1\msvc2017_64\include\QtPositioning;C:\Qt\5.11.1\msvc2017_64\include\QtQuick;C:\Qt\5.11.1\msvc2017_64\include\QtQuickWidgets;C:\Qt\5.11.1\msvc2017_64\include\QtQuickControls2;C:\Qt\5.11.1\msvc2017_64\include\QtTest;C:\Qt\5.11.1\msvc2017_64\include\QtUiTools;C:\Qt\5.11.1\msvc2017_64\include\QtWidgets;$(VCInstallDir)UnitTest\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>UNICODE;_UNICODE;WIN32;WIN64;QT_3DCORE_LIB;QT_3DANIMATION_LIB;QT_3DEXTRAS_LIB;QT_3DINPUT_LIB;QT_3DLOGIC_LIB;QT_3DRENDER_LIB;QT_3DQUICK_LIB;QT_3DQUICKANIMATION_LIB;QT_3DQUICKEXTRAS_LIB;QT_3DQUICKINPUT_LIB;QT_3DQUICKRENDER_LIB;QT_3DQUICKSCENE2D_LIB;QT_CONCURRENT_LIB;QT_CORE_LIB;QT_GUI_LIB;QT_HELP_LIB;QT_LOCATION_LIB;QT_OPENGL_LIB;QT_OPENGLEXTENSIONS_LIB;QT_POSITIONING_LIB;QT_QUICK_LIB;QT_QUICKWIDGETS_LIB;QT_QUICKCONTROLS2_LIB;QT_TESTLIB_LIB;QT_UITOOLS_LIB;QT_WIDGETS_LIB;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <UseFullPaths>true</UseFullPaths>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalLibraryDirectories>C:\Qt\5.11.0\msvc2017_64\lib;$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Qt\5.11.1\msvc2017_64\lib;$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>qtmaind.lib;Qt53DCore.lib;Qt53DAnimation.lib;Qt53DExtras.lib;Qt53DInput.lib;Qt53DLogic.lib;Qt53DRender.lib;Qt53DQuick.lib;Qt53DQuickAnimation.lib;Qt53DQuickExtras.lib;Qt53DQuickInput.lib;Qt53DQuickRender.lib;Qt53DQuickScene2D.lib;Qt53DCored.lib;Qt53DAnimationd.lib;Qt53DExtrasd.lib;Qt53DInputd.lib;Qt53DLogicd.lib;Qt53DRenderd.lib;Qt53DQuickd.lib;Qt53DQuickAnimationd.lib;Qt53DQuickExtrasd.lib;Qt53DQuickInputd.lib;Qt53DQuickRenderd.lib;Qt53DQuickScene2Dd.lib;Qt5Concurrentd.lib;Qt5Cored.lib;Qt5Guid.lib;Qt5Helpd.lib;Qt5Locationd.lib;Qt5OpenGLd.lib;opengl32.lib;glu32.lib;Qt5OpenGLExtensionsd.lib;Qt5Positioningd.lib;Qt5Quickd.lib;Qt5QuickWidgetsd.lib;Qt5QuickControls2d.lib;Qt5Testd.lib;Qt5UiToolsd.lib;Qt5Widgetsd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /y "C:\Qt\5.11.0\msvc2017_64\bin\Qt5Cored.dll" "$(TargetDir)"
-xcopy /y "C:\Qt\5.11.0\msvc2017_64\bin\Qt5Guid.dll" "$(TargetDir)"</Command>
+      <Command>xcopy /y "C:\Qt\5.11.1\msvc2017_64\bin\Qt5Cored.dll" "$(TargetDir)"
+xcopy /y "C:\Qt\5.11.1\msvc2017_64\bin\Qt5Guid.dll" "$(TargetDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
