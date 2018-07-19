@@ -27,6 +27,7 @@ void OpenGLWidget::setHalfEdgeMesh(HalfEdgeMesh* mesh)
 	}
 	delete this->mesh;
 	selections.clear();
+	heSelections.clear();
 	emit vertexSelected(nullptr);
 
 	this->mesh = mesh;
@@ -172,8 +173,10 @@ void OpenGLWidget::renderEdges()
 {
 	QColor grey(140, 140, 140, 255);
 	QColor green(0, 255, 0, 255);
+	QColor orange(239, 122, 0);
 
 	std::vector<GLfloat> halfEdges;
+	std::vector<GLfloat> selHalfEdges;
 
 	int vertexLocation = program->attributeLocation("vertex");
 	int matrixLocation = program->uniformLocation("matrix");
@@ -185,12 +188,22 @@ void OpenGLWidget::renderEdges()
 
 	//Rendern der Edges
 	for (halfEdge* edge : mesh->halfEdges) {
-		halfEdges.push_back(edge->vert->location.x());
-		halfEdges.push_back(edge->vert->location.y());
-		halfEdges.push_back(edge->vert->location.z());
-		halfEdges.push_back(edge->next->vert->location.x());
-		halfEdges.push_back(edge->next->vert->location.y());
-		halfEdges.push_back(edge->next->vert->location.z());
+		if (edge->selected) {
+			selHalfEdges.push_back(edge->vert->location.x());
+			selHalfEdges.push_back(edge->vert->location.y());
+			selHalfEdges.push_back(edge->vert->location.z());
+			selHalfEdges.push_back(edge->next->vert->location.x());
+			selHalfEdges.push_back(edge->next->vert->location.y());
+			selHalfEdges.push_back(edge->next->vert->location.z());
+		}
+		else {
+			halfEdges.push_back(edge->vert->location.x());
+			halfEdges.push_back(edge->vert->location.y());
+			halfEdges.push_back(edge->vert->location.z());
+			halfEdges.push_back(edge->next->vert->location.x());
+			halfEdges.push_back(edge->next->vert->location.y());
+			halfEdges.push_back(edge->next->vert->location.z());
+		}
 	}
 
 	program->enableAttributeArray(vertexLocation);
@@ -198,10 +211,22 @@ void OpenGLWidget::renderEdges()
 	program->setUniformValue(matrixLocation, pmvMatrix);
 	program->setUniformValue(colorLocation, grey);
 
-	int numberOfEdgeVertices = mesh->halfEdges.size() * 2;
+	int numberOfEdgeVertices = halfEdges.size() / 3;
 	glDrawArrays(GL_LINES, 0, numberOfEdgeVertices);
 
 	program->disableAttributeArray(vertexLocation);
+
+	//render selected Edges
+	program->enableAttributeArray(vertexLocation);
+	program->setAttributeArray(vertexLocation, selHalfEdges.data(), 3);
+	program->setUniformValue(matrixLocation, pmvMatrix);
+	program->setUniformValue(colorLocation, orange);
+
+	numberOfEdgeVertices = selHalfEdges.size() / 3;
+	glDrawArrays(GL_LINES, 0, numberOfEdgeVertices);
+
+	program->disableAttributeArray(vertexLocation);
+	
 }
 void OpenGLWidget::renderFaces()
 {
@@ -306,18 +331,41 @@ void OpenGLWidget::mousePressEvent(QMouseEvent *e)
 		drag = true;
 		if (mesh)
 		{
-			if (!multSelection) {
-				for (graphicVertex* v : selections) {
-					v->selected = false;
+			switch (mode)
+			{
+			case VERTEX_MODE:
+				if (!multSelection) {
+					for (graphicVertex* v : selections) {
+						v->selected = false;
+					}
+					selections.clear();
 				}
-				selections.clear();
-			}
-			pick(QVector2D(lastMousePosition.x(), height() - 1 - lastMousePosition.y()));
-			if (selections.size() == 1) {
-				emit vertexSelected(selections.at(0));
-			}
-			else {
-				emit vertexSelected(nullptr);
+				pick(QVector2D(lastMousePosition.x(), height() - 1 - lastMousePosition.y()));
+				if (selections.size() == 1) {
+					emit vertexSelected(selections.at(0));
+				}
+				else {
+					emit vertexSelected(nullptr);
+				}
+				break;
+			case EDGE_MODE:
+				if (!multSelection) {
+					for (halfEdge* h : heSelections) {
+						h->selected = false;
+						h->pair->selected = false;
+					}
+					heSelections.clear();
+				}
+				pick(QVector2D(lastMousePosition.x(), height() - 1 - lastMousePosition.y()));
+				if (heSelections.size() == 1) {
+					emit halfEdgeSelected(heSelections.at(0));
+				}
+				else {
+					emit halfEdgeSelected(nullptr);
+				}
+				break;
+			case FACE_MODE:
+				break;
 			}
 		}
 		break;
@@ -524,6 +572,12 @@ void OpenGLWidget::setMode(OpenGLWidgetMode mode)
 	}
 	selections.clear();
 	emit vertexSelected(nullptr);
+	for (halfEdge* h : heSelections) {
+		h->selected = false;
+		h->pair->selected = false;
+	}
+	heSelections.clear();
+	emit vertexSelected(nullptr);
 }
 
 void OpenGLWidget::intersect(const QVector3D &origin, const QVector3D &direction)
@@ -562,57 +616,54 @@ void OpenGLWidget::intersectVertices(const QVector3D& origin, const QVector3D& d
 	if (closest) {
 		if (closest->selected && multSelection) {
 			closest->selected = false;
-			OutputDebugStringW(L"Deselected");
 			for (int i = 0; i < selections.size(); i++) {
 				if (selections[i] == closest) selections.erase(selections.begin() + i);
 			}
 		}
 		else {
 			closest->selected = true;
-			OutputDebugStringW(L"Selected");
 			selections.push_back(closest);
 		}
 	}
 	qInfo() << "Minimum: " << minimum << "\n";
 }
 void OpenGLWidget::intersectEdges(const QVector3D& origin, const QVector3D& direction) {
-	/*
-	viscas::topology_toolbox toolbox(halfEdgeMesh);
+	float minimum = 0.5 / mesh->scale;
+	halfEdge *closest = nullptr;
+	for (halfEdge *h : mesh->halfEdges) {
+		graphicVertex * start = h->vert;
+		graphicVertex * end = h->next->vert;
+		for (float t = 0; t <= 1; t += 0.1f) {
+			QVector4D p = (1-t)*start->location + t*end->location;
+			QVector3D op = QVector3D(p.x(), p.y(), p.z()) - origin;
+			QVector3D cross = QVector3D::crossProduct(direction, op);
 
-	auto index = viscas::topology_toolbox::invalid_edge();
-	auto minimum = std::numeric_limits<float>::max();
-
-	for (auto edge : toolbox.edges())
-	{
-		auto v0 = toolbox.limitPointOrPoint(edge, true);
-		auto v1 = toolbox.limitPointOrPoint(edge, false);
-
-		// #todo Big n will lead to performance issues. Optimize!
-		const int n = 32;
-
-		for (int i = 0; i < n + 1; i++)
-		{
-			float t = (float)i / n;
-
-			auto mid = (1.0f - t) * v0 + t * v1;
-			auto distance = mid.distanceToLine(origin, direction);
+			float distance = cross.length() / direction.length();
 
 			if (minimum > distance)
 			{
 				minimum = distance;
-				index = edge;
+				closest = h;
 			}
 		}
 	}
 
-	if (invalid(index))
-		return;
-
-	if (append)
-		selectionModel->addEdgeConditional(index);
-	else
-		selectionModel->setEdge(index);
-    */
+	if (closest) {
+		if (closest->selected && multSelection) {
+			closest->selected = false;
+			closest->pair->selected = false;
+			for (int i = 0; i < heSelections.size(); i++) {
+				if (heSelections[i] == closest) heSelections.erase(heSelections.begin() + i);
+				else if (heSelections[i] == closest->pair) heSelections.erase(heSelections.begin() + i);
+			}
+		}
+		else {
+			closest->selected = true;
+			closest->pair->selected = true;
+			heSelections.push_back(closest);
+		}
+	}
+	qInfo() << "Minimum: " << minimum << "\n";
 }
 void OpenGLWidget::intersectFaces(const QVector3D& origin, const QVector3D& direction) {
 
@@ -817,7 +868,7 @@ void OpenGLWidget::catmullClark() {
 			graphicVertex * newEdgeV = new graphicVertex(locE);
 			h->nextLOD = newEdgeV;
 			newEdgeV->lastLOD = h;
-			if (h->sharp) {
+			if (h->face->isHole || h->pair->face->isHole) {
 				newEdgeV->valence = 3;
 			}
 			else {
@@ -902,6 +953,7 @@ void OpenGLWidget::catmullClark() {
 			newEdge3->next = newEdge4;
 			newEdge4->next = newEdge1;
 			newEdge1->vert = current->vert->nextLOD;
+			newEdge1->sharp = current->sharp;
 			newEdge2->vert = current->nextLOD;
 			newEdge3->vert = current->face->nextLOD;
 			halfEdge * cur = current;
@@ -909,6 +961,7 @@ void OpenGLWidget::catmullClark() {
 				cur = cur->next;
 			}
 			newEdge4->vert = cur->nextLOD;
+			newEdge4->sharp = cur->sharp;
 			newEdge1->face = newFace;
 			newEdge2->face = newFace;
 			newEdge3->face = newFace;

@@ -139,6 +139,19 @@ void QTCagd::showSelectedVertexProperties(graphicVertex * v)
 	}
 }
 
+void QTCagd::showSelectedHalfEdgeProperties(halfEdge *h)
+{
+	selectedHalfEdge = h;
+	if (selectedHalfEdge) {
+		//TODO Enum for Modes
+		ui.stackedWidget->setCurrentIndex(2);
+		ui.sharpEdgeCheckBox->setChecked(selectedHalfEdge->sharp);
+	}
+	else {
+		ui.stackedWidget->setCurrentIndex(0);
+	}
+}
+
 void QTCagd::xCoordChanged(double newX)
 {
 	if (selectedVertex) {
@@ -203,8 +216,15 @@ void QTCagd::catmullTool()
 
 void QTCagd::sharpVertex(bool sharp) {
 	if (selectedVertex) {
-		QVector4D oldLocation = selectedVertex->location;
 		selectedVertex->sharp = sharp;
+		emit ui.openGLWidget->repaint();
+	}
+}
+
+void QTCagd::sharpEdge(bool sharp){
+	if (selectedHalfEdge) {
+		selectedHalfEdge->sharp = sharp;
+		selectedHalfEdge->pair->sharp = sharp;
 		emit ui.openGLWidget->repaint();
 	}
 }

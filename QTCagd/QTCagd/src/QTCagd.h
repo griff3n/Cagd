@@ -26,6 +26,7 @@ public slots:
 	void saveAs();
 	void parsingDone();
 	void showSelectedVertexProperties(graphicVertex*);
+	void showSelectedHalfEdgeProperties(halfEdge*);
 	void xCoordChanged(double);
 	void yCoordChanged(double);
 	void zCoordChanged(double);
@@ -34,11 +35,13 @@ public slots:
 	void faceMode(bool toggled);
 	void catmullTool();
 	void sharpVertex(bool sharp);
+	void sharpEdge(bool sharp);
 
 private:
 	Ui::QTCagdClass ui;
 	QFutureWatcher<HalfEdgeMesh*> parseWatcher;
 	graphicVertex* selectedVertex = nullptr;
+	halfEdge* selectedHalfEdge = nullptr;
 	HalfEdgeMesh* mesh = nullptr;
 	QString openedFile;
 };

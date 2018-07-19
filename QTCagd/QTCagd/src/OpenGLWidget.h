@@ -38,6 +38,7 @@ public slots:
 	
 signals:
 	void vertexSelected(graphicVertex*);
+	void halfEdgeSelected(halfEdge*);
 
 protected:
 	void initializeGL();
@@ -68,6 +69,7 @@ private:
 	bool drag = false;
 	bool multSelection = false;
 	std::vector<graphicVertex*> selections;
+	std::vector<halfEdge*> heSelections;
 	QMatrix4x4 arcballRotationMatrix;
 	int wdth;
 	int hght;

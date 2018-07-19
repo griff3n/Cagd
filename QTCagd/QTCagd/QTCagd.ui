@@ -129,7 +129,7 @@
              </size>
             </property>
             <property name="currentIndex">
-             <number>1</number>
+             <number>2</number>
             </property>
             <widget class="QWidget" name="Empty"/>
             <widget class="QWidget" name="Vertex">
@@ -238,7 +238,27 @@
               </layout>
              </widget>
             </widget>
-            <widget class="QWidget" name="Edge"/>
+            <widget class="QWidget" name="Edge">
+             <widget class="QWidget" name="verticalLayoutWidget_2">
+              <property name="geometry">
+               <rect>
+                <x>10</x>
+                <y>10</y>
+                <width>161</width>
+                <height>141</height>
+               </rect>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_5">
+               <item>
+                <widget class="QCheckBox" name="sharpEdgeCheckBox">
+                 <property name="text">
+                  <string>scharf</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </widget>
             <widget class="QWidget" name="Face"/>
            </widget>
           </item>
@@ -463,6 +483,7 @@
    <header>openglwidget.h</header>
    <slots>
     <signal>vertexSelected(graphicVertex*)</signal>
+    <signal>halfEdgeSelected(halfEdge*)</signal>
     <slot>setHalfEdgeMesh(HalfEdgeMesh*)</slot>
     <slot>triggerRepaint()</slot>
     <slot>deleteVertex()</slot>
@@ -545,7 +566,7 @@
    <slot>yCoordChanged(double)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>612</x>
+     <x>609</x>
      <y>157</y>
     </hint>
     <hint type="destinationlabel">
@@ -561,7 +582,7 @@
    <slot>zCoordChanged(double)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>612</x>
+     <x>609</x>
      <y>202</y>
     </hint>
     <hint type="destinationlabel">
@@ -657,7 +678,7 @@
    <slot>deleteVertex()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>612</x>
+     <x>609</x>
      <y>254</y>
     </hint>
     <hint type="destinationlabel">
@@ -689,8 +710,8 @@
    <slot>catmullClark()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>543</x>
-     <y>270</y>
+     <x>542</x>
+     <y>434</y>
     </hint>
     <hint type="destinationlabel">
      <x>364</x>
@@ -714,6 +735,38 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>openGLWidget</sender>
+   <signal>halfEdgeSelected(halfEdge*)</signal>
+   <receiver>QTCagdClass</receiver>
+   <slot>showSelectedHalfEdgeProperties(halfEdge*)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>246</x>
+     <y>410</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>63</x>
+     <y>477</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>sharpEdgeCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>QTCagdClass</receiver>
+   <slot>sharpEdge(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>458</x>
+     <y>143</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>375</x>
+     <y>475</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <signal>meshChanged(HalfEdgeMesh*)</signal>
@@ -733,5 +786,7 @@
   <slot>deleteVertex()</slot>
   <slot>catmullTool()</slot>
   <slot>sharpVertex(bool)</slot>
+  <slot>showSelectedHalfEdgeProperties(halfEdge*)</slot>
+  <slot>sharpEdge(bool)</slot>
  </slots>
 </ui>
