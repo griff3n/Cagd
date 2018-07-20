@@ -151,8 +151,6 @@
     <ClInclude Include="src\graphicVertex.h" />
     <ClInclude Include="src\halfEdge.h" />
     <ClInclude Include="src\HalfEdgeMesh.h" />
-    <ClInclude Include="src\IClickableGraphic.h" />
-    <ClInclude Include="src\ISelectableGraphic.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="src\ObjectMemory.h" />
     <ClInclude Include="src\Skin.h" />

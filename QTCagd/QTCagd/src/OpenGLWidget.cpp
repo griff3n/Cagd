@@ -156,7 +156,7 @@ void OpenGLWidget::renderVertices()
 		program->enableAttributeArray(vertexLocation);
 		program->setAttributeArray(vertexLocation, skinFaces.data(), 3);
 		program->setUniformValue(matrixLocation, pvm);
-		if (vertex->selected) {
+		if (vertex->getIsSelected()) {
 			program->setUniformValue(colorLocation, orange);
 		}
 		else {
@@ -188,7 +188,7 @@ void OpenGLWidget::renderEdges()
 
 	//Rendern der Edges
 	for (halfEdge* edge : mesh->halfEdges) {
-		if (edge->selected) {
+		if (edge->getIsSelected()) {
 			selHalfEdges.push_back(edge->vert->location.x());
 			selHalfEdges.push_back(edge->vert->location.y());
 			selHalfEdges.push_back(edge->vert->location.z());
@@ -336,7 +336,7 @@ void OpenGLWidget::mousePressEvent(QMouseEvent *e)
 			case VERTEX_MODE:
 				if (!multSelection) {
 					for (graphicVertex* v : selections) {
-						v->selected = false;
+						v->setSelected(false);
 					}
 					selections.clear();
 				}
@@ -351,8 +351,8 @@ void OpenGLWidget::mousePressEvent(QMouseEvent *e)
 			case EDGE_MODE:
 				if (!multSelection) {
 					for (halfEdge* h : heSelections) {
-						h->selected = false;
-						h->pair->selected = false;
+						h->setSelected(false);
+						h->pair->setSelected(false);
 					}
 					heSelections.clear();
 				}
@@ -574,13 +574,13 @@ void OpenGLWidget::setMode(OpenGLWidgetMode mode)
 {
 	this->mode = mode;
 	for (graphicVertex* v : selections) {
-		v->selected = false;
+		v->setSelected(false);
 	}
 	selections.clear();
 	emit vertexSelected(nullptr);
 	for (halfEdge* h : heSelections) {
-		h->selected = false;
-		h->pair->selected = false;
+		h->setSelected(false);
+		h->pair->setSelected(false);
 	}
 	heSelections.clear();
 	emit vertexSelected(nullptr);
@@ -620,14 +620,14 @@ void OpenGLWidget::intersectVertices(const QVector3D& origin, const QVector3D& d
 	}
 
 	if (closest) {
-		if (closest->selected && multSelection) {
-			closest->selected = false;
+		if (closest->getIsSelected() && multSelection) {
+			closest->setSelected(false);
 			for (int i = 0; i < selections.size(); i++) {
 				if (selections[i] == closest) selections.erase(selections.begin() + i);
 			}
 		}
 		else {
-			closest->selected = true;
+			closest->setSelected(true);
 			selections.push_back(closest);
 		}
 	}
@@ -655,17 +655,17 @@ void OpenGLWidget::intersectEdges(const QVector3D& origin, const QVector3D& dire
 	}
 
 	if (closest) {
-		if (closest->selected && multSelection) {
-			closest->selected = false;
-			closest->pair->selected = false;
+		if (closest->getIsSelected() && multSelection) {
+			closest->setSelected(false);
+			closest->pair->setSelected(false);
 			for (int i = 0; i < heSelections.size(); i++) {
 				if (heSelections[i] == closest) heSelections.erase(heSelections.begin() + i);
 				else if (heSelections[i] == closest->pair) heSelections.erase(heSelections.begin() + i);
 			}
 		}
 		else {
-			closest->selected = true;
-			closest->pair->selected = true;
+			closest->setSelected(true);
+			closest->pair->setSelected(true);
 			heSelections.push_back(closest);
 		}
 	}

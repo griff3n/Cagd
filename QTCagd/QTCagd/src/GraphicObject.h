@@ -1,9 +1,7 @@
 #pragma once
 
-#include "ISelectableGraphic.h"
-#include "IClickableGraphic.h"
 
-class GraphicObject :public ISelectableGraphic, public IClickableGraphic
+class GraphicObject
 {
 public:
 	virtual ~GraphicObject();
