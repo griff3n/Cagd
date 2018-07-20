@@ -15,8 +15,3 @@ void GraphicObject::deselect()
 void GraphicObject::onClick()
 {
 }
-
-bool GraphicObject::getIsSelected()
-{
-	return isSelected;
-}

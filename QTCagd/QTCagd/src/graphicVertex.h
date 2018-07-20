@@ -14,9 +14,10 @@ public:
 	float weight = 0.0f;
 	QVector4D location;
 	bool sharp = false;
-	bool selected = false;
 	int valence = 0;
 	halfEdge* edge = nullptr;
 	graphicVertex * nextLOD = nullptr;
 	GraphicObject * lastLOD = nullptr;
+	QVector4D weightedLocation();
+	void normalizeLocation();
 };

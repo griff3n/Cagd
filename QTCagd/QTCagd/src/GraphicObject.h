@@ -10,10 +10,9 @@ public:
 	void select();
 	void deselect();
 	void onClick();
-	bool getIsSelected();
+	bool selected = false;
 	int LOD = 0;
 
 protected:
 
-	bool isSelected = false;
 };

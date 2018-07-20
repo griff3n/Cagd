@@ -132,6 +132,7 @@ void QTCagd::showSelectedVertexProperties(graphicVertex * v)
 		ui.xSpinBox->setValue(selectedVertex->location.x());
 		ui.ySpinBox->setValue(selectedVertex->location.y());
 		ui.zSpinBox->setValue(selectedVertex->location.z());
+		ui.wSpinBox->setValue(selectedVertex->location.w());
 		ui.sharpCheckBox->setChecked(selectedVertex->sharp);
 	}
 	else {
@@ -175,6 +176,14 @@ void QTCagd::zCoordChanged(double newZ)
 	if (selectedVertex) {
 		QVector4D oldLocation = selectedVertex->location;
 		selectedVertex->location = QVector4D(oldLocation.x(), oldLocation.y(), float(newZ), oldLocation.w());
+		emit ui.openGLWidget->repaint();
+	}
+}
+
+void QTCagd::weightChanged(double w)
+{
+	if (selectedVertex) {
+		selectedVertex->location.setW(w);
 		emit ui.openGLWidget->repaint();
 	}
 }

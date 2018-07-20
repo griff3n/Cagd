@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>653</width>
-    <height>503</height>
+    <height>586</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -129,7 +129,7 @@
              </size>
             </property>
             <property name="currentIndex">
-             <number>2</number>
+             <number>1</number>
             </property>
             <widget class="QWidget" name="Empty"/>
             <widget class="QWidget" name="Vertex">
@@ -139,7 +139,7 @@
                 <x>10</x>
                 <y>10</y>
                 <width>160</width>
-                <height>183</height>
+                <height>228</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -220,6 +220,16 @@
                   <double>0.010000000000000</double>
                  </property>
                 </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="wLabel">
+                 <property name="text">
+                  <string>Gewicht</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QDoubleSpinBox" name="wSpinBox"/>
                </item>
                <item>
                 <widget class="QCheckBox" name="sharpCheckBox">
@@ -538,7 +548,7 @@
      <y>338</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-3</x>
+     <x>0</x>
      <y>430</y>
     </hint>
    </hints>
@@ -554,7 +564,7 @@
      <y>102</y>
     </hint>
     <hint type="destinationlabel">
-     <x>660</x>
+     <x>652</x>
      <y>419</y>
     </hint>
    </hints>
@@ -570,7 +580,7 @@
      <y>157</y>
     </hint>
     <hint type="destinationlabel">
-     <x>661</x>
+     <x>652</x>
      <y>401</y>
     </hint>
    </hints>
@@ -586,7 +596,7 @@
      <y>202</y>
     </hint>
     <hint type="destinationlabel">
-     <x>661</x>
+     <x>652</x>
      <y>389</y>
     </hint>
    </hints>
@@ -679,7 +689,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>609</x>
-     <y>254</y>
+     <y>299</y>
     </hint>
     <hint type="destinationlabel">
      <x>329</x>
@@ -710,8 +720,8 @@
    <slot>catmullClark()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>542</x>
-     <y>434</y>
+     <x>540</x>
+     <y>336</y>
     </hint>
     <hint type="destinationlabel">
      <x>364</x>
@@ -726,8 +736,8 @@
    <slot>sharpVertex(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>457</x>
-     <y>216</y>
+     <x>609</x>
+     <y>270</y>
     </hint>
     <hint type="destinationlabel">
      <x>528</x>
@@ -767,6 +777,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>wSpinBox</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>QTCagdClass</receiver>
+   <slot>weightChanged(double)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>520</x>
+     <y>238</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>463</x>
+     <y>559</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <signal>meshChanged(HalfEdgeMesh*)</signal>
@@ -788,5 +814,6 @@
   <slot>sharpVertex(bool)</slot>
   <slot>showSelectedHalfEdgeProperties(halfEdge*)</slot>
   <slot>sharpEdge(bool)</slot>
+  <slot>weightChanged(double)</slot>
  </slots>
 </ui>

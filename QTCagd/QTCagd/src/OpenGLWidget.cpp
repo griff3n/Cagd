@@ -405,6 +405,12 @@ void OpenGLWidget::keyPressEvent(QKeyEvent *e) {
 	case Qt::Key_T:
 		testMesh();
 		break;
+	case Qt::Key_D:
+		for (halfEdge * h : mesh->halfEdges) h->sharp = false;
+		break;
+	case Qt::Key_A:
+		for (halfEdge * h : mesh->halfEdges) h->sharp = true;
+		break;
 	}
 }
 
@@ -840,7 +846,7 @@ void OpenGLWidget::catmullClark() {
 		halfEdge * current = f->edge;
 		QVector4D locF = QVector4D(0, 0, 0, 0);
 		for (int i = 0; i < f->valence; i++) {
-			locF += current->vert->location;
+			locF += current->vert->weightedLocation();
 			current = current->next;
 		}
 		locF /= (float)f->valence;
@@ -849,20 +855,21 @@ void OpenGLWidget::catmullClark() {
 		newFaceV->lastLOD = f;
 		newFaceV->valence = f->valence;
 		newMesh->vertices.push_back(newFaceV);
+		newFaceV->normalizeLocation();
 	}
 	for (halfEdge * h : mesh->halfEdges) {
 		if (h->pair->nextLOD == nullptr) {
 			QVector4D locE = QVector4D(0, 0, 0, 0);
 			if (!h->sharp) {
-				locE += h->vert->location;
-				locE += h->pair->vert->location;
-				locE += h->face->nextLOD->location;
-				locE += h->pair->face->nextLOD->location;
+				locE += h->vert->weightedLocation();
+				locE += h->pair->vert->weightedLocation();
+				locE += h->face->nextLOD->weightedLocation();
+				locE += h->pair->face->nextLOD->weightedLocation();
 				locE /= 4.0;
 			}
 			else {
-				locE += h->vert->location;
-				locE += h->pair->vert->location;
+				locE += h->vert->weightedLocation();
+				locE += h->pair->vert->weightedLocation();
 				locE /= 2.0;
 			}
 			graphicVertex * newEdgeV = new graphicVertex(locE);
@@ -875,6 +882,7 @@ void OpenGLWidget::catmullClark() {
 				newEdgeV->valence = 4;
 			}
 			newMesh->vertices.push_back(newEdgeV);
+			newEdgeV->normalizeLocation();
 		}
 		else {
 			h->nextLOD = h->pair->nextLOD;
@@ -896,6 +904,7 @@ void OpenGLWidget::catmullClark() {
 		}
 		if (incidentSharpEdges > 2 || v->sharp) {
 			cornerRule = true;
+			sharpEdgeRule = false;
 		}
 		QVector4D locV = QVector4D(0, 0, 0, 0);
 		QVector4D q = QVector4D(0, 0, 0, 0);
@@ -905,26 +914,26 @@ void OpenGLWidget::catmullClark() {
 			for (int i = 0; i < v->valence; i++) {
 				//if (v->edge->sharp) {
 				if (current->sharp) {
-					r += current->pair->vert->location;
+					r += current->pair->vert->weightedLocation();
 				}
 				current = current->pair->next;
 			}
 			r /= 2.0;
-			locV = (r + 3 * v->location)/4.0;
+			locV = (r + 3 * v->weightedLocation())/4.0;
 		}
 		else if (cornerRule) {
-			locV = v->location;
+			locV = v->weightedLocation();
 		}
 		else {
 			for (int i = 0; i < v->valence; i++) {
 				//r += current->nextLOD->location;
-				r += current->pair->vert->location;
-				q += current->face->nextLOD->location;
+				r += current->pair->vert->weightedLocation();
+				q += current->face->nextLOD->weightedLocation();
 				current = current->pair->next;
 			}
 			q /= (float)v->valence;
 			r /= (float)v->valence;
-			locV = (q + r)/ (float)v->valence + v->location * (1 - 2 / (float)v->valence);
+			locV = (q + r)/ (float)v->valence + v->weightedLocation() * (1 - 2 / (float)v->valence);
 		}
 		graphicVertex * newV = new graphicVertex(locV);
 		v->nextLOD = newV;
@@ -932,7 +941,9 @@ void OpenGLWidget::catmullClark() {
 		newV->lastLOD = v;
 		newV->valence = v->valence;
 		newMesh->vertices.push_back(newV);
+		newV->normalizeLocation();
 	}
+
 	//Verbinden der neuen Vertices
 	
 	for (graphicFace * f : mesh->faces) {
@@ -1112,6 +1123,12 @@ void OpenGLWidget::testMesh() {
 	}
 	qInfo() << "Halfedges: " << mesh->halfEdges.size() << "\n";
 	qInfo() << "Sharp Edges: " << sharpEdges << "\n";
+	bool otherValues = false;
+	for (graphicVertex* v : mesh->vertices) {
+		if (v->location.w() != 1) otherValues = true;
+		break;
+	}
+	if(!otherValues) qInfo() << "Alle Gewichtungen sind 1\n";
 	qInfo() << "===================================================\n";
 	qInfo() << "\n";
 }

@@ -47,12 +47,12 @@ HalfEdgeMesh* loadOBJreg(std::string path) {
 					graphicVertex* newVert = new graphicVertex(QVector4D(x, y, z, 1.0f));
 					mesh->vertices.push_back(newVert);
 
-					if (newVert->location.x() < bbox[0]) bbox[0] = newVert->location.x();
-					if (newVert->location.x() > bbox[1]) bbox[1] = newVert->location.x();
-					if (newVert->location.y() < bbox[2]) bbox[2] = newVert->location.y();
-					if (newVert->location.y() > bbox[3]) bbox[3] = newVert->location.y();
-					if (newVert->location.z() < bbox[4]) bbox[4] = newVert->location.z();
-					if (newVert->location.z() > bbox[5]) bbox[5] = newVert->location.z();
+					if (x < bbox[0]) bbox[0] = x;
+					if (x > bbox[1]) bbox[1] = x;
+					if (y < bbox[2]) bbox[2] = y;
+					if (y > bbox[3]) bbox[3] = y;
+					if (z < bbox[4]) bbox[4] = z;
+					if (z > bbox[5]) bbox[5] = z;
 				}
 				catch (const std::invalid_argument& ia) {
 					qInfo() << "Invalid argument: " << ia.what() << '\n';

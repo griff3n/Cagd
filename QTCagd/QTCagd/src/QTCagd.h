@@ -30,6 +30,7 @@ public slots:
 	void xCoordChanged(double);
 	void yCoordChanged(double);
 	void zCoordChanged(double);
+	void weightChanged(double);
 	void vertexMode(bool toggled);
 	void edgeMode(bool toggled);
 	void faceMode(bool toggled);
