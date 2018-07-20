@@ -147,6 +147,12 @@ void QTCagd::showSelectedHalfEdgeProperties(halfEdge *h)
 		//TODO Enum for Modes
 		ui.stackedWidget->setCurrentIndex(2);
 		ui.sharpEdgeCheckBox->setChecked(selectedHalfEdge->sharp);
+		if (selectedHalfEdge->face->isHole || selectedHalfEdge->pair->face->isHole) {
+			ui.sharpEdgeCheckBox->setDisabled(true);
+		}
+		else {
+			ui.sharpEdgeCheckBox->setEnabled(true);
+		}
 	}
 	else {
 		ui.stackedWidget->setCurrentIndex(0);
@@ -184,7 +190,6 @@ void QTCagd::weightChanged(double w)
 {
 	if (selectedVertex) {
 		selectedVertex->location.setW(w);
-		emit ui.openGLWidget->repaint();
 	}
 }
 

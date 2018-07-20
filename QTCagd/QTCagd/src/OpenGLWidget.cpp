@@ -406,7 +406,7 @@ void OpenGLWidget::keyPressEvent(QKeyEvent *e) {
 		testMesh();
 		break;
 	case Qt::Key_D:
-		for (halfEdge * h : mesh->halfEdges) h->sharp = false;
+		for (halfEdge * h : mesh->halfEdges) if(!h->face->isHole && !h->pair->face->isHole) h->sharp = false;
 		break;
 	case Qt::Key_A:
 		for (halfEdge * h : mesh->halfEdges) h->sharp = true;
