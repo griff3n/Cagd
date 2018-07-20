@@ -18,5 +18,4 @@ public:
 	halfEdge* next = nullptr;		// next half-edge around the face
 	graphicVertex * nextLOD = nullptr;
 	bool sharp = false;
-	bool selected = false;
 };

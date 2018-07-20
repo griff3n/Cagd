@@ -31,9 +31,6 @@
     <Filter Include="Model">
       <UniqueIdentifier>{52878d8c-f0a2-4ca0-a9f6-b3be2896e53e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Model\Interfaces">
-      <UniqueIdentifier>{123e23ab-d035-483a-8c69-b3a1b4f312e6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Model\Skins">
       <UniqueIdentifier>{7cf0c01e-8122-4bc6-bae1-61b523711026}</UniqueIdentifier>
     </Filter>
@@ -88,12 +85,6 @@
     </ClInclude>
     <ClInclude Include="src\halfEdge.h">
       <Filter>Model</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ISelectableGraphic.h">
-      <Filter>Model\Interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="src\IClickableGraphic.h">
-      <Filter>Model\Interfaces</Filter>
     </ClInclude>
     <ClInclude Include="src\HalfEdgeMesh.h">
       <Filter>Model</Filter>

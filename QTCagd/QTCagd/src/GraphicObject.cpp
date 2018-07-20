@@ -20,3 +20,8 @@ bool GraphicObject::getIsSelected()
 {
 	return isSelected;
 }
+
+void GraphicObject::setSelected(bool selected)
+{
+	isSelected = selected;
+}
