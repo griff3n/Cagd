@@ -678,16 +678,181 @@ void OpenGLWidget::intersectFaces(const QVector3D& origin, const QVector3D& dire
 //todo: delete vertex connected to only hole faces
 void OpenGLWidget::deleteVertex(){
 	if (!selections.empty()) {
-		//v is the Vertex that is going to be deleted, e is one outgoing halfedge of v
+		//v is the Vertex that is going to be deleted
 		graphicVertex * v = selections.at(0);
-		if (v->edge == nullptr) {
+		selections.clear();
+		emit vertexSelected(nullptr);
+		//Case floating vertex
+		if (v->valence == 0) {
 			mesh->vertices.erase(std::remove(mesh->vertices.begin(), mesh->vertices.end(), v), mesh->vertices.end());
 			delete v;
-			selections.clear();
-			emit vertexSelected(nullptr);
+			testMesh();
 			emit repaint();
 			return;
 		}
+		//delEdges are the in- and outgoing halfedges of v to be deleted
+		std::vector<halfEdge*> delEdges;
+		//nearVertices are all adjacent vertices connected to the vertex v
+		std::vector<graphicVertex*> nearVertices;
+		//nearFaces are all adjacent Faces to the vertex v
+		std::vector<graphicFace*> nearFaces;
+
+		halfEdge* current = v->edge;
+		for (int i = 0; i < v->valence; i++) {
+			//fill delEdges
+			delEdges.push_back(current);
+			delEdges.push_back(current->pair);
+
+			//fill nearVertices
+			nearVertices.push_back(current->pair->vert);
+
+			//fill nearFaces
+			bool alreadyAdded = false;
+			for (graphicFace* f : nearFaces) {
+				if (current->face == f) { 
+					alreadyAdded = true;
+					break;
+				}
+			}
+			if (!alreadyAdded) {
+				nearFaces.push_back(current->face);
+			}
+			current = current->pair->next;
+		}
+		//toConnect collects all halfedges that need to be connected again
+		std::vector<halfEdge*> toConnect;
+		std::reverse(nearFaces.begin(), nearFaces.end());
+		for (graphicFace* f : nearFaces) {
+			current = f->edge;
+			for (int i = 0; i < f->valence; i++) {
+				bool toBeDeleted = false;
+				for (halfEdge* h : delEdges) {
+					if (current == h) {
+						toBeDeleted = true;
+						break;
+					}
+				}
+				if (!toBeDeleted) {
+					toConnect.push_back(current);
+					//update newly sharp edges
+					current->sharp = true;
+					current->pair->sharp = true;
+				}
+				current = current->next;
+			}
+		}
+
+		//updating nearVertices
+		for (graphicVertex* v : nearVertices) {
+			//update outgoing edge
+			if (v->valence == 1) {
+				v->edge = nullptr;
+			}
+			else {
+				halfEdge* cur = v->edge;
+				bool newEdgeFound = false; //TEST
+				for (int i = 0; i < v->valence; i++) {
+					bool toBeDeleted = false;
+					for (halfEdge* h : delEdges) {
+						if (cur == h) {
+							toBeDeleted = true;
+							break;
+						}
+					}
+					if (!toBeDeleted) {
+						v->edge = cur;
+						newEdgeFound = true; //TEST
+						break;
+					}
+					cur = cur->pair->next;
+				}
+				if (!newEdgeFound) qInfo() << "ERROR: No outgoing edge found!\n"; //TEST
+			}
+			//update valence
+			v->valence -= 1;
+		}
+
+		//connect the toConnect halfEdges
+		while (toConnect.size() != 0) {
+			//copy toConnect and clear it
+			std::vector<halfEdge*> toConnectCopy;
+			for(halfEdge* h : toConnect) {
+				toConnectCopy.push_back(h);
+			}
+			toConnect.clear();
+
+			//new Hole
+			graphicFace * newHole = new graphicFace();
+			newHole->isHole = true;
+
+			//connectors
+			halfEdge* first;
+			halfEdge* last;
+
+			for (int i = 0; i < toConnectCopy.size(); i++) {
+				if (i == 0) {
+					first = toConnectCopy.at(i);
+					last = toConnectCopy.at(i);
+					newHole->edge = first;
+					toConnectCopy.at(i)->face = newHole;
+				}
+				else if (i != toConnectCopy.size() - 1){
+					//if the toConnectCopy halfEdges do not connect, they are separate holes and will be connected in another iteration
+					if (toConnectCopy.at(i)->vert != last->pair->vert) {
+						toConnect.push_back(toConnectCopy.at(i));
+					}
+					else {
+						last->next = toConnectCopy.at(i);
+						last = toConnectCopy.at(i);
+						toConnectCopy.at(i)->face = newHole;
+					}
+				}
+				else {
+					//if the toConnectCopy halfEdges do not connect, they are separate holes and will be connected in another iteration
+					if (toConnectCopy.at(i)->vert != last->pair->vert) {
+						toConnect.push_back(toConnectCopy.at(i));
+						//connect last to first
+						last->next = first;
+					}
+					else {
+						last->next = toConnectCopy.at(i);
+						toConnectCopy.at(i)->face = newHole;
+						//connect last to first
+						toConnectCopy.at(i)->next = first;
+					}
+				}
+			}
+			//count hole valence
+			halfEdge* cur = newHole->edge;
+			int holeValence = 0;
+			do{
+				holeValence++;
+				cur = cur->next;
+			} while (cur != newHole->edge);
+			newHole->valence = holeValence;
+			mesh->faces.push_back(newHole);
+		}
+
+		//delete nearFaces
+		for (graphicFace* f : nearFaces) {
+			mesh->faces.erase(std::remove(mesh->faces.begin(), mesh->faces.end(), f), mesh->faces.end());
+			delete f;
+		}
+
+		//delete delEdges
+		for (halfEdge* e : delEdges) {
+			mesh->halfEdges.erase(std::remove(mesh->halfEdges.begin(), mesh->halfEdges.end(), e), mesh->halfEdges.end());
+			delete e;
+		}
+
+		//finally delete v
+		mesh->vertices.erase(std::remove(mesh->vertices.begin(), mesh->vertices.end(), v), mesh->vertices.end());
+		delete v;
+		testMesh();
+		emit repaint();
+
+		/*
+		//old Code
 		halfEdge * e = v->edge;
 		graphicFace * hole = nullptr;
 
@@ -784,13 +949,13 @@ void OpenGLWidget::deleteVertex(){
 			halfEdge * end = toConnect.at(i + 1);
 			end->next = start;
 		}
-		/*current = e->next;
-		do {
-			current->vert->edge = current;
-			current = current->next;
-			qInfo() << "HI \n";
-		} while (current != e->next);
-		*/
+		//current = e->next;
+		//do {
+			//current->vert->edge = current;
+			//current = current->next;
+			//qInfo() << "HI \n";
+		//} while (current != e->next);
+		
 		for (halfEdge * he : del) {
 			if (he->face->isHole && he->face->edge == he) {
 				for (halfEdge* h : mesh->halfEdges) {
@@ -809,17 +974,17 @@ void OpenGLWidget::deleteVertex(){
 				}
 				if (!hasOutgoing) he->vert->edge = nullptr;
 			}
-			/*
-			graphicVertex* v = he->vert;
-			if (v->edge == he) {
-				if (he == he->pair->next) {
-					v->edge = nullptr;
-				}
-				else {
-					v->edge = he->pair->next;
-				}
-			}
-			*/
+
+			//graphicVertex* v = he->vert;
+			//if (v->edge == he) {
+				//if (he == he->pair->next) {
+					//v->edge = nullptr;
+				//}
+				//else {
+					//v->edge = he->pair->next;
+				//}
+			//}
+			
 			mesh->halfEdges.erase(std::remove(mesh->halfEdges.begin(), mesh->halfEdges.end(), he), mesh->halfEdges.end());
 			delete he;
 		}
@@ -829,6 +994,7 @@ void OpenGLWidget::deleteVertex(){
 		selections.clear();
 		emit vertexSelected(nullptr);
 		emit repaint();
+		*/
 	}
 }
 
