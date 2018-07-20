@@ -8,9 +8,10 @@ public:
 	void select();
 	void deselect();
 	void onClick();
-	bool selected = false;
+	bool getIsSelected();
+	void setSelected(bool selected);
 	int LOD = 0;
 
 protected:
-
+	bool selected = false;
 };
