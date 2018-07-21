@@ -144,13 +144,13 @@ void OpenGLWidget::renderVertices()
 		HalfEdgeMesh *skinMesh = vertexSkin->returnSkinObject();
 		QMatrix4x4 scale = QMatrix4x4();
 		scale.setToIdentity();
-		QVector3D point = mesh->model * QVector3D(vertex->location.x(), vertex->location.y(), vertex->location.z());
+		QVector3D point = mesh->model * QVector3D(vertex->getLocation(limitMode).x(), vertex->getLocation(limitMode).y(), vertex->getLocation(limitMode).z());
 		float distance = (eye * arcballRotationMatrix - point).length();
 		//float zoomCorrection = eye.z() > 0.5 ? eye.z() : 0.5;
 		scale.scale(0.005 * distance / (mesh->scale));// (mesh->scale*zoomCorrection));
 		QMatrix4x4 translation = QMatrix4x4();
 		translation.setToIdentity();
-		translation.translate(vertex->location.x(), vertex->location.y(), vertex->location.z());
+		translation.translate(vertex->getLocation(limitMode).x(), vertex->getLocation(limitMode).y(), vertex->getLocation(limitMode).z());
 		QMatrix4x4 pvm = pmvMatrix * translation * scale * skinMesh->model;
 
 		program->enableAttributeArray(vertexLocation);
@@ -189,20 +189,20 @@ void OpenGLWidget::renderEdges()
 	//Rendern der Edges
 	for (halfEdge* edge : mesh->halfEdges) {
 		if (edge->getIsSelected()) {
-			selHalfEdges.push_back(edge->vert->location.x());
-			selHalfEdges.push_back(edge->vert->location.y());
-			selHalfEdges.push_back(edge->vert->location.z());
-			selHalfEdges.push_back(edge->next->vert->location.x());
-			selHalfEdges.push_back(edge->next->vert->location.y());
-			selHalfEdges.push_back(edge->next->vert->location.z());
+			selHalfEdges.push_back(edge->vert->getLocation(limitMode).x());
+			selHalfEdges.push_back(edge->vert->getLocation(limitMode).y());
+			selHalfEdges.push_back(edge->vert->getLocation(limitMode).z());
+			selHalfEdges.push_back(edge->next->vert->getLocation(limitMode).x());
+			selHalfEdges.push_back(edge->next->vert->getLocation(limitMode).y());
+			selHalfEdges.push_back(edge->next->vert->getLocation(limitMode).z());
 		}
 		else {
-			halfEdges.push_back(edge->vert->location.x());
-			halfEdges.push_back(edge->vert->location.y());
-			halfEdges.push_back(edge->vert->location.z());
-			halfEdges.push_back(edge->next->vert->location.x());
-			halfEdges.push_back(edge->next->vert->location.y());
-			halfEdges.push_back(edge->next->vert->location.z());
+			halfEdges.push_back(edge->vert->getLocation(limitMode).x());
+			halfEdges.push_back(edge->vert->getLocation(limitMode).y());
+			halfEdges.push_back(edge->vert->getLocation(limitMode).z());
+			halfEdges.push_back(edge->next->vert->getLocation(limitMode).x());
+			halfEdges.push_back(edge->next->vert->getLocation(limitMode).y());
+			halfEdges.push_back(edge->next->vert->getLocation(limitMode).z());
 		}
 	}
 
@@ -251,9 +251,9 @@ void OpenGLWidget::renderFaces()
 			halfEdge* start = face->edge;
 			halfEdge* current = face->edge;
 			for (int i = 0; i < 3; i++) {
-				triangles.push_back(current->vert->location.x());
-				triangles.push_back(current->vert->location.y());
-				triangles.push_back(current->vert->location.z());
+				triangles.push_back(current->vert->getLocation(limitMode).x());
+				triangles.push_back(current->vert->getLocation(limitMode).y());
+				triangles.push_back(current->vert->getLocation(limitMode).z());
 				current = current->next;
 			}
 		}
@@ -267,15 +267,15 @@ void OpenGLWidget::renderFaces()
 			graphicVertex * triangleFanTip = start->vert;
 			// Loop starts with the second Vertex and ends with the last but one to create (valence-2) triangles
 			for (int i = 0; i < face->valence - 2; i++) {
-				triangles.push_back(triangleFanTip->location.x());
-				triangles.push_back(triangleFanTip->location.y());
-				triangles.push_back(triangleFanTip->location.z());
-				triangles.push_back(current->vert->location.x());
-				triangles.push_back(current->vert->location.y());
-				triangles.push_back(current->vert->location.z());
-				triangles.push_back(current->next->vert->location.x());
-				triangles.push_back(current->next->vert->location.y());
-				triangles.push_back(current->next->vert->location.z());
+				triangles.push_back(triangleFanTip->getLocation(limitMode).x());
+				triangles.push_back(triangleFanTip->getLocation(limitMode).y());
+				triangles.push_back(triangleFanTip->getLocation(limitMode).z());
+				triangles.push_back(current->vert->getLocation(limitMode).x());
+				triangles.push_back(current->vert->getLocation(limitMode).y());
+				triangles.push_back(current->vert->getLocation(limitMode).z());
+				triangles.push_back(current->next->vert->getLocation(limitMode).x());
+				triangles.push_back(current->next->vert->getLocation(limitMode).y());
+				triangles.push_back(current->next->vert->getLocation(limitMode).z());
 				current = current->next;
 			}
 		}
@@ -1071,6 +1071,13 @@ void OpenGLWidget::changeLoD(int level)
 	emit repaint();
 }
 
+void OpenGLWidget::changeLimitMode(bool mode)
+{
+	if(mode = true)	this->limitMode = 1;
+	else this->limitMode = 0;
+	emit repaint();
+}
+
 void OpenGLWidget::catmullClark() {
 	//delete existing nextLoD
 	if(mesh->nextLOD != nullptr){
@@ -1186,7 +1193,8 @@ void OpenGLWidget::catmullClark() {
 			}
 			q /= (float)v->valence;
 			r /= (float)v->valence;
-			locV = (q + r)/ (float)v->valence + v->weightedLocation() * (1 - 2 / (float)v->valence);
+			locV = (q + r)/ (float)v->valence + v->weightedLocation() * (1 - (float) 2 / (float)v->valence);
+			
 		}
 		graphicVertex * newV = new graphicVertex(locV);
 		v->nextLOD = newV;
@@ -1319,10 +1327,31 @@ void OpenGLWidget::catmullClark() {
 	testMesh();
 	emit loDAdded();
 	emit repaint();
+	calculateLimitPoints();
 }
 
 
-
+void OpenGLWidget::calculateLimitPoints() {
+	for (graphicVertex * alpha : mesh->vertices) {
+		QVector4D limitPoint = QVector4D(0, 0, 0, 0);
+		std::vector<graphicVertex*> beta;
+		std::vector<graphicVertex*> gamma;
+		halfEdge* current = alpha->edge;
+		for (int i = 0; i < alpha->valence; i++) {
+			beta.push_back(current->next->vert);
+			gamma.push_back(current->next->next->vert);
+			current = current->pair->next;
+		}
+		limitPoint += (1 - (float)5 / (alpha->valence + 5)) * alpha->location;
+		for (graphicVertex * b : beta) {
+			limitPoint += ((float)4 / ((alpha->valence + 5)*alpha->valence)) * b->location;
+		}
+		for (graphicVertex * g : gamma) {
+			limitPoint += ((float)1 / ((alpha->valence + 5)*alpha->valence)) * g->location;
+		}
+		alpha->limitPoint = limitPoint;
+	}
+}
 
 
 void OpenGLWidget::testMesh() {

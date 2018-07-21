@@ -38,6 +38,7 @@ public slots:
 	void sharpVertex(bool sharp);
 	void sharpEdge(bool sharp);
 	void updateLoDSlider();
+	void updateLoDLabel(int level);
 
 private:
 	Ui::QTCagdClass ui;

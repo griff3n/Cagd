@@ -36,6 +36,7 @@ public slots:
 	void catmullClark();
 	void deleteVertex();
 	void changeLoD(int);
+	void changeLimitMode(bool);
 	
 signals:
 	void vertexSelected(graphicVertex*);
@@ -63,6 +64,7 @@ private:
 	void renderVertices();
 	void renderEdges();
 	void renderFaces();
+	void calculateLimitPoints();
 	void testMesh();
 
 private:
@@ -101,4 +103,5 @@ private:
 	std::vector<GLfloat> skinFaces;
 	//Render Mode
 	OpenGLWidgetMode mode = VERTEX_MODE;
+	bool limitMode = false;
 };
