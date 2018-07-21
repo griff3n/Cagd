@@ -19,5 +19,7 @@ public:
 	graphicVertex * nextLOD = nullptr;
 	GraphicObject * lastLOD = nullptr;
 	QVector4D weightedLocation();
+	QVector4D limitPoint;
+	QVector4D getLocation(bool limit);
 	void normalizeLocation();
 };
