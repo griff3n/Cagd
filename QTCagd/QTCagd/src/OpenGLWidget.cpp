@@ -29,6 +29,7 @@ void OpenGLWidget::setHalfEdgeMesh(HalfEdgeMesh* mesh)
 	selections.clear();
 	heSelections.clear();
 	emit vertexSelected(nullptr);
+	emit halfEdgeSelected(nullptr);
 
 	this->mesh = mesh;
 
@@ -583,7 +584,7 @@ void OpenGLWidget::setMode(OpenGLWidgetMode mode)
 		h->pair->setSelected(false);
 	}
 	heSelections.clear();
-	emit vertexSelected(nullptr);
+	emit halfEdgeSelected(nullptr);
 }
 
 void OpenGLWidget::intersect(const QVector3D &origin, const QVector3D &direction)
@@ -680,6 +681,9 @@ void OpenGLWidget::deleteVertex(){
 	if (!selections.empty()) {
 		//v is the Vertex that is going to be deleted
 		graphicVertex * v = selections.at(0);
+		for (graphicVertex* v : selections) {
+			v->setSelected(false);
+		}
 		selections.clear();
 		emit vertexSelected(nullptr);
 		//Case floating vertex
@@ -1325,6 +1329,18 @@ void OpenGLWidget::catmullClark() {
 		}
 	}
 	testMesh();
+	//unselect all vertices and halfedges
+	for (graphicVertex* v : selections) {
+		v->setSelected(false);
+	}
+	selections.clear();
+	emit vertexSelected(nullptr);
+	for (halfEdge* h : heSelections) {
+		h->setSelected(false);
+		h->pair->setSelected(false);
+	}
+	heSelections.clear();
+	emit halfEdgeSelected(nullptr);
 	emit loDAdded();
 	emit repaint();
 	calculateLimitPoints();
