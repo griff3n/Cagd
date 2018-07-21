@@ -253,14 +253,24 @@ void QTCagd::sharpEdge(bool sharp){
 
 void QTCagd::updateLoDSlider()
 {
+	if (!ui.limitCheckBox->isEnabled()) ui.limitCheckBox->setEnabled(true);
 	if (ui.LoDSlider->isEnabled()) {
 		int previousLoD = ui.LoDSlider->value();
 		ui.LoDSlider->setRange(0, previousLoD + 1);
 		ui.LoDSlider->setSliderPosition(previousLoD + 1);
+		QString labelText = "Level of Detail: " + QString::number(ui.LoDSlider->value(), 10);
+		ui.LoDLabel->setText(labelText);
 	}
 	else {
 		ui.LoDSlider->setEnabled(true);
 		ui.LoDSlider->setRange(0,1);
 		ui.LoDSlider->setSliderPosition(1);
+		QString labelText = "Level of Detail: " + QString::number(ui.LoDSlider->value(), 10);
+		ui.LoDLabel->setText(labelText);
 	}
+}
+
+void QTCagd::updateLoDLabel(int level) {
+	QString labelText = "Level of Detail: " + QString::number(level, 10);
+	ui.LoDLabel->setText(labelText);
 }
