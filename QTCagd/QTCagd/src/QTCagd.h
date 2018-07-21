@@ -37,6 +37,7 @@ public slots:
 	void catmullTool();
 	void sharpVertex(bool sharp);
 	void sharpEdge(bool sharp);
+	void updateLoDSlider();
 
 private:
 	Ui::QTCagdClass ui;

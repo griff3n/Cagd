@@ -77,6 +77,7 @@ void QTCagd::saveFile(QString filename) {
 			file << "v " << v->location.x() << " " << v->location.y() << " " << v->location.z() << std::endl;
 		}
 		for (graphicFace* f : mesh->faces) {
+			if (f->isHole) continue;
 			file << "f";
 			halfEdge* start = f->edge;
 			for (int i = 0; i < mesh->vertices.size(); i++) {
@@ -108,6 +109,10 @@ void QTCagd::parsingDone()
 {
 	QFuture<HalfEdgeMesh *> future = parseWatcher.future();
 	HalfEdgeMesh* newHalfEdgeMesh = future.result();
+
+	//disable old LoDSlider
+	ui.LoDSlider->setRange(0, 0);
+	ui.LoDSlider->setDisabled(true);
 
 	this->mesh = newHalfEdgeMesh;
 
@@ -201,6 +206,7 @@ void QTCagd::vertexMode(bool toggled)
 	ui.stackedWidget->setCurrentIndex(0);
 	if(ui.actionEdge_Mode->isChecked()) ui.actionEdge_Mode->toggle();
 	if (ui.actionFace_Mode->isChecked()) ui.actionFace_Mode->toggle();
+	emit ui.openGLWidget->repaint();
 }
 
 void QTCagd::edgeMode(bool toggled)
@@ -211,6 +217,7 @@ void QTCagd::edgeMode(bool toggled)
 	ui.stackedWidget->setCurrentIndex(0);
 	if (ui.actionVertexMode->isChecked()) ui.actionVertexMode->toggle();
 	if (ui.actionFace_Mode->isChecked()) ui.actionFace_Mode->toggle();
+	emit ui.openGLWidget->repaint();
 }
 
 void QTCagd::faceMode(bool toggled)
@@ -221,6 +228,7 @@ void QTCagd::faceMode(bool toggled)
 	ui.stackedWidget->setCurrentIndex(0);
 	if (ui.actionVertexMode->isChecked()) ui.actionVertexMode->toggle();
 	if (ui.actionEdge_Mode->isChecked()) ui.actionEdge_Mode->toggle();
+	emit ui.openGLWidget->repaint();
 }
 
 void QTCagd::catmullTool()
@@ -240,5 +248,19 @@ void QTCagd::sharpEdge(bool sharp){
 		selectedHalfEdge->sharp = sharp;
 		selectedHalfEdge->pair->sharp = sharp;
 		emit ui.openGLWidget->repaint();
+	}
+}
+
+void QTCagd::updateLoDSlider()
+{
+	if (ui.LoDSlider->isEnabled()) {
+		int previousLoD = ui.LoDSlider->value();
+		ui.LoDSlider->setRange(0, previousLoD + 1);
+		ui.LoDSlider->setSliderPosition(previousLoD + 1);
+	}
+	else {
+		ui.LoDSlider->setEnabled(true);
+		ui.LoDSlider->setRange(0,1);
+		ui.LoDSlider->setSliderPosition(1);
 	}
 }

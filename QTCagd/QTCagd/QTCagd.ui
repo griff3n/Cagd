@@ -280,6 +280,9 @@
               <height>120</height>
              </size>
             </property>
+            <property name="currentIndex">
+             <number>1</number>
+            </property>
             <widget class="QWidget" name="Empty_2"/>
             <widget class="QWidget" name="CatmullClark">
              <property name="minimumSize">
@@ -325,6 +328,23 @@
                  </item>
                  <item>
                   <widget class="Line" name="line_6">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="LoDLabel">
+                   <property name="text">
+                    <string>Level of Detail</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QSlider" name="LoDSlider">
+                   <property name="enabled">
+                    <bool>false</bool>
+                   </property>
                    <property name="orientation">
                     <enum>Qt::Horizontal</enum>
                    </property>
@@ -494,10 +514,12 @@
    <slots>
     <signal>vertexSelected(graphicVertex*)</signal>
     <signal>halfEdgeSelected(halfEdge*)</signal>
+    <signal>loDAdded()</signal>
     <slot>setHalfEdgeMesh(HalfEdgeMesh*)</slot>
     <slot>triggerRepaint()</slot>
     <slot>deleteVertex()</slot>
     <slot>catmullClark()</slot>
+    <slot>changeLoD(int)</slot>
    </slots>
   </customwidget>
  </customwidgets>
@@ -720,8 +742,8 @@
    <slot>catmullClark()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>540</x>
-     <y>336</y>
+     <x>649</x>
+     <y>475</y>
     </hint>
     <hint type="destinationlabel">
      <x>364</x>
@@ -793,6 +815,38 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>openGLWidget</sender>
+   <signal>loDAdded()</signal>
+   <receiver>QTCagdClass</receiver>
+   <slot>updateLoDSlider()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>288</x>
+     <y>326</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>296</x>
+     <y>560</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>LoDSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>openGLWidget</receiver>
+   <slot>changeLoD(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>470</x>
+     <y>387</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>268</x>
+     <y>328</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <signal>meshChanged(HalfEdgeMesh*)</signal>
@@ -815,5 +869,6 @@
   <slot>showSelectedHalfEdgeProperties(halfEdge*)</slot>
   <slot>sharpEdge(bool)</slot>
   <slot>weightChanged(double)</slot>
+  <slot>updateLoDSlider()</slot>
  </slots>
 </ui>

@@ -1060,7 +1060,32 @@ void OpenGLWidget::deleteVertex(){
 	}
 }
 
+void OpenGLWidget::changeLoD(int level)
+{
+	while (this->mesh->lastLOD != nullptr) {
+		this->mesh = this->mesh->lastLOD;
+	}
+	for (int i = 0; i < level; i++) {
+		this->mesh = this->mesh->nextLOD;
+	}
+	emit repaint();
+}
+
 void OpenGLWidget::catmullClark() {
+	//delete existing nextLoD
+	if(mesh->nextLOD != nullptr){
+		delete mesh->nextLOD;
+		mesh->nextLOD = nullptr;
+		for (graphicVertex* v : mesh->vertices) {
+			v->nextLOD = nullptr;
+		}
+		for (halfEdge* h : mesh->halfEdges) {
+			h->nextLOD = nullptr;
+		}
+		for (graphicFace* f : mesh->faces) {
+			f->nextLOD = nullptr;
+		}
+	}
 	HalfEdgeMesh * newMesh = new HalfEdgeMesh();
 	newMesh->lastLOD = mesh;
 	mesh->nextLOD = newMesh;
@@ -1292,6 +1317,7 @@ void OpenGLWidget::catmullClark() {
 		}
 	}
 	testMesh();
+	emit loDAdded();
 	emit repaint();
 }
 

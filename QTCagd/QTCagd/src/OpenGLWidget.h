@@ -35,10 +35,12 @@ public:
 public slots:
 	void catmullClark();
 	void deleteVertex();
+	void changeLoD(int);
 	
 signals:
 	void vertexSelected(graphicVertex*);
 	void halfEdgeSelected(halfEdge*);
+	void loDAdded();
 
 protected:
 	void initializeGL();
