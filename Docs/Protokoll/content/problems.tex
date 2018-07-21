@@ -1,0 +1,23 @@
+%Qt Neuland
+%Qt Designer nicht gut in VS eingebunden
+%Debugging in MS VS
+%Performance
+%Geeignete Architektur
+
+Bei der Arbeit am Projekt sind wir nur auf wenige größere Probleme gestoßen. 
+Die meisten Probleme, die wir hatten, hatten mit der Fehlerfindung in Visual Studio und C++ zu tun. 
+An vielen Stellen war es nicht offensichtlich, an welcher Stelle nun ein Fehler auftrat und warum. 
+
+Das Problem wurde insbesondere dadurch verstärkt, dass wir keinerlei Vorkenntnis mit QT hatten, welches wir für die UI nutzen wollten. 
+Dies sollte uns einiges an Arbeit im Bereich der Oberflächengestaltung ersparen.
+Im Endeffekt haben wir vermutlich das gleiche an Einarbeitungszeit aufwenden müssen. 
+Des Weiteren hatten wir einige Probleme mit dem QT Designer Tool, welches schnelles und einfaches erstellen von UIs ermöglichen soll. 
+Insbesondere dessen Visual Studio Einbindung funktioniert nicht immer, wie wir es erwartet hätten. 
+
+Ein weiteres Problem war das Finden einer geeigneten und erweiterbaren Architektur für das Projekt. 
+Insbesondere die Erweiterbarkeit war zu Anfang schwierig, da noch nicht alle Aufgaben und nötigen Funktionen bekannt waren.
+Dem entsprechend hat die Architektur einige Iterationen gesehen.
+
+Das letzte große Problem war die Performance. 
+Mit wachsendem Funktionsumfang wurde das Projekt leider deutlich langsamer. 
+Bei ``größeren`` Meshes -viele Vertices und Edges- dauerten dann Catmull-Clark Iterationen eine Minute oder länger, bei einem Model mit 50.000 Vertices und 300.000 Halfedges dauert selbst das Laden des Objektes etwa 30 Sekunden.
