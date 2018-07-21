@@ -1077,8 +1077,7 @@ void OpenGLWidget::changeLoD(int level)
 
 void OpenGLWidget::changeLimitMode(bool mode)
 {
-	if(mode = true)	this->limitMode = 1;
-	else this->limitMode = 0;
+	this->limitMode = mode;
 	emit repaint();
 }
 
