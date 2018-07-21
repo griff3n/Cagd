@@ -1,0 +1,19 @@
+Folgende Funktionen wurden gemäß der Aufgabenstellung implementiert:
+\begin{enumerate}
+\item Es können .obj-Objekte eingelesen werden. Diese werden von der Anwendung direkt angezeigt.
+\item Es können einzelne oder mehrere Punkte gruppiert verschoben werden. 
+\item Es können beliebige Vertice-Gewichte >0 auf zwei Nachkommastellen genau gesetzt werden. Diese fließen in die Berechnung der Unterteilungsflächen mit ein. 
+Des Weiteren ist das setzen scharfer Kanten möglich, die vom Catmull-Clark-Algorithmus auch als solche behandelt werden.
+\item Es können offene wie geschlossene Meshes mit Catmull-Clark unterteilt werden. 
+\item Es können die verschiedenen Catmull-Clark-Iterationen über einen Slider angezeigt werden. 
+\item Es können optional zu jedem unterteilten Mesh die Limitpunkte und -normalen angezeigt werden.
+\item Es kann die Konsistenz eines Meshes überprüft werden. Zusätzlich dazu wird eine Statistik ausgegeben, die Informationen über die Halfedge-Datenstruktur liefert. 
+\end{enumerate}
+
+Zusätzlich wurden folgende weitere Funktionen implementiert:
+\begin{enumerate}
+\item Einzelne Punkte können aus Meshes gelöscht werden. Dabei entstehen Hole-Faces.
+\item Punkte können nur an einer bestimmten Achse verschoben werden.
+\item Meshes können aus der Anwendung exportiert/gespeichert werden.
+\item Punkte können als ``spitz`` markiert werden und erhalten dann beim Unterteilen ihre Position.
+\end{enumerate}
