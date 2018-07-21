@@ -719,12 +719,15 @@ void OpenGLWidget::deleteVertex(){
 			}
 			current = current->pair->next;
 		}
-		//toConnect collects all halfedges that need to be connected again
-		std::vector<halfEdge*> toConnect;
-		std::reverse(nearFaces.begin(), nearFaces.end());
-		for (graphicFace* f : nearFaces) {
-			current = f->edge;
-			for (int i = 0; i < f->valence; i++) {
+		//toConnect collects all chains of halfedges that need to be connected again
+		std::vector<std::vector<halfEdge*>> toConnect;
+		toConnect.resize(1);
+		//std::reverse(nearFaces.begin(), nearFaces.end());
+		int slot = 0;
+		bool blocked = false;
+		current = v->edge;
+		for (int k = 0; k < v->valence; k++ ) {
+			for (int i = 0; i < current->face->valence; i++) {
 				bool toBeDeleted = false;
 				for (halfEdge* h : delEdges) {
 					if (current == h) {
@@ -733,13 +736,26 @@ void OpenGLWidget::deleteVertex(){
 					}
 				}
 				if (!toBeDeleted) {
-					toConnect.push_back(current);
+					if (blocked) {
+						toConnect.resize(toConnect.size() + 1);
+						blocked = false;
+					}
+					toConnect[slot].push_back(current);
 					//update newly sharp edges
 					current->sharp = true;
+					//set face to nullptr
+					current->face = nullptr;
 					current->pair->sharp = true;
+				}
+				else {
+					if (!blocked && !toConnect[slot].empty()) {
+						slot += 1;
+						blocked = true;
+					} 
 				}
 				current = current->next;
 			}
+			current = current->pair->next;
 		}
 
 		//updating nearVertices
@@ -773,13 +789,58 @@ void OpenGLWidget::deleteVertex(){
 		}
 
 		//connect the toConnect halfEdges
-		while (toConnect.size() != 0) {
+		//TODO try to puzzle all half edge chains correctly
+		for (int i = 0; i < toConnect.size(); i++) {
+			if (toConnect[0].empty()) break;
+			halfEdge *start, *end;
+			start = toConnect[i].front();
+			end = toConnect[i].back();
+			for (int j = 0; j < toConnect.size(); j++) {
+				halfEdge *start2, *end2;
+				start2 = toConnect[j].front();
+				end2 = toConnect[j].back();
+				if (end->pair->vert == start2->vert) {
+					end->next = start2;
+					qInfo() << "End mit Start2 verbunden!\n";
+				}
+				if (end2->pair->vert == start->vert) {
+					end2->next = start;
+					qInfo() << "End2 mit Start verbunden!\n";
+				}
+			}
+		}
+
+		//new holes
+		for (int i = 0; i < toConnect.size(); i++) {
+			if (toConnect[0].empty()) break;
+			if (toConnect[i][0]->face == nullptr) {
+				//new hole
+				graphicFace * newHole = new graphicFace();
+				newHole->isHole = true;
+				newHole->edge = toConnect[i][0];
+				mesh->faces.push_back(newHole);
+				int holeValence = 0;
+				//connect all halfedges to hole
+				halfEdge* current = toConnect[i][0];
+				do {
+					current->face = newHole;
+					holeValence++;
+					current = current->next;
+				} while (current != toConnect[i][0]);
+				newHole->valence = holeValence;
+			}
+		}
+		
+
+
+		/*while (toConnect.size() != 0) {
 			//copy toConnect and clear it
 			std::vector<halfEdge*> toConnectCopy;
 			for(halfEdge* h : toConnect) {
 				toConnectCopy.push_back(h);
 			}
 			toConnect.clear();
+			
 
 			//new Hole
 			graphicFace * newHole = new graphicFace();
@@ -832,6 +893,7 @@ void OpenGLWidget::deleteVertex(){
 			newHole->valence = holeValence;
 			mesh->faces.push_back(newHole);
 		}
+		*/
 
 		//delete nearFaces
 		for (graphicFace* f : nearFaces) {
