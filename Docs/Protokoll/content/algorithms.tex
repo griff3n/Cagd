@@ -17,7 +17,7 @@ Die neuen Punkte werden nach folgenden Regeln gebildet:\\
 \begin{itemize}
 \item Ein neuer Flächenpunkt errechnet sich aus dem Mittel der die Fläche umschließenden Punkte.
 \item Ein neuer Kantenpunkt wird aus dem Mittel der neuen Flächenpunkten und der angrenzenden Punkte der Kante gebildet.
-\item Neue Eckpunkte wird aus den neuen, angrenzenden Flächenpunkten, den inzidenten Punkten und dem alten Eckpunkt errechnet.
+\item Neue Eckpunkte werden aus den neuen, angrenzenden Flächenpunkten, den inzidenten Punkten und dem alten Eckpunkt errechnet.
 \end{itemize}
 
 Im folgenden wird auf die genauen Berechnungen eingangen.
@@ -50,14 +50,14 @@ Die Kantenpunkte(grün) werden wie in Abb. ~\ref{fig:edgepoints} ermittelt. Die 
 \label{fig:vertexpoints}
 \end{figure}
 
-Die neuen Eckpunkte ergeben sich durch Anteile der neuen Flächenpunkte und der alten inzidenten Eckpunkten wie in Abb.~\ref{fig:vertexpoints} dargestellt. Hierbei bezeichnet \emph{k} die Punktvalenz.
+Die neuen Eckpunkte ergeben sich durch Anteile der neuen Flächenpunkte und der alten, inzidenten Eckpunkte, wie in Abb.~\ref{fig:vertexpoints} dargestellt. Hierbei bezeichnet \emph{k} die Punktvalenz.
 
 \subsubsection{Scharfe Kanten und spitze Punkte}
 \label{sec:sharpEdge}
 Eine scharfe Kante verwendet gesonderte Regeln um beim Unterteilen andere Ergebnisse zu erzielen. Dies begründet sich darin, dass bei der Berechnung nur die inzidenten Eckpunkte betrachtet werden. Es entstehen sichtbare Knicke im Mesh. \\
 
 Ein spezieller Einsatzbereich der scharfen Kanten ist die Umrandung von Löchern im Mesh. Der Einsatz scharfer Kanten verhindert hierbei ein Anwachsen der Lochgröße.
-\begin{figure}[htpb]
+\begin{figure}[tpb]
 \centering
 \includegraphics[width=\columnwidth]{content/pictures/sharpLimit.png}
 \caption{Berechnung der scharfen Kanten mit Limitpunkten}
@@ -87,6 +87,7 @@ In den Limitpunkt gehen die genannten Komponenten zu folgenden Verhältnissen ei
 \gamma_i = \dfrac{1}{(k+5)k}
 \end{equation}
 
+An scharfen Kanten gelten für die Berechnung von Limitpunkten die in Abb.~\ref{fig:sharpLimit} gezeigten Verhältnisse.
 
 \subsection{Punktglättung}
 Bei der Punktglättung werden alle Punkten, der zu einem Punkt inzidenten Flächen, mit dem Ursprungspunkt addiert. 
@@ -95,7 +96,7 @@ Zwischen dem Ursprungspunkt und dem geglätteten Punkt kann man nun per Interpol
 
 \subsection{Löschen von Punkten, Kanten und Flächen}
 Im folgenden wird die Funktion, Punkte, Kanten und Flächen zu löschen näher betrachtet.
-Insbesondere wird kruz auf Besonderheiten bei den einzelnen Verfahren hingewiesen.
+Insbesondere wird kurz auf Besonderheiten bei den einzelnen Verfahren hingewiesen.
 \subsubsection{Löschen von Punkten}
 Das Löschen von Punkten ist der schwierigste Fall beim Löschen. Hierbei müssen einige Schritte unternommen werden und auf einige Spezialfälle geachtet werden. 
 Allgemein betrachtet muss folgendes geschehen:
