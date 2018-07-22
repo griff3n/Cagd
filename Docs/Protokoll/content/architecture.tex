@@ -1,9 +1,9 @@
 \subsection{Vorgaben}
-Es galt eine Architektur aufzubauen, die auf einer HalfEdge-Datenstruktur basiert. Das hei\ss{}t insbesondere:
+Es galt eine Architektur aufzubauen, die auf einer HalfEdge-Datenstruktur basiert. Das heißt insbesondere:
 \begin{itemize}
 \item Jeder Punkt kennt genau \textit{eine} seiner ausgehenden und \textit{keine} seiner eingehenden Kanten.
 \item Jede Kante kennt nur ihren Ausgangspunkt, ihre Gegenkante und die nachfolgende Kante.
-\item Jede Fläche kennt genau \textit{eine} ihrer umschlie\ss{}enden Kanten. 
+\item Jede Fläche kennt genau \textit{eine} ihrer umschließenden Kanten. 
 \item Bei einem zusammenhängenden Mesh ist jeder Punkt von jedem anderen über die Kanten erreichbar.
 \item Gehört eine Fläche nicht zum Mesh wird diese als ``Hole`` bezeichnet.
 \end{itemize}
@@ -17,6 +17,7 @@ Im folgenden soll zuerst das Model-Paket und anschlie\ss{}end das View-Paket vor
 
 \subsubsection{Model}
 \begin{figure}[htbp]
+\centering
 \includegraphics[angle=90,scale=0.5]{content/pictures/architekturModel.png}
 \caption{Model-Paket der Architektur}
 \label{fig:model}
@@ -35,6 +36,7 @@ Dies wurde aufgrund von Zeitmangel jedoch nicht umgesetzt.
 
 \subsubsection{View}
 \begin{figure}[htbp]
+\centering
 \includegraphics[angle=90,scale=0.6]{content/pictures/architekturView.png}
 \caption{View-Paket der Architektur}
 \label{fig:view}
