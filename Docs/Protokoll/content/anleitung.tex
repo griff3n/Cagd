@@ -101,13 +101,37 @@ Der Button "`Anwenden"' unterteilt das Mesh (siehe Abb.~\ref{fig:MeshCatmullClar
 	\label{fig:MeshCatmullClark}
 \end{figure}
 
+\subsection{Limitpunkte Anzeigen}
+Im "`Catmull-Clark Subdivision"' Menü können die Limitpunkte angezeigt werden indem die Checkbox "`Limitpunkte"' gesetzt wird (siehe Abb.~\ref{fig:Limitpunkte}).\\
+Wenn die Checkbox "`Limitpunkte"' gesetzt ist können keine Objekte geändert werden.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.5]{content/pictures/9-Limitpunkte}
+	\caption{}
+	\label{fig:Limitpunkte}
+\end{figure}
+
+\subsection{Smoothing}
+Unter "`Werkzeuge->Glättung"' wird das "`Glättung"' Menü geöffnet.\\
+Der Slider "`Glättung"' glättet das Mesh und zeigt das Mesh in dem eingestellten Glättungs-Level in Prozent an.\\
+Der Button "`Anwenden"' Übernimmt das geglättete Mesh (siehe Abb.~\ref{fig:Smoothing}).\\
+Wenn der Slider "`Glättung"' einen Wert grö\ss{}er als Null hat können keine Objekte geändert werden.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.5]{content/pictures/10-Smoothing}
+	\caption{}
+	\label{fig:Smoothing}
+\end{figure}
+
 \subsection{Konsistenzprüfung und Statistik}
 Mit der Taste "`T"' kann ein Mesh auf Fehler untersucht werden und die Statistik angezeigt werden (siehe Abb.~\ref{fig:TestStatistik}).\\
 Au\ss{}erdem wird nach jeder Iteration Catmull-Clark automatisch auf Fehler untersucht.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.5]{content/pictures/9-TestStatistik}
+	\includegraphics[scale=0.5]{content/pictures/11-TestStatistik}
 	\caption{Konsistenzprüfung und Statistik für ein Dreieck}
 	\label{fig:TestStatistik}
 \end{figure}
