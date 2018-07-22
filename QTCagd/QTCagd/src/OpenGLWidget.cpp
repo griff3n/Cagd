@@ -926,10 +926,10 @@ void OpenGLWidget::deleteVertex(){
 			}
 			current = current->pair->next;
 		}
+		//TODO check if face is has been added already
 		//toConnect collects all chains of halfedges that need to be connected again
 		std::vector<std::vector<halfEdge*>> toConnect;
 		toConnect.resize(1);
-		//std::reverse(nearFaces.begin(), nearFaces.end());
 		int slot = 0;
 		bool blocked = false;
 		current = v->edge;
@@ -1118,6 +1118,8 @@ void OpenGLWidget::deleteVertex(){
 		mesh->vertices.erase(std::remove(mesh->vertices.begin(), mesh->vertices.end(), v), mesh->vertices.end());
 		delete v;
 		testMesh();
+		dirtyHarry = true;
+		dirtyDancing = true;
 		emit repaint();
 
 		/*
@@ -1267,11 +1269,80 @@ void OpenGLWidget::deleteVertex(){
 	}
 }
 
+void OpenGLWidget::deleteEdge() {
+	halfEdge * h = heSelections.at(0);
+	//halfedges to be deleted
+	std::vector<halfEdge*> delEdges;
+	std::vector<graphicFace*> checkedFaces;
+	delEdges.push_back(h);
+	delEdges.push_back(h->pair);
+	//toConnect collects all chains of halfedges that need to be connected again
+	std::vector<std::vector<halfEdge*>> toConnect;
+	toConnect.resize(1);
+	int slot = 0;
+	bool blocked = false;
+	halfEdge* current = h;
+	for (int k = 0; k < 2; k++) {
+		for (int i = 0; i < current->face->valence; i++) {
+			bool alreadyChecked = false;
+			for (graphicFace* f : checkedFaces) {
+				if (current->face == f) {
+					alreadyChecked = true;
+					break;
+				}
+			}
+			if (alreadyChecked) {
+				break;
+			}
+			else {
+				checkedFaces.push_back(current->face);
+			}
+			bool toBeDeleted = false;
+			for (halfEdge* h : delEdges) {
+				if (current == h) {
+					toBeDeleted = true;
+					break;
+				}
+			}
+			if (!toBeDeleted) {
+				if (blocked) {
+					toConnect.resize(toConnect.size() + 1);
+					blocked = false;
+				}
+				toConnect[slot].push_back(current);
+				//update newly sharp edges
+				current->sharp = true;
+				//set face to nullptr
+				current->face = nullptr;
+				current->pair->sharp = true;
+			}
+			else {
+				if (!blocked && !toConnect[slot].empty()) {
+					slot += 1;
+					blocked = true;
+				}
+			}
+			current = current->next;
+		}
+		current = current->pair->next;
+	}
+
+	//TODO connect toConnect
+	//TODO delete delEdges
+
+
+	for (halfEdge* h : heSelections) {
+		h->setSelected(false);
+	}
+	heSelections.clear();
+	dirtyHarry = true;
+	dirtyDancing = true;
+	emit halfEdgeSelected(nullptr);
+	emit repaint();
+}
+
 void OpenGLWidget::deleteFace() {
 	graphicFace * f = fSelections.at(0);
-	for (graphicFace* f : fSelections) {
-		f->setSelected(false);
-	}
 	f->isHole = true;
 	halfEdge * current = f->edge;
 	for (int i = 0; i < f->valence; i++) {
@@ -1279,7 +1350,12 @@ void OpenGLWidget::deleteFace() {
 		current->pair->sharp = true;
 		current = current->next;
 	}
+	for (graphicFace* f : fSelections) {
+		f->setSelected(false);
+	}
 	fSelections.clear();
+	dirtyDancing = true;
+	dirtyHarry = true;
 	emit faceSelected(nullptr);
 	emit repaint();
 }
@@ -1309,14 +1385,51 @@ void OpenGLWidget::calcSmoothPoints() {
 		v->smoothLocation = QVector4D(0, 0, 0, 0);
 		std::vector<graphicVertex*> surrounding;
 		halfEdge * current = v->edge;
+
+		//detect sharp edges
+		bool sharpEdgeRule = false;
+		bool cornerRule = false;
+		int incidentSharpEdges = 0;
 		for (int i = 0; i < v->valence; i++) {
-			for (int j = 0; j < current->face->valence; j++) {
-				if (!(std::find(surrounding.begin(), surrounding.end(), current->vert) != surrounding.end())) {
-					surrounding.push_back(current->vert);
-				}
-				current = current->next;
+			if (current->sharp) {
+				incidentSharpEdges++;
 			}
 			current = current->pair->next;
+		}
+		if (incidentSharpEdges == 2) {
+			sharpEdgeRule = true;
+		}
+		if (incidentSharpEdges > 2 || v->sharp) {
+			cornerRule = true;
+			sharpEdgeRule = false;
+		}
+
+		if (sharpEdgeRule) {
+			current = v->edge;
+			surrounding.push_back(v);
+			for (int i = 0; i < v->valence; i++) {
+				if (current->sharp) {
+					if (!(std::find(surrounding.begin(), surrounding.end(), current->pair->vert) != surrounding.end())) {
+						surrounding.push_back(current->pair->vert);
+					}
+				}
+				current = current->pair->next;
+			}
+		}
+		else if (cornerRule) {
+			v->smoothLocation = v->location;
+		}
+		else {
+			current = v->edge;
+			for (int i = 0; i < v->valence; i++) {
+				for (int j = 0; j < current->face->valence; j++) {
+					if (!(std::find(surrounding.begin(), surrounding.end(), current->vert) != surrounding.end())) {
+						surrounding.push_back(current->vert);
+					}
+					current = current->next;
+				}
+				current = current->pair->next;
+			}
 		}
 		for (graphicVertex * sv : surrounding) {
 			v->smoothLocation += sv->location;
