@@ -335,19 +335,21 @@ void OpenGLWidget::mousePressEvent(QMouseEvent *e)
 			switch (mode)
 			{
 			case VERTEX_MODE:
-				if (!multSelection) {
+				if (!multSelection && !move) {
 					for (graphicVertex* v : selections) {
 						v->setSelected(false);
 					}
 					selections.clear();
 				}
-				pick(QVector2D(lastMousePosition.x(), height() - 1 - lastMousePosition.y()));
-				if (selections.size() == 1) {
-					emit vertexSelected(selections.at(0));
-				}
-				else {
-					emit vertexSelected(nullptr);
-				}
+				if (!move) {
+					pick(QVector2D(lastMousePosition.x(), height() - 1 - lastMousePosition.y()));
+					if (selections.size() == 1) {
+						emit vertexSelected(selections.at(0));
+					}
+					else {
+						emit vertexSelected(nullptr);
+					}
+				} 
 				break;
 			case EDGE_MODE:
 				if (!multSelection) {
@@ -377,6 +379,9 @@ void OpenGLWidget::keyPressEvent(QKeyEvent *e) {
 	{
 	case Qt::Key_Control:
 		multSelection = true;
+		break;
+	case Qt::Key_Alt:
+		move = true;
 		break;
 	case Qt::Key_X:
 		//check if any other axis is currently hold and ignore in that case
@@ -421,6 +426,9 @@ void OpenGLWidget::keyReleaseEvent(QKeyEvent *e) {
 	case Qt::Key_Control:
 		multSelection = false;
 		break;
+	case Qt::Key_Alt:
+		move = false;
+		break;
 	case Qt::Key_X:
 		//check if THIS axis is hold else ignore
 		if (axisXModified) {
@@ -463,7 +471,7 @@ void OpenGLWidget::mouseMoveEvent(QMouseEvent *e)
 {
 	currentMousePosition = e->pos();
 
-	if (drag && selections.size() != 0)
+	if (drag && move && selections.size() != 0)
 	{
 		//TODO Clean up messy Code
 		graphicVertex* lastSelected = selections.at(selections.size() - 1);

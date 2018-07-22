@@ -71,6 +71,7 @@ private:
 	HalfEdgeMesh * mesh = nullptr;
 	bool arcball = false;
 	bool drag = false;
+	bool move = false;
 	bool multSelection = false;
 	std::vector<graphicVertex*> selections;
 	std::vector<halfEdge*> heSelections;
