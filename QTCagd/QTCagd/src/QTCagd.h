@@ -31,13 +31,16 @@ public slots:
 	void yCoordChanged(double);
 	void zCoordChanged(double);
 	void weightChanged(double);
-	void vertexMode(bool toggled);
 	void edgeMode(bool toggled);
 	void faceMode(bool toggled);
 	void catmullTool();
+	void smoothingTool();
+	void vertexMode(bool toggled);
 	void sharpVertex(bool sharp);
 	void sharpEdge(bool sharp);
 	void updateLoDSlider();
+	void resetSmoothingSlider();
+	void updateSmoothingLabel(int level);
 	void updateLoDLabel(int level);
 
 private:

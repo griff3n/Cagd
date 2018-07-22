@@ -126,6 +126,8 @@ void QTCagd::parsingDone()
 		emit ui.statusBar->showMessage(QLatin1String("Datei konnte nicht geöffnet werden!"), 5000);
 	}
 	ui.action_Open->setEnabled(true);
+	ui.limitCheckBox->setChecked(false);
+	ui.smoothingSlider->setValue(0);
 }
 
 void QTCagd::showSelectedVertexProperties(graphicVertex * v)
@@ -169,6 +171,8 @@ void QTCagd::xCoordChanged(double newX)
 	if (selectedVertex) {
 		QVector4D oldLocation = selectedVertex->location;
 		selectedVertex->location = QVector4D(float(newX), oldLocation.y(), oldLocation.z(), oldLocation.w());
+		ui.openGLWidget->dirtyHarry = true;
+		ui.openGLWidget->dirtyDancing = true;
 		emit ui.openGLWidget->repaint();
 	}
 }
@@ -178,6 +182,8 @@ void QTCagd::yCoordChanged(double newY)
 	if (selectedVertex) {
 		QVector4D oldLocation = selectedVertex->location;
 		selectedVertex->location = QVector4D(oldLocation.x(), float(newY), oldLocation.z(), oldLocation.w());
+		ui.openGLWidget->dirtyHarry = true;
+		ui.openGLWidget->dirtyDancing = true;
 		emit ui.openGLWidget->repaint();
 	}
 }
@@ -187,6 +193,8 @@ void QTCagd::zCoordChanged(double newZ)
 	if (selectedVertex) {
 		QVector4D oldLocation = selectedVertex->location;
 		selectedVertex->location = QVector4D(oldLocation.x(), oldLocation.y(), float(newZ), oldLocation.w());
+		ui.openGLWidget->dirtyHarry = true;
+		ui.openGLWidget->dirtyDancing = true;
 		emit ui.openGLWidget->repaint();
 	}
 }
@@ -233,12 +241,20 @@ void QTCagd::faceMode(bool toggled)
 
 void QTCagd::catmullTool()
 {
+	ui.stackedWidget_2->setCurrentIndex(2);
+	ui.smoothingSlider->setValue(0);
+}
+
+void QTCagd::smoothingTool()
+{
 	ui.stackedWidget_2->setCurrentIndex(1);
+	ui.limitCheckBox->setChecked(false);
 }
 
 void QTCagd::sharpVertex(bool sharp) {
 	if (selectedVertex) {
 		selectedVertex->sharp = sharp;
+		ui.openGLWidget->dirtyHarry = true;
 		emit ui.openGLWidget->repaint();
 	}
 }
@@ -247,6 +263,7 @@ void QTCagd::sharpEdge(bool sharp){
 	if (selectedHalfEdge) {
 		selectedHalfEdge->sharp = sharp;
 		selectedHalfEdge->pair->sharp = sharp;
+		ui.openGLWidget->dirtyHarry = true;
 		emit ui.openGLWidget->repaint();
 	}
 }
@@ -268,6 +285,17 @@ void QTCagd::updateLoDSlider()
 		QString labelText = "Level of Detail: " + QString::number(ui.LoDSlider->value(), 10);
 		ui.LoDLabel->setText(labelText);
 	}
+}
+
+void QTCagd::resetSmoothingSlider() {
+	ui.smoothingSlider->setValue(0);
+	QString labelText = QLatin1String("Glättung: ") + QString::number(0, 10) + "%";
+	ui.smoothingLabel->setText(labelText);
+}
+
+void QTCagd::updateSmoothingLabel(int level) {
+	QString labelText = QLatin1String("Glättung: ") + QString::number(level, 10) + "%";
+	ui.smoothingLabel->setText(labelText);
 }
 
 void QTCagd::updateLoDLabel(int level) {

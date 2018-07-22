@@ -32,11 +32,15 @@ public:
 	void setMode(OpenGLWidgetMode mode);
 	void setHalfEdgeMesh(HalfEdgeMesh*);
 	HalfEdgeMesh * getHalfEdgeMesh();
+	bool dirtyHarry = false;
+	bool dirtyDancing = false;//smoothing
 public slots:
 	void catmullClark();
 	void deleteVertex();
 	void changeLoD(int);
+	void smoothenMesh(int);
 	void changeLimitMode(bool);
+	void applySmoothing();
 	
 signals:
 	void vertexSelected(graphicVertex*);
@@ -66,6 +70,8 @@ private:
 	void renderFaces();
 	void calculateLimitPoints();
 	void testMesh();
+	void calcSmoothPoints();
+
 
 private:
 	HalfEdgeMesh * mesh = nullptr;
@@ -104,5 +110,5 @@ private:
 	std::vector<GLfloat> skinFaces;
 	//Render Mode
 	OpenGLWidgetMode mode = VERTEX_MODE;
-	bool limitMode = false;
+	float limitMode = 0;
 };

@@ -43,6 +43,8 @@ void OpenGLWidget::setHalfEdgeMesh(HalfEdgeMesh* mesh)
 
 	//reset arcball
 	arcballRotationMatrix.setToIdentity();
+	dirtyHarry = true;
+	dirtyDancing = true;
 
 	emit repaint();
 
@@ -330,7 +332,7 @@ void OpenGLWidget::mousePressEvent(QMouseEvent *e)
 		break;
 	case Qt::LeftButton:
 		drag = true;
-		if (mesh)
+		if (mesh && limitMode==0)
 		{
 			switch (mode)
 			{
@@ -498,6 +500,8 @@ void OpenGLWidget::mouseMoveEvent(QMouseEvent *e)
 			v->location[1] = newPosition.y();
 			v->location[2] = newPosition.z();
 		}
+		dirtyHarry = true;
+		dirtyDancing = true;
 		emit repaint();
 
 		//Update SpinBoxes
@@ -1083,11 +1087,59 @@ void OpenGLWidget::changeLoD(int level)
 	emit repaint();
 }
 
-void OpenGLWidget::changeLimitMode(bool mode)
-{
-	this->limitMode = mode;
+void OpenGLWidget::smoothenMesh(int wannabt) {
+	limitMode = (float)wannabt / 100;
+	if(dirtyDancing){
+		calcSmoothPoints();
+		dirtyDancing = false;
+	}
 	emit repaint();
 }
+
+void OpenGLWidget::calcSmoothPoints() {
+	for (graphicVertex * v : mesh->vertices) {
+		v->smoothLocation = QVector4D(0, 0, 0, 0);
+		std::vector<graphicVertex*> surrounding;
+		halfEdge * current = v->edge;
+		for (int i = 0; i < v->valence; i++) {
+			for (int j = 0; j < current->face->valence; j++) {
+				if (!(std::find(surrounding.begin(), surrounding.end(), current->vert) != surrounding.end())) {
+					surrounding.push_back(current->vert);
+				}
+				current = current->next;
+			}
+			current = current->pair->next;
+		}
+		for (graphicVertex * sv : surrounding) {
+			v->smoothLocation += sv->location;
+		}
+		v->smoothLocation /= surrounding.size();
+	}
+}
+
+void OpenGLWidget::applySmoothing() {
+	for (graphicVertex * v : mesh->vertices) {
+		v->location = v->getLocation(limitMode);
+	}
+	dirtyDancing = true;
+}
+
+void OpenGLWidget::changeLimitMode(bool mode)
+{
+	if (mode) {
+		if (dirtyHarry)
+		{
+			calculateLimitPoints();
+			dirtyHarry = false;
+		}
+		this->limitMode = -1;
+	}
+	else {
+		this->limitMode = 0;
+	}
+	emit repaint();
+}
+
 
 void OpenGLWidget::catmullClark() {
 	//delete existing nextLoD
@@ -1351,6 +1403,7 @@ void OpenGLWidget::catmullClark() {
 	emit loDAdded();
 	emit repaint();
 	calculateLimitPoints();
+	dirtyDancing = true;
 }
 
 

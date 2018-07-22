@@ -20,6 +20,7 @@ public:
 	GraphicObject * lastLOD = nullptr;
 	QVector4D weightedLocation();
 	QVector4D limitPoint;
-	QVector4D getLocation(bool limit);
+	QVector4D getLocation(float limit);
 	void normalizeLocation();
+	QVector4D smoothLocation;
 };
