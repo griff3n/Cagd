@@ -1,9 +1,9 @@
 \subsection{Vorgaben}
-Es galt eine Architektur aufzubauen, die auf einer HalfEdge-Datenstruktur basiert. Das heißt insbesondere:
+Es galt eine Architektur aufzubauen, die auf einer HalfEdge-Datenstruktur basiert. Das hei\ss{}t insbesondere:
 \begin{itemize}
 \item Jeder Punkt kennt genau \textit{eine} seiner ausgehenden und \textit{keine} seiner eingehenden Kanten.
 \item Jede Kante kennt nur ihren Ausgangspunkt, ihre Gegenkante und die nachfolgende Kante.
-\item Jede Fläche kennt genau \textit{eine} ihrer umschließenden Kanten. 
+\item Jede Fläche kennt genau \textit{eine} ihrer umschlie\ss{}enden Kanten. 
 \item Bei einem zusammenhängenden Mesh ist jeder Punkt von jedem anderen über die Kanten erreichbar.
 \item Gehört eine Fläche nicht zum Mesh wird diese als ``Hole`` bezeichnet.
 \end{itemize}
@@ -13,7 +13,7 @@ In den folgenden Abschnitten wird die erstellte Architektur dargestellt und kurz
 Die Architektur des Projektes teilt sich im wesentlichen in ein Model- und ein View-Paket. 
 Während das Model eine etwas erweiterte HalfEdge-Struktur bereitstellt, ist das View-Paket im wesentlichen für die Anzeige zuständig. 
 
-Im folgenden soll zuerst das Model-Paket und anschließend das View-Paket vorgestellt werden.
+Im folgenden soll zuerst das Model-Paket und anschlie\ss{}end das View-Paket vorgestellt werden.
 
 \subsubsection{Model}
 \begin{figure}[htbp]
@@ -41,7 +41,7 @@ Dies wurde aufgrund von Zeitmangel jedoch nicht umgesetzt.
 \end{figure}
 
 Um den Aufwand für UI-Programmierung zu reduzieren, haben wir uns des QT-Frameworks bedient. 
-Dem entsprechend besteht die View zum größten Teil aus externen QT-Abhängigkeiten. 
+Dem entsprechend besteht die View zum grö\ss{}ten Teil aus externen QT-Abhängigkeiten. 
 Das Hauptfenster der Anwendung wird in QTCagd realisiert, welche eine mit dem QT-Designer erstellte QTCagd.ui einbindet und anzeigt (siehe Abb.~\ref{fig:view}).
 Des Weiteren werden dort entsprechende Signale für UI-Eingaben und Auswahlen gesendet.
 
