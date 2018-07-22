@@ -28,8 +28,10 @@ void OpenGLWidget::setHalfEdgeMesh(HalfEdgeMesh* mesh)
 	delete this->mesh;
 	selections.clear();
 	heSelections.clear();
+	fSelections.clear();
 	emit vertexSelected(nullptr);
 	emit halfEdgeSelected(nullptr);
+	emit faceSelected(nullptr);
 
 	this->mesh = mesh;
 
@@ -240,44 +242,80 @@ void OpenGLWidget::renderFaces()
 	pmvMatrix = projection * modelView;
 
 	std::vector<GLfloat> triangles;
+	std::vector<GLfloat> selTriangles;
 
 	QColor lightgrey(220, 220, 220, 255);
 	QColor red(255, 0, 0, 255);
+	QColor orange(239, 122, 0);
 	//QColor yellow(255, 255, 0, 255);
 
 
 	//Rendern der Faces
 	for (graphicFace* face : mesh->faces) {
-		if (face->valence == 3 && !face->isHole) {
-			halfEdge* start = face->edge;
-			halfEdge* current = face->edge;
-			for (int i = 0; i < 3; i++) {
-				triangles.push_back(current->vert->getLocation(limitMode).x());
-				triangles.push_back(current->vert->getLocation(limitMode).y());
-				triangles.push_back(current->vert->getLocation(limitMode).z());
-				current = current->next;
+		if (face->getIsSelected()) {
+			if (face->valence == 3 && !face->isHole) {
+				halfEdge* start = face->edge;
+				halfEdge* current = face->edge;
+				for (int i = 0; i < 3; i++) {
+					selTriangles.push_back(current->vert->getLocation(limitMode).x());
+					selTriangles.push_back(current->vert->getLocation(limitMode).y());
+					selTriangles.push_back(current->vert->getLocation(limitMode).z());
+					current = current->next;
+				}
+			}
+
+			else if (face->valence > 3 && !face->isHole) {
+				// Create a Triangle Fan out of every face with valence higher than 3
+				// Only works if all faces are convex
+				halfEdge* start = face->edge;
+				halfEdge* current = start->next;
+				graphicVertex * triangleFanTip = start->vert;
+				// Loop starts with the second Vertex and ends with the last but one to create (valence-2) triangles
+				for (int i = 0; i < face->valence - 2; i++) {
+					selTriangles.push_back(triangleFanTip->getLocation(limitMode).x());
+					selTriangles.push_back(triangleFanTip->getLocation(limitMode).y());
+					selTriangles.push_back(triangleFanTip->getLocation(limitMode).z());
+					selTriangles.push_back(current->vert->getLocation(limitMode).x());
+					selTriangles.push_back(current->vert->getLocation(limitMode).y());
+					selTriangles.push_back(current->vert->getLocation(limitMode).z());
+					selTriangles.push_back(current->next->vert->getLocation(limitMode).x());
+					selTriangles.push_back(current->next->vert->getLocation(limitMode).y());
+					selTriangles.push_back(current->next->vert->getLocation(limitMode).z());
+					current = current->next;
+				}
 			}
 		}
-		
-		else if (face->valence > 3 && !face->isHole) {
-			//TODO Change Render to only create triangles
-			// Create a Triangle Fan out of every face with valence higher than 3
-			// Only works if all faces are convex
-			halfEdge* start = face->edge;
-			halfEdge* current = start->next;
-			graphicVertex * triangleFanTip = start->vert;
-			// Loop starts with the second Vertex and ends with the last but one to create (valence-2) triangles
-			for (int i = 0; i < face->valence - 2; i++) {
-				triangles.push_back(triangleFanTip->getLocation(limitMode).x());
-				triangles.push_back(triangleFanTip->getLocation(limitMode).y());
-				triangles.push_back(triangleFanTip->getLocation(limitMode).z());
-				triangles.push_back(current->vert->getLocation(limitMode).x());
-				triangles.push_back(current->vert->getLocation(limitMode).y());
-				triangles.push_back(current->vert->getLocation(limitMode).z());
-				triangles.push_back(current->next->vert->getLocation(limitMode).x());
-				triangles.push_back(current->next->vert->getLocation(limitMode).y());
-				triangles.push_back(current->next->vert->getLocation(limitMode).z());
-				current = current->next;
+		else {
+			if (face->valence == 3 && !face->isHole) {
+				halfEdge* start = face->edge;
+				halfEdge* current = face->edge;
+				for (int i = 0; i < 3; i++) {
+					triangles.push_back(current->vert->getLocation(limitMode).x());
+					triangles.push_back(current->vert->getLocation(limitMode).y());
+					triangles.push_back(current->vert->getLocation(limitMode).z());
+					current = current->next;
+				}
+			}
+
+			else if (face->valence > 3 && !face->isHole) {
+				// Create a Triangle Fan out of every face with valence higher than 3
+				// Only works if all faces are convex
+				halfEdge* start = face->edge;
+				halfEdge* current = start->next;
+				graphicVertex * triangleFanTip = start->vert;
+				// Loop starts with the second Vertex and ends with the last but one to create (valence-2) triangles
+				for (int i = 0; i < face->valence - 2; i++) {
+					triangles.push_back(triangleFanTip->getLocation(limitMode).x());
+					triangles.push_back(triangleFanTip->getLocation(limitMode).y());
+					triangles.push_back(triangleFanTip->getLocation(limitMode).z());
+					triangles.push_back(current->vert->getLocation(limitMode).x());
+					triangles.push_back(current->vert->getLocation(limitMode).y());
+					triangles.push_back(current->vert->getLocation(limitMode).z());
+					triangles.push_back(current->next->vert->getLocation(limitMode).x());
+					triangles.push_back(current->next->vert->getLocation(limitMode).y());
+					triangles.push_back(current->next->vert->getLocation(limitMode).z());
+					current = current->next;
+				}
 			}
 		}
 	}
@@ -290,6 +328,17 @@ void OpenGLWidget::renderFaces()
 	program->setUniformValue(colorLocation, lightgrey);
 
 	int numberOfFaceVertices = triangles.size() / 3;
+	glDrawArrays(GL_TRIANGLES, 0, numberOfFaceVertices);
+
+	program->disableAttributeArray(vertexLocation);
+
+	//render selected faces
+	program->enableAttributeArray(vertexLocation);
+	program->setAttributeArray(vertexLocation, selTriangles.data(), 3);
+	program->setUniformValue(matrixLocation, pmvMatrix);
+	program->setUniformValue(colorLocation, orange);
+
+	numberOfFaceVertices = selTriangles.size() / 3;
 	glDrawArrays(GL_TRIANGLES, 0, numberOfFaceVertices);
 
 	program->disableAttributeArray(vertexLocation);
@@ -368,6 +417,20 @@ void OpenGLWidget::mousePressEvent(QMouseEvent *e)
 				}
 				break;
 			case FACE_MODE:
+				if (!multSelection) {
+					for (graphicFace* f : fSelections) {
+						f->setSelected(false);
+					}
+					fSelections.clear();
+				}
+				pick(QVector2D(lastMousePosition.x(), height() - 1 - lastMousePosition.y()));
+				if (fSelections.size() == 1) {
+					//TODO signal
+					emit faceSelected(fSelections.at(0));
+				}
+				else {
+					emit faceSelected(nullptr);
+				}
 				break;
 			}
 		}
@@ -406,7 +469,15 @@ void OpenGLWidget::keyPressEvent(QKeyEvent *e) {
 		}
 		break;
 	case Qt::Key_Delete:
-		deleteVertex();
+		switch (mode)
+		{
+		case VERTEX_MODE:
+			deleteVertex();
+			break;
+		case FACE_MODE:
+			deleteFace();
+			break;
+		}
 		break;
 	case Qt::Key_T:
 		testMesh();
@@ -593,6 +664,11 @@ void OpenGLWidget::setMode(OpenGLWidgetMode mode)
 	}
 	heSelections.clear();
 	emit halfEdgeSelected(nullptr);
+	for (graphicFace* f : fSelections) {
+		f->setSelected(false);
+	}
+	fSelections.clear();
+	emit faceSelected(nullptr);
 }
 
 void OpenGLWidget::intersect(const QVector3D &origin, const QVector3D &direction)
@@ -680,8 +756,123 @@ void OpenGLWidget::intersectEdges(const QVector3D& origin, const QVector3D& dire
 	}
 	qInfo() << "Minimum: " << minimum << "\n";
 }
-void OpenGLWidget::intersectFaces(const QVector3D& origin, const QVector3D& direction) {
 
+bool rayPlaneIntersection(const QVector3D& rayOrigin, const QVector3D& rayDirection, const QVector3D& planeOrigin, const QVector3D& planeNormal, QVector3D& result, float& t)
+{
+	float ln = QVector3D::dotProduct(rayDirection, planeNormal);
+
+	if (std::fabs(ln) < std::numeric_limits<float>::epsilon())
+	{
+		float temp = QVector3D::dotProduct((planeOrigin - rayOrigin), planeNormal);
+
+		if (std::fabs(temp) < std::numeric_limits<float>::epsilon())
+		{
+			result = rayOrigin;
+
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	else
+	{
+		float temp = QVector3D::dotProduct((planeOrigin - rayOrigin), planeNormal);
+		t = temp / ln;
+
+		result = rayOrigin + t * rayDirection;
+
+		return true;
+	}
+}
+
+std::vector<QVector3D> triangulateToPoints(graphicFace* face) {
+	std::vector<QVector3D> points;
+	if (face->valence > 3 && !face->isHole) {
+		//TODO Change Render to only create triangles
+		// Create a Triangle Fan out of every face with valence higher than 3
+		// Only works if all faces are convex
+		halfEdge* start = face->edge;
+		halfEdge* current = start->next;
+		graphicVertex * triangleFanTip = start->vert;
+		// Loop starts with the second Vertex and ends with the last but one to create (valence-2) triangles
+		for (int i = 0; i < face->valence - 2; i++) {
+			points.push_back(QVector3D(triangleFanTip->location));
+			points.push_back(QVector3D(current->vert->location));
+			points.push_back(QVector3D(current->next->vert->location));
+			current = current->next;
+		}
+	}
+	else if(face->valence == 3 && !face->isHole){
+		halfEdge* current = face->edge;
+		for (int i = 0; i < face->valence; i++) {
+			points.push_back(QVector3D(current->vert->location));
+			current = current->next;
+		}
+	}
+	return points;
+}
+
+void OpenGLWidget::intersectFaces(const QVector3D& origin, const QVector3D& direction) {
+	graphicFace* selectedFace = nullptr;
+	auto minimum = std::numeric_limits<float>::max();
+
+	for (graphicFace* face : mesh->faces)
+	{
+		// The upcoming algorithm is only working with triangles... so triangulate the current face and run the algorithm.
+		std::vector<QVector3D> points = triangulateToPoints(face);
+
+		for (int i = 0; i < points.size(); i++)
+		{
+			QVector3D a = points[i];
+			QVector3D b = points[++i];
+			QVector3D c = points[++i];
+
+			QVector3D pNormal = QVector3D::normal(a, b, c);
+
+			QVector3D result;
+			float distance;
+
+			if (rayPlaneIntersection(origin, direction, a, pNormal, result, distance))
+			{
+				// distance check
+				if (distance < minimum)
+				{
+					// assumption: face contains 3 edges , 3 vertices
+					// if the face contains more, face must be triangle and
+					// each resulting face needs to be checked ( until hit)
+
+					QVector3D v0 = c - a;
+					QVector3D v1 = b - a;
+					QVector3D v2 = result - a;
+
+					float dot00 = QVector3D::dotProduct(v0, v0);
+					float dot01 = QVector3D::dotProduct(v0, v1);
+					float dot02 = QVector3D::dotProduct(v0, v2);
+					float dot11 = QVector3D::dotProduct(v1, v1);
+					float dot12 = QVector3D::dotProduct(v1, v2);
+
+					float invDenom = 1.0f / (dot00 * dot11 - dot01 * dot01);
+					float u = (dot11 * dot02 - dot01 * dot12) * invDenom;
+					float v = (dot00 * dot12 - dot01 * dot02) * invDenom;
+
+					if ((u >= .0f) && (v >= .0f) && ((u + v) < 1.0f))
+					{
+						minimum = distance;
+						selectedFace = face;
+					}
+				}
+			}
+		}
+	}
+
+	if (!selectedFace)
+		return;
+	
+	fSelections.push_back(selectedFace);
+	selectedFace->setSelected(true);
+	qInfo() << "Face selected " << selectedFace << "\n";
 }
 
 //todo: delete vertex connected to only hole faces
@@ -1072,6 +1263,23 @@ void OpenGLWidget::deleteVertex(){
 	}
 }
 
+void OpenGLWidget::deleteFace() {
+	graphicFace * f = fSelections.at(0);
+	for (graphicFace* f : fSelections) {
+		f->setSelected(false);
+	}
+	f->isHole = true;
+	halfEdge * current = f->edge;
+	for (int i = 0; i < f->valence; i++) {
+		current->sharp = true;
+		current->pair->sharp = true;
+		current = current->next;
+	}
+	fSelections.clear();
+	emit faceSelected(nullptr);
+	emit repaint();
+}
+
 void OpenGLWidget::changeLoD(int level)
 {
 	while (this->mesh->lastLOD != nullptr) {
@@ -1348,6 +1556,8 @@ void OpenGLWidget::catmullClark() {
 	}
 	heSelections.clear();
 	emit halfEdgeSelected(nullptr);
+	fSelections.clear();
+	emit faceSelected(nullptr);
 	emit loDAdded();
 	emit repaint();
 	calculateLimitPoints();
