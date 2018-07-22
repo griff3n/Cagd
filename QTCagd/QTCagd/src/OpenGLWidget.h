@@ -37,6 +37,7 @@ public:
 public slots:
 	void catmullClark();
 	void deleteVertex();
+	void deleteFace();
 	void changeLoD(int);
 	void smoothenMesh(int);
 	void changeLimitMode(bool);
@@ -45,6 +46,7 @@ public slots:
 signals:
 	void vertexSelected(graphicVertex*);
 	void halfEdgeSelected(halfEdge*);
+	void faceSelected(graphicFace*);
 	void loDAdded();
 
 protected:
@@ -81,6 +83,7 @@ private:
 	bool multSelection = false;
 	std::vector<graphicVertex*> selections;
 	std::vector<halfEdge*> heSelections;
+	std::vector<graphicFace*> fSelections;
 	QMatrix4x4 arcballRotationMatrix;
 	int wdth;
 	int hght;

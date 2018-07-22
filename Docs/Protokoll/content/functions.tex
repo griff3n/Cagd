@@ -1,19 +1,20 @@
 Folgende Funktionen wurden gemä\ss{} der Aufgabenstellung implementiert:
 \begin{enumerate}
-\item Es können .obj-Objekte eingelesen werden. Diese werden von der Anwendung direkt angezeigt.
-\item Es können einzelne oder mehrere Punkte gruppiert verschoben werden. 
+\item .obj-Objekte können eingelesen werden. Diese werden von der Anwendung direkt angezeigt.
+\item Einzelne oder mehrere Punkte gruppiert sind verschiebbar. 
 \item Es können beliebige Vertice-Gewichte >0 auf zwei Nachkommastellen genau gesetzt werden. Diese flie\ss{}en in die Berechnung der Unterteilungsflächen mit ein. 
 Des Weiteren ist das setzen scharfer Kanten möglich, die vom Catmull-Clark-Algorithmus auch als solche behandelt werden.
-\item Es können offene wie geschlossene Meshes mit Catmull-Clark unterteilt werden. 
-\item Es können die verschiedenen Catmull-Clark-Iterationen über einen Slider angezeigt werden. 
-\item Es können optional zu jedem unterteilten Mesh die Limitpunkte und -normalen angezeigt werden.
+\item Sowohl offene, wie auch geschlossene Meshes sind mit Catmull-Clark unterteilbar. 
+\item Die verschiedenen Catmull-Clark-Iterationen können über einen Slider angezeigt werden. 
+\item Optional können zu jedem unterteilten Mesh die Limitpunkte angezeigt werden.
 \item Es kann die Konsistenz eines Meshes überprüft werden. Zusätzlich dazu wird eine Statistik ausgegeben, die Informationen über die Halfedge-Datenstruktur liefert. 
+\item Abschließend kann mithilfe eines Sliders eine Punktglättung durchgeführt werden. Der Slider bestimmt dabei das Maß der Glättung.
 \end{enumerate}
 
 Zusätzlich wurden folgende weitere Funktionen implementiert:
 \begin{enumerate}
-\item Einzelne Punkte können aus Meshes gelöscht werden. Dabei entstehen Hole-Faces.
-\item Punkte können nur an einer bestimmten Achse verschoben werden.
-\item Meshes können aus der Anwendung exportiert/gespeichert werden.
+\item Einzelne Punkte, Kanten oder Faces können aus Meshes gelöscht werden. Dabei entstehen Hole-Faces.
+\item Punkte können gezielt an einer bestimmten Achse verschoben werden.
+\item Meshes sind aus der Anwendung exportierbar.
 \item Punkte können als ``spitz`` markiert werden und erhalten dann beim Unterteilen ihre Position.
 \end{enumerate}
