@@ -37,6 +37,7 @@ public:
 public slots:
 	void catmullClark();
 	void deleteVertex();
+	void deleteEdge();
 	void deleteFace();
 	void changeLoD(int);
 	void smoothenMesh(int);
