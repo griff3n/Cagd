@@ -1348,21 +1348,56 @@ void OpenGLWidget::catmullClark() {
 
 void OpenGLWidget::calculateLimitPoints() {
 	for (graphicVertex * alpha : mesh->vertices) {
+
+		bool sharpEdgeRule = false;
+		bool cornerRule = false;
+		halfEdge * current = alpha->edge;
+		int incidentSharpEdges = 0;
+		for (int i = 0; i < alpha->valence; i++) {
+			if (current->sharp) {
+				incidentSharpEdges++;
+			}
+			current = current->pair->next;
+		}
+		if (incidentSharpEdges == 2) {
+			sharpEdgeRule = true;
+		}
+		if (incidentSharpEdges > 2 || alpha->sharp) {
+			cornerRule = true;
+			sharpEdgeRule = false;
+		}
+
 		QVector4D limitPoint = QVector4D(0, 0, 0, 0);
 		std::vector<graphicVertex*> beta;
 		std::vector<graphicVertex*> gamma;
-		halfEdge* current = alpha->edge;
+		current = alpha->edge;
 		for (int i = 0; i < alpha->valence; i++) {
 			beta.push_back(current->next->vert);
 			gamma.push_back(current->next->next->vert);
 			current = current->pair->next;
 		}
-		limitPoint += (1 - (float)5 / (alpha->valence + 5)) * alpha->location;
-		for (graphicVertex * b : beta) {
-			limitPoint += ((float)4 / ((alpha->valence + 5)*alpha->valence)) * b->location;
+		
+		if (sharpEdgeRule) {
+			limitPoint += ((float)2 / 3) * alpha->location;
+			current = alpha->edge;
+			for (int i = 0; i < alpha->valence; i++) {
+				if (current->sharp) {
+					limitPoint += ((float)1 / 6) *current->pair->vert->location;
+				}
+				current = current->pair->next;
+			}
 		}
-		for (graphicVertex * g : gamma) {
-			limitPoint += ((float)1 / ((alpha->valence + 5)*alpha->valence)) * g->location;
+		else if (cornerRule) {
+			limitPoint = alpha->location;
+		}
+		else {
+			limitPoint += (1 - (float)5 / (alpha->valence + 5)) * alpha->location;
+			for (graphicVertex * b : beta) {
+				limitPoint += ((float)4 / ((alpha->valence + 5)*alpha->valence)) * b->location;
+			}
+			for (graphicVertex * g : gamma) {
+				limitPoint += ((float)1 / ((alpha->valence + 5)*alpha->valence)) * g->location;
+			}
 		}
 		alpha->limitPoint = limitPoint;
 	}
