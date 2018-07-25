@@ -307,6 +307,11 @@ void QTCagd::updateSmoothingLabel(int level) {
 	ui.smoothingLabel->setText(labelText);
 }
 
+void QTCagd::updateTextbox(QString text) {
+	ui.textEdit->clear();
+	ui.textEdit->setText(text);
+}
+
 void QTCagd::updateLoDLabel(int level) {
 	QString labelText = "Level of Detail: " + QString::number(level, 10);
 	ui.LoDLabel->setText(labelText);

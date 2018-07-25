@@ -34,6 +34,7 @@ public:
 	HalfEdgeMesh * getHalfEdgeMesh();
 	bool dirtyHarry = false;
 	bool dirtyDancing = false;//smoothing
+
 public slots:
 	void catmullClark();
 	void deleteVertex();
@@ -49,6 +50,7 @@ signals:
 	void halfEdgeSelected(halfEdge*);
 	void faceSelected(graphicFace*);
 	void loDAdded();
+	void outputChanged(QString text);
 
 protected:
 	void initializeGL();
