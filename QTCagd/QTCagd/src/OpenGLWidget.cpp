@@ -1773,6 +1773,11 @@ void OpenGLWidget::catmullClark() {
 
 void OpenGLWidget::calculateLimitPoints() {
 	for (graphicVertex * alpha : mesh->vertices) {
+		//alte normalen löschen falls vorhanden
+		for (QVector3D * n : alpha->limitNormals) {
+			delete n;
+		}
+		alpha->limitNormals.clear();
 
 		bool sharpEdgeRule = false;
 		bool cornerRule = false;
@@ -1793,29 +1798,113 @@ void OpenGLWidget::calculateLimitPoints() {
 		}
 
 		QVector4D limitPoint = QVector4D(0, 0, 0, 0);
-		std::vector<graphicVertex*> beta;
-		std::vector<graphicVertex*> gamma;
-		current = alpha->edge;
-		for (int i = 0; i < alpha->valence; i++) {
-			beta.push_back(current->next->vert);
-			gamma.push_back(current->next->next->vert);
-			current = current->pair->next;
-		}
+		
 		
 		if (sharpEdgeRule) {
 			limitPoint += ((float)2 / 3) * alpha->location;
 			current = alpha->edge;
+			bool nearHoles = false; // for limit normals
 			for (int i = 0; i < alpha->valence; i++) {
 				if (current->sharp) {
 					limitPoint += ((float)1 / 6) *current->pair->vert->location;
 				}
+				if (current->face->isHole) {
+					nearHoles = true;
+				}
 				current = current->pair->next;
+			}
+			//limit normal
+			std::vector<std::vector<graphicVertex*>> betaN;
+			std::vector<std::vector<graphicVertex*>> gammaN;
+			betaN.resize(1);
+			gammaN.resize(1);
+			current = alpha->edge;
+			//go to first sharp edge
+			if (nearHoles) {
+				while (!(current->sharp && current->face->isHole)) {
+					current = current->pair->next;
+				}
+			}
+			else {
+				while (!current->sharp) {
+					current = current->pair->next;
+				}
+			}
+			int n = 0;
+			bool sharpEdgeCrossed = false;
+			for (int i = 0; i < alpha->valence; i++) {
+				if (!(current->sharp && sharpEdgeCrossed)) {
+					betaN[n].push_back(current->next->vert);
+					gammaN[n].push_back(current->next->next->vert);
+				}
+				else {
+					betaN[n].push_back(current->next->vert);
+
+					if (!(current->face->isHole || i == alpha->valence - 1)) {
+						betaN.resize(betaN.size() + 1);
+						gammaN.resize(gammaN.size() + 1);
+						n++;
+						sharpEdgeCrossed = false;
+
+						betaN[n].push_back(current->next->vert);
+						gammaN[n].push_back(current->next->next->vert);
+					}
+					
+				}
+				current = current->pair->next;
+				if (current->sharp) sharpEdgeCrossed = true;
+			}
+			//add startBeta to last beta list
+			if (betaN.size() != 1) {
+				betaN[betaN.size() - 1].push_back(betaN[0][0]);
+			}
+			//start building normals
+			for (int h = 0; h < betaN.size(); h++) {
+				int k = gammaN[h].size();
+				double r = (qCos((M_PI) / (double)k) + 1) / (k * qSin((M_PI) / (double)k) * (3 + qCos((M_PI) / (double)k)));
+
+				QVector3D *limitNormal = new QVector3D(0, 0, 0);
+				QVector3D tangent1 = QVector3D(0, 0, 0);
+				QVector3D tangent2 = QVector3D(0, 0, 0);
+				tangent1 += (4 * r * (qCos(M_PI / (double)k) - 1)) * QVector3D(alpha->location);
+				
+				int i = 0;
+				for (graphicVertex * b : betaN[h]) {
+					if (i == 0) {
+						tangent1 += (-r * (1 + 2 * qCos(M_PI / (double)k))) * QVector3D(b->location);
+						tangent2 += QVector3D(b->location);
+					}
+					else if (i == k) {
+						tangent1 += (-r * (1 + 2 * qCos(M_PI / (double)k))) * QVector3D(b->location);
+						tangent2 += -QVector3D(b->location);
+					}
+					else {
+						tangent1 += ((4 * qSin(i*(M_PI / (double)k)))/((3 + qCos(M_PI / (double)k)) * k)) * QVector3D(b->location);
+					}
+					i++;
+				}
+				i = 0;
+				for (graphicVertex * g : gammaN[h]) {
+					tangent1 += ((qSin(i*(M_PI / (double)k)) + qSin((i + 1) * (M_PI/(double)k))) / ((3 + qCos(M_PI / (double)k)) * k)) * QVector3D(g->location);
+					i++;
+				}
+				*limitNormal = QVector3D::normal(tangent1, tangent2);
+				alpha->limitNormals.push_back(limitNormal);
 			}
 		}
 		else if (cornerRule) {
 			limitPoint = alpha->location;
 		}
 		else {
+			std::vector<graphicVertex*> beta;
+			std::vector<graphicVertex*> gamma;
+			current = alpha->edge;
+			for (int i = 0; i < alpha->valence; i++) {
+				beta.push_back(current->next->vert);
+				gamma.push_back(current->next->next->vert);
+				current = current->pair->next;
+			}
+
 			//limit normal
 			QVector3D *limitNormal = new QVector3D(0, 0, 0);
 			QVector3D tangent1 = QVector3D(0, 0, 0);

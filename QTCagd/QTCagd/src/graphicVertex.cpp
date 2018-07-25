@@ -29,4 +29,8 @@ void graphicVertex::normalizeLocation() {
 	location /= location.w();
 }
 
-graphicVertex::~graphicVertex() {}
+graphicVertex::~graphicVertex() {
+	for (QVector3D * n : limitNormals) {
+		delete n;
+	}
+}
