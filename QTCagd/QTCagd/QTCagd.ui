@@ -808,8 +808,9 @@
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:large; font-weight:600;&quot;&gt;Hallo hier steht ihre informationsausgabe&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;testsetsetsetsetsets&lt;br /&gt;osdngodfngb&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;pdfgpdfbpd&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;pfdgsmpdb&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;spkvmposfbv&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:large; font-weight:600;&quot;&gt;Hier könnte Ihre Werbung stehen&lt;/span&gt;&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:large; font-weight:600;&quot;&gt;Statistik:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
           </item>
@@ -964,6 +965,7 @@ p, li { white-space: pre-wrap; }
     <signal>vertexSelected(graphicVertex*)</signal>
     <signal>halfEdgeSelected(halfEdge*)</signal>
     <signal>loDAdded()</signal>
+    <signal>outputChanged(QString)</signal>
     <slot>setHalfEdgeMesh(HalfEdgeMesh*)</slot>
     <slot>triggerRepaint()</slot>
     <slot>deleteVertex()</slot>
@@ -1146,8 +1148,8 @@ p, li { white-space: pre-wrap; }
    <slot>yCoordChanged(double)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>609</x>
-     <y>157</y>
+     <x>878</x>
+     <y>148</y>
     </hint>
     <hint type="destinationlabel">
      <x>652</x>
@@ -1162,8 +1164,8 @@ p, li { white-space: pre-wrap; }
    <slot>weightChanged(double)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>520</x>
-     <y>238</y>
+     <x>878</x>
+     <y>228</y>
     </hint>
     <hint type="destinationlabel">
      <x>463</x>
@@ -1178,8 +1180,8 @@ p, li { white-space: pre-wrap; }
    <slot>updateLoDLabel(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>455</x>
-     <y>385</y>
+     <x>601</x>
+     <y>349</y>
     </hint>
     <hint type="destinationlabel">
      <x>500</x>
@@ -1194,8 +1196,8 @@ p, li { white-space: pre-wrap; }
    <slot>changeLimitMode(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>449</x>
-     <y>419</y>
+     <x>601</x>
+     <y>349</y>
     </hint>
     <hint type="destinationlabel">
      <x>217</x>
@@ -1210,8 +1212,8 @@ p, li { white-space: pre-wrap; }
    <slot>changeLoD(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>470</x>
-     <y>387</y>
+     <x>601</x>
+     <y>349</y>
     </hint>
     <hint type="destinationlabel">
      <x>268</x>
@@ -1226,8 +1228,8 @@ p, li { white-space: pre-wrap; }
    <slot>sharpVertex(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>609</x>
-     <y>270</y>
+     <x>878</x>
+     <y>245</y>
     </hint>
     <hint type="destinationlabel">
      <x>528</x>
@@ -1290,8 +1292,8 @@ p, li { white-space: pre-wrap; }
    <slot>zCoordChanged(double)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>609</x>
-     <y>202</y>
+     <x>878</x>
+     <y>188</y>
     </hint>
     <hint type="destinationlabel">
      <x>652</x>
@@ -1306,8 +1308,8 @@ p, li { white-space: pre-wrap; }
    <slot>catmullClark()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>649</x>
-     <y>513</y>
+     <x>601</x>
+     <y>349</y>
     </hint>
     <hint type="destinationlabel">
      <x>364</x>
@@ -1322,8 +1324,8 @@ p, li { white-space: pre-wrap; }
    <slot>sharpEdge(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>551</x>
-     <y>151</y>
+     <x>601</x>
+     <y>92</y>
     </hint>
     <hint type="destinationlabel">
      <x>375</x>
@@ -1338,8 +1340,8 @@ p, li { white-space: pre-wrap; }
    <slot>deleteVertex()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>609</x>
-     <y>299</y>
+     <x>878</x>
+     <y>268</y>
     </hint>
     <hint type="destinationlabel">
      <x>329</x>
@@ -1354,8 +1356,8 @@ p, li { white-space: pre-wrap; }
    <slot>smoothenMesh(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>479</x>
-     <y>386</y>
+     <x>882</x>
+     <y>414</y>
     </hint>
     <hint type="destinationlabel">
      <x>411</x>
@@ -1370,8 +1372,8 @@ p, li { white-space: pre-wrap; }
    <slot>applySmoothing()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>479</x>
-     <y>503</y>
+     <x>882</x>
+     <y>437</y>
     </hint>
     <hint type="destinationlabel">
      <x>224</x>
@@ -1386,8 +1388,8 @@ p, li { white-space: pre-wrap; }
    <slot>resetSmoothingSlider()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>549</x>
-     <y>507</y>
+     <x>882</x>
+     <y>437</y>
     </hint>
     <hint type="destinationlabel">
      <x>174</x>
@@ -1402,8 +1404,8 @@ p, li { white-space: pre-wrap; }
    <slot>updateSmoothingLabel(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>502</x>
-     <y>385</y>
+     <x>882</x>
+     <y>414</y>
     </hint>
     <hint type="destinationlabel">
      <x>219</x>
@@ -1411,10 +1413,27 @@ p, li { white-space: pre-wrap; }
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>openGLWidget</sender>
+   <signal>outputChanged(QString)</signal>
+   <receiver>QTCagdClass</receiver>
+   <slot>updateTextbox(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>81</x>
+     <y>288</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>98</x>
+     <y>690</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <signal>meshChanged(HalfEdgeMesh*)</signal>
   <signal>triggerRepaint()</signal>
+  <signal>clearText()</signal>
   <slot>closeApplication()</slot>
   <slot>showBunny()</slot>
   <slot>openFile()</slot>
@@ -1438,5 +1457,6 @@ p, li { white-space: pre-wrap; }
   <slot>smoothingTool()</slot>
   <slot>resetSmoothingSlider()</slot>
   <slot>updateSmoothingLabel(int)</slot>
+  <slot>updateTextbox(QString)</slot>
  </slots>
 </ui>

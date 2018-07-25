@@ -48,6 +48,7 @@ void OpenGLWidget::setHalfEdgeMesh(HalfEdgeMesh* mesh)
 	dirtyHarry = true;
 	dirtyDancing = true;
 
+	testMesh();
 	emit repaint();
 
 	//Set Focus for multSelection
@@ -1378,6 +1379,7 @@ void OpenGLWidget::deleteEdge() {
 	heSelections.clear();
 	dirtyHarry = true;
 	dirtyDancing = true;
+	testMesh();
 	emit halfEdgeSelected(nullptr);
 	emit repaint();
 }
@@ -1397,6 +1399,7 @@ void OpenGLWidget::deleteFace() {
 	fSelections.clear();
 	dirtyDancing = true;
 	dirtyHarry = true;
+	testMesh();
 	emit faceSelected(nullptr);
 	emit repaint();
 }
@@ -1409,6 +1412,7 @@ void OpenGLWidget::changeLoD(int level)
 	for (int i = 0; i < level; i++) {
 		this->mesh = this->mesh->nextLOD;
 	}
+	testMesh();
 	emit repaint();
 }
 
@@ -1937,12 +1941,16 @@ void OpenGLWidget::calculateLimitPoints() {
 
 void OpenGLWidget::testMesh() {
 	MeshTester * m = new MeshTester();
-	m->testMesh(mesh);
+	QString * out =  m->testMesh(mesh);
+	
 	delete m;
 	m = nullptr;
 	
+	QString output = "";
 	qInfo() << "Statistik =========================================\n";
 	qInfo() << "Vertices: " << mesh->vertices.size() << "\n";
+	output += "<h3><u>Statistik:<u></h3>\n";
+	output += "<h4>Vertices: </h4>" + QString::number(mesh->vertices.size(), 10) + "\n";
 	std::vector<int> vertexValences;
 	for (int i = 0; i < mesh->vertices.size(); i++) {
 		if (mesh->vertices[i]->valence + 1 > vertexValences.size()) vertexValences.resize(mesh->vertices[i]->valence + 1);
@@ -1951,6 +1959,7 @@ void OpenGLWidget::testMesh() {
 	for (int i = 0; i < vertexValences.size(); i++) {
 		if (vertexValences[i] > 0) {
 			qInfo() << "Vertex-Valenz " << i << ": " << vertexValences[i] << "\n";
+			output += "<p>Vertex-Valenz " + QString::number(i, 10) + ": " + QString::number(vertexValences[i], 10) + "</p>\n";
 		}
 	}
 	int holeFaces = 0;
@@ -1958,7 +1967,9 @@ void OpenGLWidget::testMesh() {
 		if (f->isHole) holeFaces++;
 	}
 	qInfo() << "Faces: " << mesh->faces.size() - holeFaces << "\n";
-	qInfo() << "Holes: " << holeFaces << "\n";
+	output += "<h4>Faces: </h4>" + QString::number(mesh->faces.size() - holeFaces, 10) + "\n";
+	//qInfo() << "Holes: " << holeFaces << "\n";
+	//output += "<h4>Holes: </h4>" + QString::number(holeFaces, 10) + "\n";
 	std::vector<int> faceValences;
 	std::vector<int> holeValences;
 	for (int i = 0; i < mesh->faces.size(); i++) {
@@ -1974,11 +1985,15 @@ void OpenGLWidget::testMesh() {
 	for (int i = 0; i < faceValences.size(); i++) {
 		if (faceValences[i] > 0) {
 			qInfo() << "Face-Valenz " << i << ": " << faceValences[i] << "\n";
+			output += "<p>Face-Valenz " + QString::number(i, 10) + ": " + QString::number(faceValences[i], 10) + "</p>\n";
 		}
 	}
+	qInfo() << "Holes: " << holeFaces << "\n";
+	output += "<h4>Holes: </h4>" + QString::number(holeFaces, 10) + "\n";
 	for (int i = 0; i < holeValences.size(); i++) {
 		if (holeValences[i] > 0) {
 			qInfo() << "Hole-Valenz " << i << ": " << holeValences[i] << "\n";
+			output += "<p>Hole-Valenz " + QString::number(i, 10) + ": " + QString::number(holeValences[i], 10) + "</p>\n";
 		}
 	}
 	int sharpEdges = 0;
@@ -1986,13 +2001,24 @@ void OpenGLWidget::testMesh() {
 		if (h->sharp) sharpEdges++;
 	}
 	qInfo() << "Halfedges: " << mesh->halfEdges.size() << "\n";
+	output += "<h4>Halfedges: </h4>" + QString::number(mesh->halfEdges.size(), 10) + "\n";
 	qInfo() << "Sharp Edges: " << sharpEdges << "\n";
+	output += "<h4>Sharp Edges: </h4>" + QString::number(sharpEdges, 10) + "\n";
 	bool otherValues = false;
 	for (graphicVertex* v : mesh->vertices) {
 		if (v->location.w() != 1) otherValues = true;
 		break;
 	}
-	if(!otherValues) qInfo() << "Alle Gewichtungen sind 1\n";
+	if (!otherValues) {
+		qInfo() << "Alle Gewichtungen sind 1\n";
+		output += "<h4>Alle Gewichtungen sind 1</h4>\n";
+	}
+
 	qInfo() << "===================================================\n";
 	qInfo() << "\n";
+	output += "\n";
+
+	output = output + *out;
+	delete out;
+	emit(outputChanged(output));
 }

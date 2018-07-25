@@ -41,6 +41,7 @@ public slots:
 	void updateLoDSlider();
 	void resetSmoothingSlider();
 	void updateSmoothingLabel(int level);
+	void updateTextbox(QString text);
 	void updateLoDLabel(int level);
 
 private:
