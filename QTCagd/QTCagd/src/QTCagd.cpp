@@ -13,7 +13,9 @@ QTCagd::QTCagd(QWidget *parent)
 	ui.setupUi(this);
 	connect(&parseWatcher, SIGNAL(finished()), this, SLOT(parsingDone()));
 	ui.stackedWidget->setCurrentIndex(0);
+	ui.stackedWidget->setMaximumHeight(ui.Empty->maximumHeight());
 	ui.stackedWidget_2->setCurrentIndex(0);
+	ui.stackedWidget_2->setMaximumHeight(ui.Empty2->maximumHeight());
 }
 
 void QTCagd::openFile()
@@ -136,6 +138,7 @@ void QTCagd::showSelectedVertexProperties(graphicVertex * v)
 	if (selectedVertex) {
 		//TODO Enum for Modes
 		ui.stackedWidget->setCurrentIndex(1);
+		ui.stackedWidget->setMaximumHeight(ui.Vertex->maximumHeight());
 		ui.xSpinBox->setValue(selectedVertex->location.x());
 		ui.ySpinBox->setValue(selectedVertex->location.y());
 		ui.zSpinBox->setValue(selectedVertex->location.z());
@@ -153,6 +156,7 @@ void QTCagd::showSelectedHalfEdgeProperties(halfEdge *h)
 	if (selectedHalfEdge) {
 		//TODO Enum for Modes
 		ui.stackedWidget->setCurrentIndex(2);
+		ui.stackedWidget->setMaximumHeight(ui.Edge->maximumHeight());
 		ui.sharpEdgeCheckBox->setChecked(selectedHalfEdge->sharp);
 		if (selectedHalfEdge->face->isHole || selectedHalfEdge->pair->face->isHole) {
 			ui.sharpEdgeCheckBox->setDisabled(true);
@@ -212,6 +216,7 @@ void QTCagd::vertexMode(bool toggled)
 
 	ui.openGLWidget->setMode(VERTEX_MODE);
 	ui.stackedWidget->setCurrentIndex(0);
+	ui.stackedWidget->setMaximumHeight(ui.Empty->maximumHeight());
 	if(ui.actionEdge_Mode->isChecked()) ui.actionEdge_Mode->toggle();
 	if (ui.actionFace_Mode->isChecked()) ui.actionFace_Mode->toggle();
 	emit ui.openGLWidget->repaint();
@@ -223,6 +228,7 @@ void QTCagd::edgeMode(bool toggled)
 
 	ui.openGLWidget->setMode(EDGE_MODE);
 	ui.stackedWidget->setCurrentIndex(0);
+	ui.stackedWidget->setMaximumHeight(ui.Empty->maximumHeight());
 	if (ui.actionVertexMode->isChecked()) ui.actionVertexMode->toggle();
 	if (ui.actionFace_Mode->isChecked()) ui.actionFace_Mode->toggle();
 	emit ui.openGLWidget->repaint();
@@ -234,6 +240,7 @@ void QTCagd::faceMode(bool toggled)
 
 	ui.openGLWidget->setMode(FACE_MODE);
 	ui.stackedWidget->setCurrentIndex(0);
+	ui.stackedWidget->setMaximumHeight(ui.Empty->maximumHeight());
 	if (ui.actionVertexMode->isChecked()) ui.actionVertexMode->toggle();
 	if (ui.actionEdge_Mode->isChecked()) ui.actionEdge_Mode->toggle();
 	emit ui.openGLWidget->repaint();
@@ -242,12 +249,14 @@ void QTCagd::faceMode(bool toggled)
 void QTCagd::catmullTool()
 {
 	ui.stackedWidget_2->setCurrentIndex(2);
+	ui.stackedWidget_2->setMaximumHeight(ui.CatmullClark->maximumHeight());
 	ui.smoothingSlider->setValue(0);
 }
 
 void QTCagd::smoothingTool()
 {
 	ui.stackedWidget_2->setCurrentIndex(1);
+	ui.stackedWidget_2->setMaximumHeight(ui.Smoothing->maximumHeight());
 	ui.limitCheckBox->setChecked(false);
 }
 
