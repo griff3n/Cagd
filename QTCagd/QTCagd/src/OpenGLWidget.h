@@ -73,6 +73,7 @@ private:
 	void renderVertices();
 	void renderEdges();
 	void renderFaces();
+	void renderNormals();
 	void calculateLimitPoints();
 	void testMesh();
 	void calcSmoothPoints();

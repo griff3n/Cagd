@@ -117,14 +117,17 @@ void OpenGLWidget::paintGL()
 			renderFaces();
 			renderEdges();
 			renderVertices();
+			if(limitMode == -1) renderNormals();
 			break;
 		case EDGE_MODE:
 			renderFaces();
 			renderEdges();
+			if (limitMode == -1) renderNormals();
 			break;
 		case FACE_MODE:
 			renderFaces();
 			renderEdges();
+			if (limitMode == -1) renderNormals();
 			break;
 		//default:
 		}
@@ -347,6 +350,44 @@ void OpenGLWidget::renderFaces()
 	program->disableAttributeArray(vertexLocation);
 
 	glDisable(GL_POLYGON_OFFSET_FILL);
+}
+void OpenGLWidget::renderNormals()
+{
+	QColor blue(30, 30, 255);
+
+	std::vector<GLfloat> normals;
+
+	int vertexLocation = program->attributeLocation("vertex");
+	int matrixLocation = program->uniformLocation("matrix");
+	int colorLocation = program->uniformLocation("color");
+
+	QMatrix4x4 pmvMatrix;
+	modelView = view * arcballRotationMatrix * mesh->model;
+	pmvMatrix = projection * modelView;
+
+	//Rendern der Normalen
+	for (graphicVertex* v : mesh->vertices) {
+		if (!v->limitNormals.empty()) {
+			for (int i = 0; i < v->limitNormals.size(); i++) {
+				normals.push_back(v->getLocation(limitMode).x());
+				normals.push_back(v->getLocation(limitMode).y());
+				normals.push_back(v->getLocation(limitMode).z());
+				normals.push_back(v->getLocation(limitMode).x() + v->limitNormals[i]->x());
+				normals.push_back(v->getLocation(limitMode).y() + v->limitNormals[i]->y());
+				normals.push_back(v->getLocation(limitMode).z() + v->limitNormals[i]->z());
+			}
+		}
+	}
+
+	program->enableAttributeArray(vertexLocation);
+	program->setAttributeArray(vertexLocation, normals.data(), 3);
+	program->setUniformValue(matrixLocation, pmvMatrix);
+	program->setUniformValue(colorLocation, blue);
+
+	int numberOfNormalVertices = normals.size() / 3;
+	glDrawArrays(GL_LINES, 0, numberOfNormalVertices);
+
+	program->disableAttributeArray(vertexLocation);
 }
 
 void OpenGLWidget::resizeGL(int w, int h)
@@ -1779,13 +1820,30 @@ void OpenGLWidget::calculateLimitPoints() {
 			limitPoint = alpha->location;
 		}
 		else {
-			limitPoint += (1 - (float)5 / (alpha->valence + 5)) * alpha->location;
+			//limit normal
+			QVector3D *limitNormal = new QVector3D(0, 0, 0);
+			QVector3D tangent1 = QVector3D(0, 0, 0);
+			QVector3D tangent2 = QVector3D(0, 0, 0);
+			int k = alpha->valence;
+			double a = 1 + qCos((2 * M_PI) / (double)k) + qCos((M_PI) / (double)k) * qSqrt(2 * (9 + qCos((2 * M_PI) / (double)k)));
+			
+			limitPoint += (1 - (float)5 / (k + 5)) * alpha->location;
+			int i = 0;
 			for (graphicVertex * b : beta) {
-				limitPoint += ((float)4 / ((alpha->valence + 5)*alpha->valence)) * b->location;
+				limitPoint += ((float)4 / ((k + 5)*k)) * b->location;
+				tangent1 += a * qCos((2 * M_PI * (i + 1)) / (double)k) * QVector3D(b->location);
+				tangent2 += a * qCos((2 * M_PI * i) / (double)k) * QVector3D(b->location);
+				i++;
 			}
+			i = 0;
 			for (graphicVertex * g : gamma) {
-				limitPoint += ((float)1 / ((alpha->valence + 5)*alpha->valence)) * g->location;
+				limitPoint += ((float)1 / ((k + 5)*k)) * g->location;
+				tangent1 += (qCos((2 * M_PI * (i + 1)) / (double)k) + qCos((2 * M_PI * (i + 2)) / (double)k)) * QVector3D(g->location);
+				tangent2 += (qCos((2 * M_PI * i) / (double)k) + qCos((2 * M_PI * (i + 1)) / (double)k)) * QVector3D(g->location);
+				i++;
 			}
+			*limitNormal = QVector3D::normal(tangent2, tangent1);
+			alpha->limitNormals.push_back(limitNormal);
 		}
 		alpha->limitPoint = limitPoint;
 	}

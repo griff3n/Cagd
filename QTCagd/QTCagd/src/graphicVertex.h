@@ -23,4 +23,5 @@ public:
 	QVector4D getLocation(float limit);
 	void normalizeLocation();
 	QVector4D smoothLocation;
+	std::vector<QVector3D*> limitNormals;
 };
