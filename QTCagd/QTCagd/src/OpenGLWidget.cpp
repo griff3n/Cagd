@@ -518,6 +518,9 @@ void OpenGLWidget::keyPressEvent(QKeyEvent *e) {
 		case VERTEX_MODE:
 			deleteVertex();
 			break;
+		case EDGE_MODE:
+			deleteEdge();
+			break;
 		case FACE_MODE:
 			deleteFace();
 			break;
@@ -1316,8 +1319,11 @@ void OpenGLWidget::deleteEdge() {
 	//halfedges to be deleted
 	std::vector<halfEdge*> delEdges;
 	std::vector<graphicFace*> checkedFaces;
+	std::vector<graphicVertex*> nearVertices;
 	delEdges.push_back(h);
 	delEdges.push_back(h->pair);
+	nearVertices.push_back(h->vert);
+	nearVertices.push_back(h->pair->vert);
 	//toConnect collects all chains of halfedges that need to be connected again
 	std::vector<std::vector<halfEdge*>> toConnect;
 	toConnect.resize(1);
@@ -1325,19 +1331,22 @@ void OpenGLWidget::deleteEdge() {
 	bool blocked = false;
 	halfEdge* current = h;
 	for (int k = 0; k < 2; k++) {
-		for (int i = 0; i < current->face->valence; i++) {
-			bool alreadyChecked = false;
-			for (graphicFace* f : checkedFaces) {
-				if (current->face == f) {
-					alreadyChecked = true;
+		int valence = current->face->valence;
+		for (int i = 0; i <= valence; i++) {
+			if (i == 0) {
+				bool alreadyChecked = false;
+				for (graphicFace* f : checkedFaces) {
+					if (current->face == f) {
+						alreadyChecked = true;
+						break;
+					}
+				}
+				if (alreadyChecked) {
 					break;
 				}
-			}
-			if (alreadyChecked) {
-				break;
-			}
-			else {
-				checkedFaces.push_back(current->face);
+				else {
+					checkedFaces.push_back(current->face);
+				}
 			}
 			bool toBeDeleted = false;
 			for (halfEdge* h : delEdges) {
@@ -1364,14 +1373,94 @@ void OpenGLWidget::deleteEdge() {
 					blocked = true;
 				}
 			}
-			current = current->next;
+			if(!(i == valence)) current = current->next;
 		}
-		current = current->pair->next;
+		current = current->pair;
 	}
 
-	//TODO connect toConnect
-	//TODO delete delEdges
+	//updating nearVertices
+	for (graphicVertex* v : nearVertices) {
+		//update outgoing edge
+		if (v->valence == 1) {
+			v->edge = nullptr;
+		}
+		else {
+			halfEdge* cur = v->edge;
+			bool newEdgeFound = false; //TEST
+			for (int i = 0; i < v->valence; i++) {
+				bool toBeDeleted = false;
+				for (halfEdge* h : delEdges) {
+					if (cur == h) {
+						toBeDeleted = true;
+						break;
+					}
+				}
+				if (!toBeDeleted) {
+					v->edge = cur;
+					newEdgeFound = true; //TEST
+					break;
+				}
+				cur = cur->pair->next;
+			}
+			if (!newEdgeFound) qInfo() << "ERROR: No outgoing edge found!\n"; //TEST
+		}
+		//update valence
+		v->valence -= 1;
+	}
 
+	//connect the toConnect halfEdge chains
+	for (int i = 0; i < toConnect.size(); i++) {
+		if (toConnect[0].empty()) break;
+		halfEdge *start, *end;
+		start = toConnect[i].front();
+		end = toConnect[i].back();
+		for (int j = 0; j < toConnect.size(); j++) {
+			halfEdge *start2, *end2;
+			start2 = toConnect[j].front();
+			end2 = toConnect[j].back();
+			if (end->pair->vert == start2->vert) {
+				end->next = start2;
+				qInfo() << "End mit Start2 verbunden!\n";
+			}
+			if (end2->pair->vert == start->vert) {
+				end2->next = start;
+				qInfo() << "End2 mit Start verbunden!\n";
+			}
+		}
+	}
+
+	//new holes
+	for (int i = 0; i < toConnect.size(); i++) {
+		if (toConnect[0].empty()) break;
+		if (toConnect[i][0]->face == nullptr) {
+			//new hole
+			graphicFace * newHole = new graphicFace();
+			newHole->isHole = true;
+			newHole->edge = toConnect[i][0];
+			mesh->faces.push_back(newHole);
+			int holeValence = 0;
+			//connect all halfedges to hole
+			halfEdge* current = toConnect[i][0];
+			do {
+				current->face = newHole;
+				holeValence++;
+				current = current->next;
+			} while (current != toConnect[i][0]);
+			newHole->valence = holeValence;
+		}
+	}
+
+	//delete checkedFaces
+	for (graphicFace* f : checkedFaces) {
+		mesh->faces.erase(std::remove(mesh->faces.begin(), mesh->faces.end(), f), mesh->faces.end());
+		delete f;
+	}
+
+	//delete delEdges
+	for (halfEdge* h : delEdges) {
+		mesh->halfEdges.erase(std::remove(mesh->halfEdges.begin(), mesh->halfEdges.end(), h), mesh->halfEdges.end());
+		delete h;
+	}
 
 	for (halfEdge* h : heSelections) {
 		h->setSelected(false);
@@ -2018,7 +2107,7 @@ void OpenGLWidget::testMesh() {
 	qInfo() << "\n";
 	output += "\n";
 
-	output = output + *out;
+	output = *out + output;
 	delete out;
 	emit(outputChanged(output));
 }
