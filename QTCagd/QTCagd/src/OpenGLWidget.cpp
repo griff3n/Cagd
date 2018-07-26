@@ -1552,6 +1552,7 @@ void OpenGLWidget::calcSmoothPoints() {
 		}
 		else if (cornerRule) {
 			v->smoothLocation = v->location;
+			continue;
 		}
 		else {
 			current = v->edge;
