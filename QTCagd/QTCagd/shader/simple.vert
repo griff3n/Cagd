@@ -1,14 +1,8 @@
-#version 330
+attribute highp vec4 vertex;
+uniform highp mat4 matrix;
 
-in vec3 position;
-in vec3 color;
-
-uniform mat4 mvp;
-
-out vec3 fragmentColor;
-
-void main()
+void main(void)
 {
-	fragmentColor = color;
-	gl_Position   = mvp * vec4(position,  1.0);
+    gl_Position = matrix * vertex;
+    gl_PointSize = 5.0;
 }
